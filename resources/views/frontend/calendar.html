@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Abu Sport</title>
+
+    <!-- Bootstrap -->
+    <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="bower_components/bootstrap-offcanvas/dist/css/bootstrap.offcanvas.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="empty-space"></div>
+    <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle offcanvas-toggle" data-toggle="offcanvas" data-target="#js-bootstrap-offcanvas">
+            <span class="sr-only">Toggle navigation</span>
+            <span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </span>
+          </button>
+
+          <button type="submit" class="btn btn-success navbar-btn navbar-xs-btn hidden-sm hidden-md hidden-lg"><span class="glyphicon glyphicon-plus"></span></button>
+
+          <a class="navbar-brand" href="#">Abu Sport</a>
+        </div>
+
+        <button type="submit" class="btn btn-success navbar-btn navbar-right hidden-xs"><span class="glyphicon glyphicon-plus"></span> Создать матч</button>
+
+        <form class="navbar-form navbar-right navbar-form__mobile">
+          <div class="input-group">
+            <input type="text" class="form-control" placeholder="Search for...">
+            <span class="input-group-btn">
+              <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span></button>
+            </span>
+          </div>
+        </form>
+      </div>
+    </nav>
+
+    <ul class="tabs-panel">
+      <li><a href="#">Матчи</a></li>
+      <li class="active"><a href="#">Календарь</a></li>
+      <li><a href="#">Информация</a></li>
+    </ul>
+
+    <main class="container">
+      <div class="row">
+        <aside class="col-md-2 hidden-sm navbar-offcanvas navbar-offcanvas-touch" id="js-bootstrap-offcanvas">
+          <form class="navbar-offcanvas-form hidden-sm hidden-md hidden-lg">
+            <div class="input-group">
+              <span class="input-group-btn">
+                <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span></button>
+              </span>
+              <input type="text" class="form-control" placeholder="Search for...">
+            </div>
+          </form>
+
+          <ul class="nav nav-pills nav-stacked">
+            <li role="presentation"><a href="#">Wallet <small class="text-left text-success">6000 тг</small></a></li>
+            <li role="presentation" class=""><a href="#">My Profile</a></li>
+            <li role="presentation"><a href="#">My Friends <span class="badge">42</span></a></li>
+            <li role="presentation"><a href="#">My Matches <span class="badge">5</span></a></li>
+            <li role="presentation"><a href="#">Notifications <span class="badge">2</span></a></li>
+            <li role="presentation"><a href="#">Settings</a></li>
+            <li role="presentation"><a href="#">Feedback</a></li>
+            <li role="presentation"><a href="#">Help</a></li>
+          </ul>
+        </aside>
+        <div class="col-md-8 col-sm-12">
+          <div class="">
+
+            <h4>Футбольное поле Медина - Поле 1</h4>
+            <ul class="nav nav-tabs nav-justified">
+              <li role="presentation" class="active"><a href="#">Неделя</a></li>
+              <li role="presentation"><a href="#">4 дня</a></li>
+              <li role="presentation"><a href="#">День</a></li>
+            </ul>
+            <br>
+
+            <div class="table-responsive">
+              <table class="table-calendar table-bordered">
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>24 Ср</th>
+                    <th>25 Чт</th>
+                    <th>26 Пт</th>
+                    <th>27 Сб</th>
+                    <th>28 Вс</th>
+                    <th>29 Пн</th>
+                    <th>30 Вт</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="time-matches">
+                      <div><div>00:00</div></div>
+                      <div><div>01:00</div></div>
+                      <div><div>02:00</div></div>
+                      <div><div>03:00</div></div>
+                      <div><div>04:00</div></div>
+                      <div><div>05:00</div></div>
+                      <div><div>06:00</div></div>
+                      <div><div>07:00</div></div>
+                      <div><div>08:00</div></div>
+                      <div><div>09:00</div></div>
+                      <div><div>10:00</div></div>
+                      <div><div>11:00</div></div>
+                      <div><div>12:00</div></div>
+                      <div><div>13:00</div></div>
+                      <div><div>15:00</div></div>
+                      <div><div>16:00</div></div>
+                      <div><div>17:00</div></div>
+                      <div><div>18:00</div></div>
+                      <div><div>19:00</div></div>
+                      <div><div>20:00</div></div>
+                      <div><div>21:00</div></div>
+                      <div><div>22:00</div></div>
+                      <div><div>23:00</div></div>
+                    </td>
+                    <td class="status-matches">
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <div class="text-warning">Занят</div>
+                      </div>
+                      <div>
+                        <div class="text-warning">Занят</div>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <div class="text-warning">Занят</div>
+                      </div>
+                      <div>
+                        <div class="text-warning">Занят</div>
+                      </div>
+                      <div>
+                        <div class="text-warning">Занят</div>
+                      </div>
+                      <div>
+                        <div class="text-info">В процессе</div>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                    </td>
+                    <td class="status-matches">
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <div class="text-warning">Занят</div>
+                      </div>
+                      <div>
+                        <div class="text-warning">Занят</div>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <div class="text-warning">Занят</div>
+                      </div>
+                      <div>
+                        <div class="text-warning">Занят</div>
+                      </div>
+                      <div>
+                        <div class="text-warning">Занят</div>
+                      </div>
+                      <div>
+                        <div class="text-info">В процессе</div>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                    </td>
+                    <td class="status-matches">
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <div class="text-warning">Занят</div>
+                      </div>
+                      <div>
+                        <div class="text-warning">Занят</div>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <div class="text-warning">Занят</div>
+                      </div>
+                      <div>
+                        <div class="text-warning">Занят</div>
+                      </div>
+                      <div>
+                        <div class="text-warning">Занят</div>
+                      </div>
+                      <div>
+                        <div class="text-info">В процессе</div>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                    </td>
+                    <td class="status-matches">
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <div class="text-warning">Занят</div>
+                      </div>
+                      <div>
+                        <div class="text-warning">Занят</div>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <div class="text-warning">Занят</div>
+                      </div>
+                      <div>
+                        <div class="text-warning">Занят</div>
+                      </div>
+                      <div>
+                        <div class="text-warning">Занят</div>
+                      </div>
+                      <div>
+                        <div class="text-info">В процессе</div>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox"><span>5000тг</span>
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox"><span>5000тг</span>
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox"><span>5000тг</span>
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                    </td>
+                    <td class="status-matches">
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <div class="text-warning">Занят</div>
+                      </div>
+                      <div>
+                        <div class="text-warning">Занят</div>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <div class="text-warning">Занят</div>
+                      </div>
+                      <div>
+                        <div class="text-warning">Занят</div>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <div class="text-info">В процессе</div>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                    </td>
+                    <td class="status-matches">
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <div class="text-warning">Занят</div>
+                      </div>
+                      <div>
+                        <div class="text-warning">Занят</div>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <div class="text-warning">Занят</div>
+                      </div>
+                      <div>
+                        <div class="text-warning">Занят</div>
+                      </div>
+                      <div>
+                        <div class="text-warning">Занят</div>
+                      </div>
+                      <div>
+                        <div class="text-info">В процессе</div>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox"><span>5000тг</span>
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox"><span>5000тг</span>
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox"><span>5000тг</span>
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                    </td>
+                    <td class="status-matches">
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <div class="text-warning">Занят</div>
+                      </div>
+                      <div>
+                        <div class="text-warning">Занят</div>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <div class="text-warning">Занят</div>
+                      </div>
+                      <div>
+                        <div class="text-warning">Занят</div>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <div class="text-info">В процессе</div>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                      <div>
+                        <label class="checkbox-inline">
+                          <input type="checkbox" id="blankCheckbox" value="option1" aria-label="..."> 5000 тг
+                        </label>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+        </div>
+        <div class="col-md-2"></div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <ul class="list-inline">
+          <li><a href="#">Main</a></li>
+          <li><a href="#">About</a></li>
+          <li><a href="#">Rules</a></li>
+          <li><a href="#">Contacts</a></li>
+        </ul>
+      </div>
+    </footer>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="bower_components/bootstrap-offcanvas/dist/js/bootstrap.offcanvas.js"></script>
+  </body>
+</html>

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Abu Sport</title>
+
+    <!-- Bootstrap -->
+    <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="bower_components/bootstrap-offcanvas/dist/css/bootstrap.offcanvas.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="empty-space"></div>
+    <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle offcanvas-toggle" data-toggle="offcanvas" data-target="#js-bootstrap-offcanvas">
+            <span class="sr-only">Toggle navigation</span>
+            <span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </span>
+          </button>
+
+          <button type="submit" class="btn btn-success navbar-btn navbar-xs-btn hidden-sm hidden-md hidden-lg"><span class="glyphicon glyphicon-plus"></span></button>
+
+          <a class="navbar-brand" href="#">Abu Sport</a>
+        </div>
+
+        <button type="submit" class="btn btn-success navbar-btn navbar-right hidden-xs"><span class="glyphicon glyphicon-plus"></span> Создать матч</button>
+        <form class="navbar-form navbar-right navbar-form__mobile">
+          <div class="input-group">
+            <input type="text" class="form-control" placeholder="Search for...">
+            <span class="input-group-btn">
+              <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span></button>
+            </span>
+          </div>
+        </form>
+      </div>
+    </nav>
+
+    <ul class="tabs-panel">
+      <li class="active"><a href="#">Площадки</a></li>
+      <li><a href="#">На карте</a></li>
+      <li><a href="#">Горячие матчи</a></li>
+    </ul>
+
+    <main class="container">
+      <div class="row">
+        <aside class="col-md-2 hidden-sm navbar-offcanvas navbar-offcanvas-touch" id="js-bootstrap-offcanvas">
+
+          <form class="navbar-offcanvas-form hidden-sm hidden-md hidden-lg">
+            <div class="input-group">
+              <span class="input-group-btn">
+                <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span></button>
+              </span>
+              <input type="text" class="form-control" placeholder="Search for...">
+            </div>
+          </form>
+
+          <ul class="nav nav-pills nav-stacked">
+            <li role="presentation"><a href="#">Wallet <small class="text-left text-success">6000 тг</small></a></li>
+            <li role="presentation" class=""><a href="#">My Profile</a></li>
+            <li role="presentation"><a href="#">My Friends <span class="badge">42</span></a></li>
+            <li role="presentation"><a href="#">My Matches <span class="badge">5</span></a></li>
+            <li role="presentation"><a href="#">Notifications <span class="badge">2</span></a></li>
+            <li role="presentation"><a href="#">Settings</a></li>
+            <li role="presentation"><a href="#">Feedback</a></li>
+            <li role="presentation"><a href="#">Help</a></li>
+          </ul>
+        </aside>
+        <div class="col-md-8 col-sm-12">
+          <div class="areas">
+            <div class="media">
+              <div class="media-left hidden-xs">
+                <a href="#">
+                  <img class="media-object" src="http://dummyimage.com/170x150/05a156/fff.png&text=image" alt="...">
+                </a>
+              </div>
+              <div class="media-body">
+                <div class="pull-left">
+                  <h4 class="media-heading"><a href="#">Media heading</a></h4>
+                  <p>Address: SilkWay 666</p>  
+                </div>
+                <div class="pull-right">
+                  <p class="media-heading">Price: <span class="text-success">8000тг</span></p>
+                  <p>Players: <span class="badge">59</span></p>
+                </div>              
+                <div class="clearfix"></div>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+              </div>
+            </div>
+            <div class="media">
+              <div class="media-left hidden-xs">
+                <a href="#">
+                  <img class="media-object" src="http://dummyimage.com/170x150/05a156/fff.png&text=image" alt="...">
+                </a>
+              </div>
+              <div class="media-body">
+                <div class="pull-left">
+                  <h4 class="media-heading"><a href="#">Media heading</a></h4>
+                  <p>Address: SilkWay 666</p>  
+                </div>
+                <div class="pull-right">
+                  <p class="media-heading">Price: <span class="text-success">8000тг</span></p>
+                  <p>Players: <span class="badge">59</span></p>
+                </div>              
+                <div class="clearfix"></div>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+              </div>
+            </div>
+            <div class="media">
+              <div class="media-left hidden-xs">
+                <a href="#">
+                  <img class="media-object" src="http://dummyimage.com/170x150/05a156/fff.png&text=image" alt="...">
+                </a>
+              </div>
+              <div class="media-body">
+                <div class="pull-left">
+                  <h4 class="media-heading"><a href="#">Media heading</a></h4>
+                  <p>Address: SilkWay 666</p>  
+                </div>
+                <div class="pull-right">
+                  <p class="media-heading">Price: <span class="text-success">8000тг</span></p>
+                  <p>Players: <span class="badge">59</span></p>
+                </div>              
+                <div class="clearfix"></div>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+              </div>
+            </div>
+            <div class="media">
+              <div class="media-left hidden-xs">
+                <a href="#">
+                  <img class="media-object" src="http://dummyimage.com/170x150/05a156/fff.png&text=image" alt="...">
+                </a>
+              </div>
+              <div class="media-body">
+                <div class="pull-left">
+                  <h4 class="media-heading"><a href="#">Media heading</a></h4>
+                  <p>Address: SilkWay 666</p>  
+                </div>
+                <div class="pull-right">
+                  <p class="media-heading">Price: <span class="text-success">8000тг</span></p>
+                  <p>Players: <span class="badge">59</span></p>
+                </div>              
+                <div class="clearfix"></div>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+              </div>
+            </div>
+          </div>
+
+          <nav aria-label="Page navigation">
+            <ul class="pagination">
+              <li class="disabled">
+                <a href="#" aria-label="Previous">
+                  <span aria-hidden="true">&laquo;</span>
+                </a>
+              </li>
+              <li class="active"><a href="#">1</a></li>
+              <li><a href="#">2</a></li>
+              <li><a href="#">3</a></li>
+              <li><a href="#">4</a></li>
+              <li><a href="#">5</a></li>
+              <li>
+                <a href="#" aria-label="Next">
+                  <span aria-hidden="true">&raquo;</span>
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+        <div class="col-md-2"></div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <ul class="list-inline">
+          <li><a href="#">Main</a></li>
+          <li><a href="#">About</a></li>
+          <li><a href="#">Rules</a></li>
+          <li><a href="#">Contacts</a></li>
+        </ul>
+      </div>
+    </footer>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="bower_components/bootstrap-offcanvas/dist/js/bootstrap.offcanvas.js"></script>
+  </body>
+</html>
