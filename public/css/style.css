@@ -104,8 +104,8 @@ main.container {
   text-decoration: none;
 }
 .tabs-panel > li.active > a {
-  padding-bottom: 12px;
-  border-bottom: 3px solid #eee;
+  padding-bottom: 11px;
+  border-bottom: 4px solid #999;
 }
 
 /* Areas */

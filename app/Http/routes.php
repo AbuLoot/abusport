@@ -3,6 +3,7 @@
 Route::group(['middleware' => 'web'], function () {
 
 	Route::get('/', ['as' => 'index', 'uses' => 'SportController@getSports']);
+	Route::get('areas', ['as' => 'areas', 'uses' => 'AreaController@getAreas']);
 
 });
 
@@ -20,3 +21,7 @@ Route::get('add-sports', function() {
 
 });
 
+
+Route::auth();
+
+Route::get('/home', 'HomeController@index');

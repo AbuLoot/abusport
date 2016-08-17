@@ -4,13 +4,13 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title>@yield('title_description', 'AbuSport')</title>
     <meta name="description" content="@yield('meta_description', 'AbuSport')">
 
     <link href="/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/bower_components/bootstrap-offcanvas/dist/css/bootstrap.offcanvas.css">
-    <link rel="stylesheet" type="text/css" href="/bower_components/material_bootstrap_theme/material_theme/css/material_theme.css">
     <link rel="stylesheet" type="text/css" href="/css/style.css">
     @yield('styles')
 
@@ -25,6 +25,7 @@
     <div class="empty-space"></div>
     <nav class="navbar navbar-default navbar-fixed-top">
       <div class="container">
+
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header ">
           <button type="button" class="navbar-toggle offcanvas-toggle" data-toggle="offcanvas" data-target="#js-bootstrap-offcanvas">
@@ -38,11 +39,32 @@
 
           <button type="submit" class="btn btn-success navbar-btn navbar-xs-btn hidden-sm hidden-md hidden-lg"><span class="glyphicon glyphicon-plus"></span></button>
 
-          <a class="navbar-brand" href="#">Abu Sport</a>
+          <a class="navbar-brand" href="{{ route('index') }}">AbuSport</a>
         </div>
 
-        <button type="submit" class="btn btn-success navbar-btn navbar-right hidden-xs"><span class="glyphicon glyphicon-plus"></span> Создать матч</button>
+        <!-- Account system & Button for create match -->
+        <ul class="nav navbar-nav navbar-right hidden-xs">
+          @if (Auth::guest())
+            <li><a href="{{ url('/login') }}"><span class="glyphicon glyphicon-log-in"></span> Войти</a></li>
+          @else
+            <li><a href="#"><span class="glyphicon glyphicon-plus"></span> Создать матч</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ Auth::user()->name }} <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="#">My Profile</a></li>
+                <li><a href="#">Settings</a></li>
+                <li><a href="#">Help</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="{{ url('/logout') }}"><span class="glyphicon glyphicon-log-out"></span> Выход</a></li>
+              </ul>
+            </li>
+          @endif
+        </ul>
 
+        <!-- Create game -->
+        <!-- <button type="submit" class="btn btn-success navbar-btn navbar-right hidden-xs"><span class="glyphicon glyphicon-plus"></span> Создать матч</button> -->
+
+        <!-- Search form -->
         <form class="navbar-form navbar-right navbar-form__mobile">
           <div class="input-group">
             <input type="text" class="form-control" placeholder="Search for...">
@@ -53,6 +75,8 @@
         </form>
       </div>
     </nav>
+
+    @yield('tabs')
 
     <main class="container">
       <div class="row">

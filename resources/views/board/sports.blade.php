@@ -4,6 +4,16 @@
 
 @section('meta_description', '')
 
+@section('tabs')
+
+    <ul class="tabs-panel">
+      <li class="active"><a href="#">Спорт</a></li>
+      <li><a href="#">На карте</a></li>
+      <li><a href="#">Горячие матчи</a></li>
+    </ul>
+
+@endsection
+
 @section('content')
 
         <div class="sports">
