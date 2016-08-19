@@ -1,4 +1,19 @@
-@media (max-width: 767px) {
+
+/*@media (max-width: 991px) {
+  .container > .navbar-header,
+  .container-fluid > .navbar-header,
+  .container > .navbar-collapse,
+  .container-fluid > .navbar-collapse {
+    margin-right: 0;
+    margin-left: 0;
+  }
+}
+@media (max-width: 991px) {
+  .navbar-header { 
+      float: left; 
+  }
+}*/
+@media (max-width: 991px) {
   .offcanvas-stop-scrolling {
     height: 100%;
     overflow: hidden;

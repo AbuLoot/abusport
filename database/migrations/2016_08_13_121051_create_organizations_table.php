@@ -32,6 +32,23 @@ class CreateOrganizationsTable extends Migration
             $table->integer('status')->default(1);
             $table->timestamps();
         });
+
+        Schema::create('org_user', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('sort_id');
+            $table->integer('org_id')->references('id')->on('organizations');
+            $table->integer('user_id')->references('id')->on('users');
+            $table->timestamps();
+        });
+
+        Schema::create('org_types', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('sort_id');
+            $table->string('slug');
+            $table->string('title');
+            $table->string('short_title');
+            $table->timestamps();
+        });
     }
 
     /**
@@ -42,5 +59,7 @@ class CreateOrganizationsTable extends Migration
     public function down()
     {
         Schema::drop('organizations');
+        Schema::drop('org_user');
+        Schema::drop('org_types');
     }
 }

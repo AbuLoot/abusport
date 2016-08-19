@@ -21,13 +21,12 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
   </head>
-  <body>
-    <div class="empty-space"></div>
+  <body class="">
     <nav class="navbar navbar-default navbar-fixed-top">
       <div class="container">
 
         <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header ">
+        <div class="navbar-header">
           <button type="button" class="navbar-toggle offcanvas-toggle" data-toggle="offcanvas" data-target="#js-bootstrap-offcanvas">
             <span class="sr-only">Toggle navigation</span>
             <span>
@@ -37,13 +36,13 @@
             </span>
           </button>
 
-          <button type="submit" class="btn btn-success navbar-btn navbar-xs-btn hidden-sm hidden-md hidden-lg"><span class="glyphicon glyphicon-plus"></span></button>
+          <button type="submit" class="btn btn-success navbar-btn navbar-xs-btn navbar-right hidden-lg hidden-md"><span class="glyphicon glyphicon-plus"></span></button>
 
           <a class="navbar-brand" href="{{ route('index') }}">AbuSport</a>
         </div>
 
-        <!-- Account system & Button for create match -->
-        <ul class="nav navbar-nav navbar-right hidden-xs">
+        <!-- Account system -->
+        <ul class="nav navbar-nav navbar-right hidden-sm hidden-xs">
           @if (Auth::guest())
             <li><a href="{{ url('/login') }}"><span class="glyphicon glyphicon-log-in"></span> Войти</a></li>
           @else
@@ -62,10 +61,10 @@
         </ul>
 
         <!-- Create game -->
-        <!-- <button type="submit" class="btn btn-success navbar-btn navbar-right hidden-xs"><span class="glyphicon glyphicon-plus"></span> Создать матч</button> -->
+        <!-- <button type="submit" class="btn btn-success navbar-btn navbar-right hidden-sm hidden-xs"><span class="glyphicon glyphicon-plus"></span> Создать матч</button> -->
 
         <!-- Search form -->
-        <form class="navbar-form navbar-right navbar-form__mobile">
+        <form class="navbar-form navbar-right hidden-sm hidden-xs">
           <div class="input-group">
             <input type="text" class="form-control" placeholder="Search for...">
             <span class="input-group-btn">
@@ -80,9 +79,9 @@
 
     <main class="container">
       <div class="row">
-        <aside class="col-md-2 hidden-sm navbar-offcanvas navbar-offcanvas-touch" id="js-bootstrap-offcanvas">
 
-          <form class="navbar-offcanvas-form hidden-sm hidden-md hidden-lg">
+        <aside class="col-lg-2 col-md-3 navbar-offcanvas navbar-offcanvas-touch" id="js-bootstrap-offcanvas">
+          <form class="navbar-offcanvas-form hidden-lg hidden-md">
             <div class="input-group">
               <input type="text" class="form-control" placeholder="Search for...">
               <span class="input-group-btn">
@@ -103,11 +102,10 @@
           </ul>
         </aside>
 
-        <div class="col-md-8 col-sm-12">
+        <div class="col-lg-8 col-md-9 col-sm-12">
           @yield('content')
         </div>
 
-        <div class="col-md-2"></div>
       </div>
     </main>
 

@@ -7,6 +7,10 @@ Route::group(['middleware' => 'web'], function () {
 
 });
 
+Route::auth();
+
+Route::get('/home', 'HomeController@index');
+
 Route::get('add-sports', function() {
 
 	$sport = new App\Sport;
@@ -20,8 +24,3 @@ Route::get('add-sports', function() {
 	} 
 
 });
-
-
-Route::auth();
-
-Route::get('/home', 'HomeController@index');

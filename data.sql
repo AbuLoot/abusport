@@ -41,7 +41,7 @@ INSERT INTO `districts` (`sort_id`, `city_id`, `slug`, `title`, `lang`) VALUES
 (8, 1, 'turksibskij', 'Турксибский район', 'ru');
 
 
--- Districts
+-- Sports
 INSERT INTO `sports` (`sort_id`, `slug`, `title`, `image`, `lang`) VALUES
 (1, 'football', 'Футбол', '', 'ru'),
 (2, 'basketball', 'Баскетбол', '', 'ru'),

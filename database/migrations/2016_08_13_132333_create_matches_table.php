@@ -16,7 +16,7 @@ class CreateMatchesTable extends Migration
             $table->increments('id');
             $table->integer('sort_id');
             $table->integer('user_id')->references('id')->on('users');
-            $table->integer('area_id')->references('id')->on('areas');
+            $table->integer('field_id')->references('id')->on('fields');
             $table->time('start_time');
             $table->time('end_time');
             $table->date('date');

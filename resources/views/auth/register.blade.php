@@ -17,10 +17,21 @@
                 {{ csrf_field() }}
 
                 <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-                  <label for="name" class="col-md-4 control-label">Имя</label>
+                  <label for="name" class="col-md-4 control-label">Фамилия и Имя</label>
 
-                  <div class="col-md-6">
-                    <input id="name" type="text" class="form-control" name="name" value="{{ old('name') }}">
+                  <div class="col-md-3">
+                    <input id="surname" type="text" class="form-control" name="surname" value="{{ old('surname') }}" minlength="2" maxlength="40" placeholder="Фамилия" required>
+
+                    @if ($errors->has('surname'))
+                      <span class="help-block">
+                        <strong>{{ $errors->first('surname') }}</strong>
+                      </span>
+                    @endif
+                    <div class="hidden-md hidden-lg"><br></div>
+                  </div>
+
+                  <div class="col-md-3">
+                    <input id="name" type="text" class="form-control" name="name" value="{{ old('name') }}" minlength="2" maxlength="40" placeholder="Имя" required>
 
                     @if ($errors->has('name'))
                       <span class="help-block">
@@ -30,11 +41,25 @@
                   </div>
                 </div>
 
+                <div class="form-group{{ $errors->has('phone') ? ' has-error' : '' }}">
+                  <label for="phone" class="col-md-4 control-label">Номер Телефона</label>
+
+                  <div class="col-md-6">
+                    <input id="phone" type="tel" class="form-control" name="phone" value="{{ old('phone') ? old('phone') : '+7 7' }}" minlength="10" maxlength="40" required>
+
+                    @if ($errors->has('phone'))
+                      <span class="help-block">
+                        <strong>{{ $errors->first('phone') }}</strong>
+                      </span>
+                    @endif
+                  </div>
+                </div>
+
                 <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
                   <label for="email" class="col-md-4 control-label">E-Mail</label>
 
                   <div class="col-md-6">
-                    <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}">
+                    <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" minlength="8" maxlength="60" required>
 
                     @if ($errors->has('email'))
                       <span class="help-block">
@@ -48,7 +73,7 @@
                   <label for="password" class="col-md-4 control-label">Пароль</label>
 
                   <div class="col-md-6">
-                    <input id="password" type="password" class="form-control" name="password">
+                    <input id="password" type="password" class="form-control" name="password" minlength="6" maxlength="60" required>
 
                     @if ($errors->has('password'))
                       <span class="help-block">
@@ -59,16 +84,29 @@
                 </div>
 
                 <div class="form-group{{ $errors->has('password_confirmation') ? ' has-error' : '' }}">
-                  <label for="password-confirm" class="col-md-4 control-label">Повторите пароль</label>
+                  <label for="password-confirm" class="col-md-4 control-label">Потдвердите пароль</label>
 
                   <div class="col-md-6">
-                    <input id="password-confirm" type="password" class="form-control" name="password_confirmation">
+                    <input id="password-confirm" type="password" class="form-control" name="password_confirmation" minlength="6" maxlength="60" required>
 
                     @if ($errors->has('password_confirmation'))
                       <span class="help-block">
                         <strong>{{ $errors->first('password_confirmation') }}</strong>
                       </span>
                     @endif
+
+                    <div @if ($errors->has('rules')) class="has-error" @endif>
+                      <div class="checkbox">
+                        <label>
+                          <input type="checkbox" name="rules" required> Я согласен с <a href="#">правилами сайта</a>
+                        </label>
+                        @if ($errors->has('rules'))
+                          <span class="help-block">
+                            <strong>{{ $errors->first('rules') }}</strong>
+                          </span>
+                        @endif
+                      </div>
+                    </div>
                   </div>
                 </div>
 
@@ -82,4 +120,23 @@
               </form>
             </div>
           </div>
+
+
+          <script type="text/javascript">
+            window.onload = function () {
+              document.getElementById("password").onchange = validatePassword;
+              document.getElementById("password_confirmation").onchange = validatePassword;
+            }
+            function validatePassword() {
+              var pass1 = document.getElementById("password").value;
+              var pass2 = document.getElementById("password_confirmation").value;
+              if (pass1 != pass2) {
+                document.getElementById("password_confirmation").setCustomValidity("Пароли не совпадают");
+              }
+              else {
+                document.getElementById("password_confirmation").setCustomValidity('');
+                //empty string means no validation error
+              }
+            }
+          </script>
 @endsection
