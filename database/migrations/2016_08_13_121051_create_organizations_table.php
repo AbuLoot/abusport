@@ -14,7 +14,7 @@ class CreateOrganizationsTable extends Migration
     {
         Schema::create('organizations', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('sort_id');
+            $table->integer('sort_id')->nullable();
             $table->integer('country_id')->references('id')->on('countries');
             $table->integer('city_id')->references('id')->on('cities');
             $table->integer('district_id')->references('id')->on('districts');
@@ -34,16 +34,13 @@ class CreateOrganizationsTable extends Migration
         });
 
         Schema::create('org_user', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('sort_id');
             $table->integer('org_id')->references('id')->on('organizations');
             $table->integer('user_id')->references('id')->on('users');
-            $table->timestamps();
         });
 
         Schema::create('org_types', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('sort_id');
+            $table->integer('sort_id')->nullable();
             $table->string('slug');
             $table->string('title');
             $table->string('short_title');

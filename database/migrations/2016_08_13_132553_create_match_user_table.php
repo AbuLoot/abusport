@@ -14,7 +14,7 @@ class CreateMatchUserTable extends Migration
     {
         Schema::create('match_user', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('sort_id');
+            $table->integer('sort_id')->nullable();
             $table->integer('user_id')->references('id')->on('users');
             $table->integer('match_id')->references('id')->on('matches');
             $table->integer('status')->default(1);

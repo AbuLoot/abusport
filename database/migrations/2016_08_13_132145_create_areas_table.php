@@ -14,7 +14,7 @@ class CreateAreasTable extends Migration
     {
         Schema::create('areas', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('sort_id');
+            $table->integer('sort_id')->nullable();
             $table->integer('sport_id')->references('id')->on('sports');
             $table->integer('org_id')->references('id')->on('organizations');
             $table->integer('city_id')->references('id')->on('cities');

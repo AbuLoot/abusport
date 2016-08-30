@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\User;
-use Validator;
-use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
+
+use Validator;
+
+use App\User;
+use App\Profile;
+use App\Http\Controllers\Controller;
 
 class AuthController extends Controller
 {
@@ -28,7 +31,7 @@ class AuthController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/';
+    protected $redirectTo = '/confirm-register';
 
     /**
      * Create a new authentication controller instance.
@@ -51,9 +54,13 @@ class AuthController extends Controller
         return Validator::make($data, [
             'surname' => 'required|min:2|max:40',
             'name' => 'required|min:2|max:40',
-            'phone' => 'required|min:10|max:40',
-            'email' => 'required|email|max:255|unique:users',
-            'password' => 'required|min:6|max:255|confirmed',
+            // 'phone' => 'required|min:10|max:40',
+            // 'email' => 'required|email|max:255|unique:users',
+            // 'day' => 'required|numeric|between:1,31',
+            // 'month' => 'required|numeric|between:1,12',
+            // 'year' => 'required|numeric',
+            'sex' => 'required',
+            'password' => 'required|min:6|max:255',
             'rules' => 'accepted'
         ]);
     }
@@ -66,11 +73,27 @@ class AuthController extends Controller
      */
     protected function create(array $data)
     {
-        dd($data);
-        return User::create([
+        $user = User::create([
+            'surname' => $data['surname'],
             'name' => $data['name'],
-            'email' => $data['email'],
             'password' => bcrypt($data['password']),
+            'ip' => Request::ip(),
+            'location' => serialize(Request::ips()),
         ]);
+
+        $profile = new Profile;
+        $profile->sort_id = $user->id;
+        $profile->user_id = $user->id;
+        $profile->birthday = $data['year'].'-'.$data['month'].'-'.$data['day'];
+        $profile->sex = $data['sex'];
+        $profile->save();
+
+        return $user;
+    }
+
+
+    public function confirmRegister()
+    {
+        return view('auth.confirm-register');
     }
 }

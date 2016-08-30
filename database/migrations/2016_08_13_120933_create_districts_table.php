@@ -14,7 +14,7 @@ class CreateDistrictsTable extends Migration
     {
         Schema::create('districts', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('sort_id');
+            $table->integer('sort_id')->nullable();
             $table->integer('city_id')->references('id')->on('cities');
             $table->string('slug');
             $table->string('title');

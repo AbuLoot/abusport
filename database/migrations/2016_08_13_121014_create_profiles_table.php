@@ -14,14 +14,14 @@ class CreateProfilesTable extends Migration
     {
         Schema::create('profiles', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('sort_id');
+            $table->integer('sort_id')->nullable();
             $table->integer('user_id')->references('id')->on('users');
             $table->integer('city_id')->references('id')->on('cities');
             $table->string('avatar');
             $table->string('phone');
-            $table->integer('age');
-            $table->integer('growth');
-            $table->integer('weight');
+            $table->date('birthday');
+            $table->integer('growth')->nullable();
+            $table->integer('weight')->nullable();
             $table->enum('sex', ['man', 'woman']);
             $table->text('about');
             $table->integer('status')->default(1);

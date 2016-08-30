@@ -14,7 +14,7 @@ class CreateFieldsTable extends Migration
     {
         Schema::create('fields', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('sort_id');
+            $table->integer('sort_id')->nullable();
             $table->string('title');
             $table->string('size');
             $table->timestamps();
@@ -23,12 +23,11 @@ class CreateFieldsTable extends Migration
         Schema::create('field_option', function (Blueprint $table) {
             $table->integer('field_id')->references('id')->on('fields');
             $table->integer('option_id')->references('id')->on('options');
-            $table->timestamps();
         });
 
         Schema::create('options', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('sort_id');
+            $table->integer('sort_id')->nullable();
             $table->string('slug');
             $table->string('title');
             $table->timestamps();
