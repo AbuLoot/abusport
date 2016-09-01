@@ -14,6 +14,14 @@
           <div class="panel panel-default">
             <div class="panel-heading">Зарегистрируйтесь в систему</div>
             <div class="panel-body">
+
+              @if (session('status'))
+                <div class="alert alert-danger">
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                  {{ session('status') }}
+                </div>
+              @endif
+
               <form class="form-horizontal" role="form" method="POST" action="{{ url('/register') }}">
                 {{ csrf_field() }}
 
@@ -81,7 +89,7 @@
                   <label for="password" class="col-md-4 control-label">Пароль</label>
 
                   <div class="col-md-6">
-                    <input id="password" type="text" class="form-control" name="password" minlength="6" maxlength="60" required>
+                    <input id="password" type="text" class="form-control" name="password" value="{{ old('password') }}" minlength="6" maxlength="60" required>
 
                     @if ($errors->has('password'))
                       <span class="help-block">
@@ -98,7 +106,7 @@
                     <div @if ($errors->has('rules')) class="has-error" @endif>
                       <div class="checkbox">
                         <label>
-                          <input id="rules" type="checkbox" name="rules" required> Я согласен с <a href="#">правилами сайта</a>
+                          <input id="rules" type="checkbox" name="rules" @if (old('rules')) required @endif> Я согласен с <a href="#">правилами сайта</a>
                         </label>
                         @if ($errors->has('rules'))
                           <span class="help-block">

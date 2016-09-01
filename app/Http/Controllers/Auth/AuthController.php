@@ -90,10 +90,4 @@ class AuthController extends Controller
 
         return $user;
     }
-
-
-    public function confirmRegister()
-    {
-        return view('auth.confirm-register');
-    }
 }

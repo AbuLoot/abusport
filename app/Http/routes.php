@@ -24,15 +24,15 @@ Route::post('password/email', 'Auth\PasswordController@postEmail');
 Route::get('password/reset/{token}', 'Auth\PasswordController@getReset');
 Route::post('password/reset', 'Auth\PasswordController@postReset');
 
-Route::get('confirm-register', ['as' => 'confirm.register', 'uses' => 'Auth\AuthController@confirmRegister']);
+// Confirmation of registration
+Route::get('confirm-register', 'Auth\AuthCustomController@getConfirmRegister');
+Route::post('confirm-register', 'Auth\AuthCustomController@postConfirmRegister');
 
-Route::group(['middleware' => 'web'], function () {
+// Board
+Route::get('/', ['as' => 'index', 'uses' => 'SportController@getSports']);
+Route::get('areas', ['as' => 'areas', 'uses' => 'AreaController@getAreas']);
 
-	Route::get('/', ['as' => 'index', 'uses' => 'SportController@getSports']);
-	Route::get('areas', ['as' => 'areas', 'uses' => 'AreaController@getAreas']);
-
-});
-
+// Test
 Route::get('/home', 'HomeController@index');
 
 Route::get('add-sports', function() {
@@ -47,24 +47,4 @@ Route::get('add-sports', function() {
 		echo $faker->address . '<hr>';
 	} 
 
-});
-
-
-Route::get('test', function() {
-	$var = 'ABCDEFGH:/MNRPQR/';
-	echo "Оригинал: $var<hr />\n";
-
-	/* Обе следующих строки заменяют всю строку $var на 'bob'. */
-	echo substr_replace($var, 'bob', 0) . "<br />\n";
-	echo substr_replace($var, 'bob', 0, strlen($var)) . "<br />\n";
-
-	/* Вставляет 'bob' в начало $var. */
-	echo substr_replace($var, 'bob', 0, 1) . "<br />\n";
-
-	/* Обе следующих строки заменяют 'MNRPQR' in $var на 'bob'. */
-	echo substr_replace($var, 'bob', 10, -1) . "<br />\n";
-	echo substr_replace($var, 'bob', -7, -1) . "<br />\n";
-
-	/* Удаляет 'MNRPQR' из $var. */
-	echo substr_replace($var, '', 10, -1) . "<br />\n";
 });
