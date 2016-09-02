@@ -14,8 +14,13 @@
           <div class="panel panel-default">
             <div class="panel-heading">Подтверждение регистрации</div>
             <div class="panel-body">
+
+              @include('partials.alert')
+
               <form class="form-horizontal" role="form" method="POST" action="{{ url('/confirm-register') }}">
                 {{ csrf_field() }}
+
+                <input type="hidden" name="id" value="{{ session('user_id') }}">
 
                 <div class="form-group{{ $errors->has('phone') ? ' has-error' : '' }}">
                   <label for="phone" class="col-md-4 control-label">Номер Телефона</label>

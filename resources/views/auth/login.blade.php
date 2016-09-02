@@ -14,18 +14,21 @@
           <div class="panel panel-default">
             <div class="panel-heading">Войдите в систему</div>
             <div class="panel-body">
+
+              @include('partials.alert')
+
               <form class="form-horizontal" role="form" method="POST" action="{{ url('/login') }}">
                 {{ csrf_field() }}
 
-                <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                  <label for="email" class="col-md-4 control-label">E-Mail</label>
+                <div class="form-group{{ $errors->has('phone') ? ' has-error' : '' }}">
+                  <label for="phone" class="col-md-4 control-label">Номер Телефона</label>
 
                   <div class="col-md-6">
-                    <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" minlength="8" maxlength="60" required>
+                    <input id="phone" type="tel" class="form-control" name="phone" value="{{ old('phone') }}" minlength="8" maxlength="60" required>
 
-                    @if ($errors->has('email'))
+                    @if ($errors->has('phone'))
                       <span class="help-block">
-                        <strong>{{ $errors->first('email') }}</strong>
+                        <strong>{{ $errors->first('phone') }}</strong>
                       </span>
                     @endif
                   </div>

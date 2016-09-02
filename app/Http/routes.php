@@ -1,32 +1,28 @@
 <?php
 
-// Route::auth();
-
 // Authentication routes...
 Route::get('login', 'Auth\AuthController@getLogin');
 Route::post('login', 'Auth\AuthCustomController@postLogin');
-Route::get('logout', 'Auth\AuthController@getLogout');
+Route::get('logout', 'Auth\AuthCustomController@getLogout');
 
 // Registration routes...
 Route::get('register', 'Auth\AuthController@getRegister');
 Route::post('register', 'Auth\AuthCustomController@postRegister');
-Route::get('confirm/{token}', 'Auth\AuthCustomController@confirm');
-
-// Repeat confirm
-Route::get('repeat_confirm', 'Auth\AuthCustomController@getRepeat');
-Route::post('repeat_confirm', 'Auth\AuthCustomController@postRepeat');
-
-// Password reset link request routes...
-Route::get('password/email', 'Auth\PasswordController@getEmail');
-Route::post('password/email', 'Auth\PasswordController@postEmail');
-
-// Password reset routes...
-Route::get('password/reset/{token}', 'Auth\PasswordController@getReset');
-Route::post('password/reset', 'Auth\PasswordController@postReset');
+// Route::get('confirm/{token}', 'Auth\AuthCustomController@confirm');
 
 // Confirmation of registration
 Route::get('confirm-register', 'Auth\AuthCustomController@getConfirmRegister');
 Route::post('confirm-register', 'Auth\AuthCustomController@postConfirmRegister');
+
+// Password reset link request routes...
+// Route::get('password/email', 'Auth\PasswordController@getEmail');
+// Route::post('password/email', 'Auth\PasswordController@postEmail');
+
+// Password reset routes...
+// Route::get('password/reset/{token}', 'Auth\PasswordController@getReset');
+// Route::post('password/reset', 'Auth\PasswordController@postReset');
+
+Route::auth();
 
 // Board
 Route::get('/', ['as' => 'index', 'uses' => 'SportController@getSports']);

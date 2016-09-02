@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use Illuminate\Http\Request;
 
+use Auth;
 use Storage;
 
 use App\SMS;
@@ -16,6 +17,24 @@ use AbuLoot\Sms\MobizonApi as Mobizon;
 
 class AuthCustomController extends Controller
 {
+    public function postLogin(Request $request)
+    {
+        $phone = preg_replace('/[^0-9]/', '', $request->phone);
+
+        $request->merge(['phone' => $phone]);
+
+        if ($request->phone[0] == 8) {
+            $request->merge(['phone' => substr_replace($request->phone, '7', 0, 1)]);
+        }
+
+        if (Auth::attempt(['phone' => $request->phone, 'password' => $request->password, 'status' => 1])) {
+            return redirect('/');
+        }
+        else {
+            return redirect()->back()->withStatus('Не правильный логин или пароль или не подтвержден номер телефона.');
+        }
+    }
+
     protected function postRegister(Request $request)
     {
 		$phone = preg_replace('/[^0-9]/', '', $request->phone);
@@ -39,20 +58,32 @@ class AuthCustomController extends Controller
         	$request->merge(['phone' => substr_replace($request->phone, '7', 0, 1)]);
         }
 
+        $user = User::where('phone', $request->phone)->first();
+
+        if ( ! empty($user->phone)) {
+            if ($user->status == 0) {
+                return redirect()->back()->withInput()->withErrors('Такой номер уже зарегестрирован, но не подтвержден. Проверьте sms сообщение или запросите повторное подтверждение номера.');
+            }
+            else {
+                return redirect()->back()->withInput()->withErrors('Пользователь с таким номером уже зарегестрирован.');
+            }
+        }
+
         $code = rand(10000, 99999);
 
         $responseApi = $this->sendSms($request->phone, $code);
 
         if ($responseApi == true) {
 
-            $user = User::create([
-                'surname' => $request->surname,
-                'name' => $request->name,
-                'phone' => $request->phone,
-                'password' => bcrypt($request->password),
-                'ip' => $request->ip(),
-                'location' => serialize($request->ips()),
-            ]);
+            $user = new User();
+            $user->surname = $request->surname;
+            $user->name = $request->name;
+            $user->phone = $request->phone;
+            $user->password = bcrypt($request->password);
+            $user->ip = $request->ip();
+            $user->location = serialize($request->ips());
+            $user->status = 0;
+            $user->save();
 
             $profile = new Profile;
             $profile->sort_id = $user->id;
@@ -68,10 +99,10 @@ class AuthCustomController extends Controller
             $sms->code = $code;
             $sms->save();
 
-            return redirect('confirm-register')->withInput();            
+            return redirect('confirm-register')->with('user_id', $user->id)->withInput();
         }
         else {
-            return redirect()->back()->with('status', 'Неверный Номер Телефона')->withInput();
+            return redirect()->back()->withInput()->withErrors('Неверный Номер Телефона');
         }
     }
 
@@ -87,7 +118,7 @@ class AuthCustomController extends Controller
         $request->merge(['phone' => $phone]);
 
         $this->validate($request, [
-            'phone' => 'required|min:11|max:11|unique:users',
+            'phone' => 'required|min:11|max:11',
             'code' => 'required|numeric|min:5'
         ]);
 
@@ -95,14 +126,23 @@ class AuthCustomController extends Controller
             $request->merge(['phone' => substr_replace($request->phone, '7', 0, 1)]);
         }
 
-        $sms = SMS::where('phone', $request->phone)
+        $sms = SMS::where('user_id', $request->id)
+            ->where('phone', $request->phone)
             ->where('code', $request->code)
             ->orderBy('created_at', 'desc')
             ->first();
 
-        dd($sms);
+        if ($sms == true) {
 
-        return view('auth.confirm-register');
+            $user = User::where('phone', $sms->phone)->where('id', $request->id)->first();
+            $user->status = 1;
+            $user->save();
+
+            return redirect('login')->withInput()->withStatus('Вы успешно подтвердили регистрацию, теперь войдите через свой номер и пароль');
+        }
+        else {
+            return redirect()->back()->withInput()->withErrors('Неверный номер телефона или неверный код подтверждение');
+        }
     }
 
     public function sendSms($phone, $code)
@@ -143,7 +183,7 @@ class AuthCustomController extends Controller
 
                     foreach ($mobizonApi->getData() as $messageInfo)
                     {
-                        Storage::prepend('sms-log.txt', 'Message # ' . $messageInfo->id . " status:\t" . $messageInfo->status . PHP_EOL);
+                        Storage::prepend('sms-log.txt', 'Message # ' . $messageInfo->id . " status:\t" . $messageInfo->status);
                     }
                 }
             }
@@ -157,9 +197,15 @@ class AuthCustomController extends Controller
             Storage::prepend('sms-log.txt', json_encode($mobizonApi->getData()));
         }
 
-        Storage::prepend('sms-log.txt', '\r\n');
+        Storage::prepend('sms-log.txt', PHP_EOL);
 
         return $response;
     }
 
+    public function getLogout()
+    {
+        Auth::logout();
+
+        return redirect('/');
+    }
 }
