@@ -34,8 +34,11 @@ class CreateOrganizationsTable extends Migration
         });
 
         Schema::create('org_user', function (Blueprint $table) {
-            $table->integer('org_id')->references('id')->on('organizations');
-            $table->integer('user_id')->references('id')->on('users');
+            $table->integer('org_id')->unsigned();
+            $table->integer('user_id')->unsigned();
+
+            $table->foreign('org_id')->references('id')->on('organizations')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
 
         Schema::create('org_types', function (Blueprint $table) {
@@ -55,8 +58,8 @@ class CreateOrganizationsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('organizations');
         Schema::drop('org_user');
         Schema::drop('org_types');
+        Schema::drop('organizations');
     }
 }

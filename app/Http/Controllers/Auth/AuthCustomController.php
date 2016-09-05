@@ -71,9 +71,11 @@ class AuthCustomController extends Controller
 
         $code = rand(10000, 99999);
 
-        $responseApi = $this->sendSms($request->phone, $code);
+        // $responseApi = $this->sendSms($request->phone, $code);
 
-        if ($responseApi == true) {
+        if (true) {
+
+        // if ($responseApi == true) {
 
             $user = new User();
             $user->surname = $request->surname;
@@ -99,7 +101,7 @@ class AuthCustomController extends Controller
             $sms->code = $code;
             $sms->save();
 
-            return redirect('confirm-register')->with('user_id', $user->id)->withInput();
+            return redirect('confirm-register')->with('user_id', $user->id)->withInput()->withStatus('На ваш номер был отправлен sms c кодом, введите его для подтверждение регистрации.');
         }
         else {
             return redirect()->back()->withInput()->withErrors('Неверный Номер Телефона');

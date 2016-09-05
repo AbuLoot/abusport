@@ -15,11 +15,11 @@ class CreatePagesTable extends Migration
         Schema::create('pages', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('sort_id')->nullable();
-            $table->string('title_description');
-            $table->string('meta_description');
             $table->string('slug');
             $table->string('title');
             $table->string('icon');
+            $table->string('title_description');
+            $table->string('meta_description');
             $table->text('content');
             $table->char('lang', 4);
             $table->integer('status')->default(1);

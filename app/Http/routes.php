@@ -22,14 +22,32 @@ Route::post('confirm-register', 'Auth\AuthCustomController@postConfirmRegister')
 // Route::get('password/reset/{token}', 'Auth\PasswordController@getReset');
 // Route::post('password/reset', 'Auth\PasswordController@postReset');
 
-Route::auth();
 
 // Board
 Route::get('/', ['as' => 'index', 'uses' => 'SportController@getSports']);
 Route::get('areas', ['as' => 'areas', 'uses' => 'AreaController@getAreas']);
 
+
+// Administration
+Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
+
+	Route::resource('pages', 'Admin\PageController');
+    Route::resource('users', 'Admin\UserController');
+    Route::resource('organizations', 'Admin\OrganizationController');
+
+    Route::resource('countries', 'Admin\CountryController');
+    Route::resource('cities', 'Admin\CityController');
+    Route::resource('districts', 'Admin\DistrictController');
+
+    Route::resource('sports', 'Admin\SportController');
+    Route::resource('areas', 'Admin\AreaController');
+    Route::resource('matches', 'Admin\MatchController');
+});
+
+
 // Test
-Route::get('/home', 'HomeController@index');
+// Route::get('/home', 'HomeController@index');
+
 
 Route::get('add-sports', function() {
 

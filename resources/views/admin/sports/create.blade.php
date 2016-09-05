@@ -7,7 +7,7 @@
 
           @include('partials.alerts')
 
-          <form action="{{ route('admin.pages.store') }}" method="post">
+          <form action="{{ route('admin.sports.store') }}" method="post" enctype="multipart/form-data">
             {!! csrf_field() !!}
             <div class="form-group">
               <label for="title">Название</label>
@@ -22,6 +22,10 @@
               <input type="text" class="form-control" id="sort_id" name="sort_id" maxlength="5" value="{{ (old('sort_id')) ? old('sort_id') : NULL }}">
             </div>
             <div class="form-group">
+              <label for="image">Картинка</label>
+              <input type="file" id="image" name="image" accept="image/*" required>
+            </div>
+            <div class="form-group">
               <label for="title_description">Мета название</label>
               <input type="text" class="form-control" id="title_description" name="title_description" maxlength="255" value="{{ (old('title_description')) ? old('title_description') : '' }}">
             </div>
@@ -30,8 +34,12 @@
               <input type="text" class="form-control" id="meta_description" name="meta_description" maxlength="255" value="{{ (old('meta_description')) ? old('meta_description') : '' }}">
             </div>
             <div class="form-group">
-              <label for="content">Контент</label>
-              <textarea class="form-control" id="content" name="content" rows="5">{{ (old('content')) ? old('content') : '' }}</textarea>
+              <label for="text">Текст</label>
+              <textarea class="form-control" id="text" name="text" rows="5">{{ (old('text')) ? old('text') : '' }}</textarea>
+            </div>
+            <div class="form-group">
+              <label for="rules">Правила</label>
+              <textarea class="form-control" id="rules" name="rules" rows="5">{{ (old('rules')) ? old('rules') : '' }}</textarea>
             </div>
             <div class="form-group">
               <label for="lang">Язык</label>

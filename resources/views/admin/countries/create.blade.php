@@ -7,7 +7,7 @@
 
           @include('partials.alerts')
 
-          <form action="{{ route('admin.pages.store') }}" method="post">
+          <form action="{{ route('admin.countries.store') }}" method="post">
             {!! csrf_field() !!}
             <div class="form-group">
               <label for="title">Название</label>
@@ -20,18 +20,6 @@
             <div class="form-group">
               <label for="sort_id">Номер</label>
               <input type="text" class="form-control" id="sort_id" name="sort_id" maxlength="5" value="{{ (old('sort_id')) ? old('sort_id') : NULL }}">
-            </div>
-            <div class="form-group">
-              <label for="title_description">Мета название</label>
-              <input type="text" class="form-control" id="title_description" name="title_description" maxlength="255" value="{{ (old('title_description')) ? old('title_description') : '' }}">
-            </div>
-            <div class="form-group">
-              <label for="meta_description">Мета описание</label>
-              <input type="text" class="form-control" id="meta_description" name="meta_description" maxlength="255" value="{{ (old('meta_description')) ? old('meta_description') : '' }}">
-            </div>
-            <div class="form-group">
-              <label for="content">Контент</label>
-              <textarea class="form-control" id="content" name="content" rows="5">{{ (old('content')) ? old('content') : '' }}</textarea>
             </div>
             <div class="form-group">
               <label for="lang">Язык</label>

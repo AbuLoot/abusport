@@ -15,7 +15,7 @@
             <div class="panel-heading">Зарегистрируйтесь в систему</div>
             <div class="panel-body">
 
-              @include('partials.alert')
+              @include('partials.alerts')
 
               <form class="form-horizontal" role="form" method="POST" action="{{ url('/register') }}">
                 {{ csrf_field() }}

@@ -2,10 +2,14 @@
 
 namespace App;
 
+use App\HasRole;
+
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
+    use HasRoles;
+
     protected $table = 'users';
 
     /**

@@ -15,7 +15,7 @@
             <div class="panel-heading">Подтверждение регистрации</div>
             <div class="panel-body">
 
-              @include('partials.alert')
+              @include('partials.alerts')
 
               <form class="form-horizontal" role="form" method="POST" action="{{ url('/confirm-register') }}">
                 {{ csrf_field() }}

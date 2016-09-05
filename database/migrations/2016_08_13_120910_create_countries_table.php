@@ -18,6 +18,7 @@ class CreateCountriesTable extends Migration
             $table->string('slug');
             $table->string('title');
             $table->char('lang', 4);
+            $table->integer('status')->default(1);
             $table->timestamps();
         });
     }

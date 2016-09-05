@@ -15,10 +15,12 @@ class CreateDistrictsTable extends Migration
         Schema::create('districts', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('sort_id')->nullable();
-            $table->integer('city_id')->references('id')->on('cities');
+            $table->integer('city_id')->unsigned();
+            $table->foreign('city_id')->references('id')->on('cities');
             $table->string('slug');
             $table->string('title');
             $table->char('lang', 4);
+            $table->integer('status')->default(1);
             $table->timestamps();
         });
     }

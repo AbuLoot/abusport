@@ -1,44 +1,49 @@
-@extends('layout')
+@extends('admin.layouts')
 
 @section('content')
-      @include('partials.admin_menu')
       <div class="panel panel-default">
         <div class="panel-body">
-          <div class="row">
-            <div class="col-md-8">
-              <h3>Добавление города</h3>
-              <form action="{{ route('admin.cities.store') }}" method="post" class="form-horizontal" enctype="multipart/form-data">
-                {!! csrf_field() !!}
-                <div class="form-group">
-                  <div class="col-md-offset-3 col-md-9">
-                    @include('partials.alerts')
-                  </div>
+          <h3>Создание</h3>
 
-                  <label for="sort_id" class="col-md-3">Номер</label>
-                  <div class="col-md-9">
-                    <input type="text" class="form-control" id="sort_id" name="sort_id" maxlength="5" value="{{ (old('sort_id')) ? old('sort_id') : NULL }}">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label for="title" class="col-md-3">Название</label>
-                  <div class="col-md-9">
-                    <input type="text" class="form-control" id="title" name="title" minlength="3" maxlength="60" value="{{ (old('title')) ? old('title') : '' }}" required>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label for="slug" class="col-md-3">Slug</label>
-                  <div class="col-md-9">
-                    <input type="text" class="form-control" id="slug" name="slug" minlength="3" maxlength="60" value="{{ (old('slug')) ? old('slug') : '' }}">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <div class="col-md-9 col-md-offset-3">
-                    <button type="submit" class="btn btn-primary">Добавить</button>
-                  </div>
-                </div>
-              </form>
+          @include('partials.alerts')
+
+          <form action="{{ route('admin.cities.store') }}" method="post">
+            {!! csrf_field() !!}
+            <div class="form-group">
+              <label for="title">Название</label>
+              <input type="text" class="form-control" id="title" name="title" minlength="5" maxlength="80" value="{{ (old('title')) ? old('title') : '' }}" required>
             </div>
-          </div>
+            <div class="form-group">
+              <label for="slug">Slug</label>
+              <input type="text" class="form-control" id="slug" name="slug" minlength="5" maxlength="80" value="{{ (old('slug')) ? old('slug') : '' }}">
+            </div>
+            <div class="form-group">
+              <label for="country_id">Страны</label>
+              <select id="country_id" name="country_id" class="form-control" required>
+                <option value=""></option>
+                @foreach($countries as $country)
+                  <option value="{{ $country->id }}">{{ $country->title }}</option>
+                @endforeach
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="sort_id">Номер</label>
+              <input type="text" class="form-control" id="sort_id" name="sort_id" maxlength="5" value="{{ (old('sort_id')) ? old('sort_id') : NULL }}">
+            </div>
+            <div class="form-group">
+              <label for="lang">Язык</label>
+              <input type="text" class="form-control" id="lang" name="lang" maxlength="255" value="{{ (old('lang')) ? old('lang') : '' }}">
+            </div>
+            <div class="form-group">
+              <label for="status">Статус:</label>
+              <label>
+                <input type="checkbox" id="status" name="status" checked> Активен
+              </label>
+            </div>
+            <div class="form-group">
+              <button type="submit" class="btn btn-primary">Создать</button>
+            </div>
+          </form>
         </div>
       </div>
 @endsection

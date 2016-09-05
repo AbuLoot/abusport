@@ -20,17 +20,20 @@ class CreateFieldsTable extends Migration
             $table->timestamps();
         });
 
-        Schema::create('field_option', function (Blueprint $table) {
-            $table->integer('field_id')->references('id')->on('fields');
-            $table->integer('option_id')->references('id')->on('options');
-        });
-
         Schema::create('options', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('sort_id')->nullable();
             $table->string('slug');
             $table->string('title');
             $table->timestamps();
+        });
+
+        Schema::create('field_option', function (Blueprint $table) {
+            $table->integer('field_id')->unsigned();
+            $table->integer('option_id')->unsigned();
+
+            $table->foreign('field_id')->references('id')->on('fields')->onDelete('cascade');
+            $table->foreign('option_id')->references('id')->on('options')->onDelete('cascade');
         });
     }
 
@@ -41,8 +44,8 @@ class CreateFieldsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('fields');
         Schema::drop('field_option');
+        Schema::drop('fields');
         Schema::drop('options');
     }
 }

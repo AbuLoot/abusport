@@ -14,10 +14,9 @@ class CreateSmsTable extends Migration
     {
         Schema::create('sms', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_id')->references('id')->on('users');
+            $table->integer('user_id');
             $table->string('phone');
             $table->integer('code');
-            $table->integer('status')->default(0);
             $table->timestamps();
         });
     }
@@ -29,6 +28,6 @@ class CreateSmsTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::drop('sms');
     }
 }
