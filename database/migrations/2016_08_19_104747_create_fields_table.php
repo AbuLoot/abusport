@@ -15,6 +15,8 @@ class CreateFieldsTable extends Migration
         Schema::create('fields', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('sort_id')->nullable();
+            $table->integer('area_id')->unsigned();
+            $table->foreign('area_id')->references('id')->on('areas')->onDelete('cascade');
             $table->string('title');
             $table->string('size');
             $table->timestamps();
@@ -34,6 +36,8 @@ class CreateFieldsTable extends Migration
 
             $table->foreign('field_id')->references('id')->on('fields')->onDelete('cascade');
             $table->foreign('option_id')->references('id')->on('options')->onDelete('cascade');
+
+            $table->primary(['field_id', 'option_id']);
         });
     }
 

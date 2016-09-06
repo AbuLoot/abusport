@@ -19,6 +19,8 @@ class CreateOrganizationsTable extends Migration
             $table->integer('city_id')->references('id')->on('cities');
             $table->integer('district_id')->references('id')->on('districts');
             $table->integer('org_type_id')->references('id')->on('org_types');
+            $table->string('slug');
+            $table->string('title');
             $table->string('logo');
             $table->string('phones');
             $table->string('website');
@@ -39,6 +41,8 @@ class CreateOrganizationsTable extends Migration
 
             $table->foreign('org_id')->references('id')->on('organizations')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+
+            $table->primary(['org_id', 'user_id']);
         });
 
         Schema::create('org_types', function (Blueprint $table) {
@@ -47,6 +51,7 @@ class CreateOrganizationsTable extends Migration
             $table->string('slug');
             $table->string('title');
             $table->string('short_title');
+            $table->char('lang', 4);
             $table->timestamps();
         });
     }

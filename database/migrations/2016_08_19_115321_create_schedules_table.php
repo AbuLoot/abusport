@@ -15,7 +15,8 @@ class CreateSchedulesTable extends Migration
         Schema::create('schedules', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('sort_id')->nullable();
-            $table->integer('field_id')->references('id')->on('fields');
+            $table->integer('field_id')->unsigned();
+            $table->foreign('field_id')->references('id')->on('fields');
             $table->time('start_time');
             $table->time('end_time');
             $table->date('date');

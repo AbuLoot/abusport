@@ -34,6 +34,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
 	Route::resource('pages', 'Admin\PageController');
     Route::resource('users', 'Admin\UserController');
     Route::resource('organizations', 'Admin\OrganizationController');
+    Route::resource('org_types', 'Admin\OrgTypeController');
 
     Route::resource('countries', 'Admin\CountryController');
     Route::resource('cities', 'Admin\CityController');

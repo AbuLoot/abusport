@@ -74,7 +74,13 @@
       <ul class="nav nav-pills nav-justified">
         <li @if (Request::is('admin/pages', 'admin/pages/*')) class="active" @endif><a href="/admin/pages">Страницы</a></li>
         <li @if (Request::is('admin/users', 'admin/users/*')) class="active" @endif><a href="/admin/users">Пользователи</a></li>
-        <li @if (Request::is('admin/organizations', 'admin/organizations/*')) class="active" @endif><a href="/admin/organizations">Организации</a></li>
+        <li class="dropdown @if (Request::is('admin/organizations', 'admin/organizations/*', 'admin/org_types', 'admin/org_types/*')) active @endif">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">База<span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li @if (Request::is('admin/organizations', 'admin/organizations/*')) class="active" @endif><a href="/admin/organizations">Организации</a></li>
+            <li @if (Request::is('admin/org_types', 'admin/org_types/*')) class="active" @endif><a href="/admin/org_types">Типы организации</a></li>
+          </ul>
+        </li>
         <li @if (Request::is('admin/countries', 'admin/countries/*')) class="active" @endif><a href="/admin/countries">Страны</a></li>
         <li @if (Request::is('admin/cities', 'admin/cities/*')) class="active" @endif><a href="/admin/cities">Города</a></li>
         <li @if (Request::is('admin/districts', 'admin/districts/*')) class="active" @endif><a href="/admin/districts">Районы</a></li>
