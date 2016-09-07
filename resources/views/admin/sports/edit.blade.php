@@ -21,7 +21,7 @@
             </div>
             <div class="form-group">
               <label for="sort_id">Номер</label>
-              <input type="text" class="form-control" id="sort_id" name="sort_id" maxlength="5" value="{{ (old('sort_id')) ? old('sort_id') : NULL }}">
+              <input type="text" class="form-control" id="sort_id" name="sort_id" maxlength="5" value="{{ (old('sort_id')) ? old('sort_id') : $sport->sort_id }}">
             </div>
             <div class="form-group">
               <label>Основная картинка</label>

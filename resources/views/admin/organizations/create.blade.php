@@ -55,31 +55,31 @@
             </div>
             <div class="form-group">
               <label for="sort_id">Номер</label>
-              <input type="text" class="form-control" id="sort_id" name="sort_id" maxlength="5" value="{{ (old('sort_id')) ? old('sort_id') : NULL }}">
+              <input type="text" class="form-control" id="sort_id" name="sort_id" value="{{ (old('sort_id')) ? old('sort_id') : NULL }}">
             </div>
             <div class="form-group">
               <label for="phones">Номера телефонов</label>
-              <input type="text" class="form-control" id="phones" name="phones" maxlength="5" value="{{ (old('phones')) ? old('phones') : NULL }}">
+              <input type="text" class="form-control" id="phones" name="phones" value="{{ (old('phones')) ? old('phones') : NULL }}">
             </div>
             <div class="form-group">
               <label for="website">Website</label>
-              <input type="text" class="form-control" id="website" name="website" maxlength="5" value="{{ (old('website')) ? old('website') : NULL }}">
+              <input type="text" class="form-control" id="website" name="website" value="{{ (old('website')) ? old('website') : NULL }}">
             </div>
             <div class="form-group">
               <label for="emails">Emails</label>
-              <input type="text" class="form-control" id="emails" name="emails" maxlength="5" value="{{ (old('emails')) ? old('emails') : NULL }}">
+              <input type="text" class="form-control" id="emails" name="emails" value="{{ (old('emails')) ? old('emails') : NULL }}">
             </div>
             <div class="form-group">
               <label for="street">Улица</label>
-              <input type="text" class="form-control" id="street" name="street" maxlength="5" value="{{ (old('street')) ? old('street') : NULL }}">
+              <input type="text" class="form-control" id="street" name="street" value="{{ (old('street')) ? old('street') : NULL }}">
             </div>
             <div class="form-group">
               <label for="latitude">Широта</label>
-              <input type="text" class="form-control" id="latitude" name="latitude" maxlength="5" value="{{ (old('latitude')) ? old('latitude') : NULL }}">
+              <input type="text" class="form-control" id="latitude" name="latitude" value="{{ (old('latitude')) ? old('latitude') : NULL }}">
             </div>
             <div class="form-group">
               <label for="longitude">Долгота</label>
-              <input type="text" class="form-control" id="longitude" name="longitude" maxlength="5" value="{{ (old('longitude')) ? old('longitude') : NULL }}">
+              <input type="text" class="form-control" id="longitude" name="longitude" value="{{ (old('longitude')) ? old('longitude') : NULL }}">
             </div>
             <div class="form-group">
               <label for="image">Картинка</label>
@@ -87,7 +87,7 @@
             </div>
             <div class="form-group">
               <label for="lang">Язык</label>
-              <input type="text" class="form-control" id="lang" name="lang" maxlength="255" value="{{ (old('lang')) ? old('lang') : '' }}">
+              <input type="text" class="form-control" id="lang" name="lang" value="{{ (old('lang')) ? old('lang') : '' }}">
             </div>
             <div class="form-group">
               <label for="status">Статус:</label>

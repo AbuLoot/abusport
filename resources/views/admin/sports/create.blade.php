@@ -34,8 +34,8 @@
               <input type="text" class="form-control" id="meta_description" name="meta_description" maxlength="255" value="{{ (old('meta_description')) ? old('meta_description') : '' }}">
             </div>
             <div class="form-group">
-              <label for="text">Текст</label>
-              <textarea class="form-control" id="text" name="text" rows="5">{{ (old('text')) ? old('text') : '' }}</textarea>
+              <label for="content">Текст</label>
+              <textarea class="form-control" id="content" name="content" rows="5">{{ (old('content')) ? old('content') : '' }}</textarea>
             </div>
             <div class="form-group">
               <label for="rules">Правила</label>

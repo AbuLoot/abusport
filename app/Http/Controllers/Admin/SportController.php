@@ -31,7 +31,7 @@ class SportController extends Controller
 
         if ($request->hasFile('image')) {
 
-        	$request->file('image')->move(public_path('img/sport'), $request->image->getClientOriginalName());
+        	$request->file('image')->move('img/sport', $request->image->getClientOriginalName());
 
         	$sport->image = $request->image->getClientOriginalName();
         }
@@ -63,12 +63,12 @@ class SportController extends Controller
 
         if ($request->hasFile('image')) {
 
-        	$request->file('image')->move(public_path('img/sport'), $request->image->getClientOriginalName());
+        	$request->file('image')->move('img/sport', $request->image->getClientOriginalName());
 
         	$sport->image = $request->image->getClientOriginalName();
 
-	        if (file_exists(public_path('img/sport/'.$sport->image))) {
-	        	Storage::delete(public_path('img/sport/'.$sport->image));
+	        if (file_exists('img/sport/'.$sport->image)) {
+	        	Storage::delete('img/sport/'.$sport->image);
 	        }
         }
 
@@ -90,8 +90,8 @@ class SportController extends Controller
     {
         $sport = Sport::find($id);
 
-        if (file_exists(public_path('img/sport/'.$sport->image))) {
-            Storage::delete(public_path('img/sport/'.$sport->image));
+        if (file_exists('img/sport/'.$sport->image)) {
+            Storage::delete('img/sport/'.$sport->image);
         }
 
         $sport->delete();

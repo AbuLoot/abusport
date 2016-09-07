@@ -7,7 +7,7 @@
 
           @include('partials.alerts')
 
-          <form action="{{ route('admin.organizations.store') }}" method="post" enctype="multipart/form-data">
+          <form action="{{ route('admin.areas.store') }}" method="post" enctype="multipart/form-data">
             {!! csrf_field() !!}
             <div class="form-group">
               <label for="title">Название</label>
@@ -46,7 +46,7 @@
             </div>
             <div class="form-group">
               <label for="district_id">Районы</label>
-              <select id="district_id" name="district_id" class="form-control" required>
+              <select id="district_id" name="district_id" class="form-control">
                 <option value=""></option>
                 @foreach($districts as $district)
                   <option value="{{ $district->id }}">{{ $district->title }}</option>
@@ -59,35 +59,119 @@
             </div>
             <div class="form-group">
               <label for="phones">Номера телефонов</label>
-              <input type="text" class="form-control" id="phones" name="phones" maxlength="5" value="{{ (old('phones')) ? old('phones') : NULL }}">
+              <input type="text" class="form-control" id="phones" name="phones" value="{{ (old('phones')) ? old('phones') : NULL }}">
             </div>
             <div class="form-group">
               <label for="website">Website</label>
-              <input type="text" class="form-control" id="website" name="website" maxlength="5" value="{{ (old('website')) ? old('website') : NULL }}">
+              <input type="text" class="form-control" id="website" name="website" value="{{ (old('website')) ? old('website') : NULL }}">
             </div>
             <div class="form-group">
               <label for="emails">Emails</label>
-              <input type="text" class="form-control" id="emails" name="emails" maxlength="5" value="{{ (old('emails')) ? old('emails') : NULL }}">
+              <input type="text" class="form-control" id="emails" name="emails" value="{{ (old('emails')) ? old('emails') : NULL }}">
             </div>
             <div class="form-group">
               <label for="street">Улица</label>
-              <input type="text" class="form-control" id="street" name="street" maxlength="5" value="{{ (old('street')) ? old('street') : NULL }}">
+              <input type="text" class="form-control" id="street" name="street" value="{{ (old('street')) ? old('street') : NULL }}">
             </div>
             <div class="form-group">
               <label for="latitude">Широта</label>
-              <input type="text" class="form-control" id="latitude" name="latitude" maxlength="5" value="{{ (old('latitude')) ? old('latitude') : NULL }}">
+              <input type="text" class="form-control" id="latitude" name="latitude" value="{{ (old('latitude')) ? old('latitude') : NULL }}">
             </div>
             <div class="form-group">
               <label for="longitude">Долгота</label>
-              <input type="text" class="form-control" id="longitude" name="longitude" maxlength="5" value="{{ (old('longitude')) ? old('longitude') : NULL }}">
+              <input type="text" class="form-control" id="longitude" name="longitude" value="{{ (old('longitude')) ? old('longitude') : NULL }}">
             </div>
             <div class="form-group">
-              <label for="image">Картинка</label>
-              <input type="file" id="image" name="image" accept="image/*" required>
+              <label for="image">Картинка:</label><br>
+              <div class="fileinput fileinput-new" data-provides="fileinput">
+                <div class="fileinput-new thumbnail" style="width:300px;height:200px;"></div>
+                <div class="fileinput-preview fileinput-exists thumbnail" style="max-width:300px;max-height:200px;"></div>
+                <div>
+                  <span class="btn btn-default btn-sm btn-file">
+                    <span class="fileinput-new"><i class="glyphicon glyphicon-folder-open"></i>&nbsp; Выбрать</span>
+                    <span class="fileinput-exists"><i class="glyphicon glyphicon-folder-open"></i>&nbsp;</span>
+                    <input type="file" name="image" accept="image/*" required>
+                  </span>
+                  <a href="#" class="btn btn-default btn-sm fileinput-exists" data-dismiss="fileinput"><i class="glyphicon glyphicon-trash"></i> Удалить</a>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="images">Галерея</label><br>
+              <div class="fileinput fileinput-new" data-provides="fileinput">
+                <div class="fileinput-preview thumbnail" style="width:300px;height:200px;" data-trigger="fileinput"></div>
+                <div>
+                  <span class="btn btn-default btn-sm btn-file">
+                    <span class="fileinput-new"><i class="glyphicon glyphicon-folder-open"></i>&nbsp; Выбрать</span>
+                    <span class="fileinput-exists"><i class="glyphicon glyphicon-folder-open"></i>&nbsp;</span>
+                    <input type="file" name="images[]" accept="image/*">
+                  </span>
+                  <a href="#" class="btn btn-default btn-sm fileinput-exists" data-dismiss="fileinput"><i class="glyphicon glyphicon-trash"></i> Удалить</a>
+                </div>
+              </div>
+              <div class="fileinput fileinput-new" data-provides="fileinput">
+                <div class="fileinput-preview thumbnail" style="width:300px;height:200px;" data-trigger="fileinput"></div>
+                <div>
+                  <span class="btn btn-default btn-sm btn-file">
+                    <span class="fileinput-new"><i class="glyphicon glyphicon-folder-open"></i>&nbsp; Выбрать</span>
+                    <span class="fileinput-exists"><i class="glyphicon glyphicon-folder-open"></i>&nbsp;</span>
+                    <input type="file" name="images[]" accept="image/*">
+                  </span>
+                  <a href="#" class="btn btn-default btn-sm fileinput-exists" data-dismiss="fileinput"><i class="glyphicon glyphicon-trash"></i> Удалить</a>
+                </div>
+              </div>
+              <div class="fileinput fileinput-new" data-provides="fileinput">
+                <div class="fileinput-preview thumbnail" style="width:300px;height:200px;" data-trigger="fileinput"></div>
+                <div>
+                  <span class="btn btn-default btn-sm btn-file">
+                    <span class="fileinput-new"><i class="glyphicon glyphicon-folder-open"></i>&nbsp; Выбрать</span>
+                    <span class="fileinput-exists"><i class="glyphicon glyphicon-folder-open"></i>&nbsp;</span>
+                    <input type="file" name="images[]" accept="image/*">
+                  </span>
+                  <a href="#" class="btn btn-default btn-sm fileinput-exists" data-dismiss="fileinput"><i class="glyphicon glyphicon-trash"></i> Удалить</a>
+                </div>
+              </div>
+              <div class="fileinput fileinput-new" data-provides="fileinput">
+                <div class="fileinput-preview thumbnail" style="width:300px;height:200px;" data-trigger="fileinput"></div>
+                <div>
+                  <span class="btn btn-default btn-sm btn-file">
+                    <span class="fileinput-new"><i class="glyphicon glyphicon-folder-open"></i>&nbsp; Выбрать</span>
+                    <span class="fileinput-exists"><i class="glyphicon glyphicon-folder-open"></i>&nbsp;</span>
+                    <input type="file" name="images[]" accept="image/*">
+                  </span>
+                  <a href="#" class="btn btn-default btn-sm fileinput-exists" data-dismiss="fileinput"><i class="glyphicon glyphicon-trash"></i> Удалить</a>
+                </div>
+              </div>
+              <div class="fileinput fileinput-new" data-provides="fileinput">
+                <div class="fileinput-preview thumbnail" style="width:300px;height:200px;" data-trigger="fileinput"></div>
+                <div>
+                  <span class="btn btn-default btn-sm btn-file">
+                    <span class="fileinput-new"><i class="glyphicon glyphicon-folder-open"></i>&nbsp; Выбрать</span>
+                    <span class="fileinput-exists"><i class="glyphicon glyphicon-folder-open"></i>&nbsp;</span>
+                    <input type="file" name="images[]" accept="image/*">
+                  </span>
+                  <a href="#" class="btn btn-default btn-sm fileinput-exists" data-dismiss="fileinput"><i class="glyphicon glyphicon-trash"></i> Удалить</a>
+                </div>
+              </div>
+              <div class="fileinput fileinput-new" data-provides="fileinput">
+                <div class="fileinput-preview thumbnail" style="width:300px;height:200px;" data-trigger="fileinput"></div>
+                <div>
+                  <span class="btn btn-default btn-sm btn-file">
+                    <span class="fileinput-new"><i class="glyphicon glyphicon-folder-open"></i>&nbsp; Выбрать</span>
+                    <span class="fileinput-exists"><i class="glyphicon glyphicon-folder-open"></i>&nbsp;</span>
+                    <input type="file" name="images[]" accept="image/*">
+                  </span>
+                  <a href="#" class="btn btn-default btn-sm fileinput-exists" data-dismiss="fileinput"><i class="glyphicon glyphicon-trash"></i> Удалить</a>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="content">Контент</label>
+              <textarea class="form-control" id="content" name="content" rows="5">{{ (old('content')) ? old('content') : '' }}</textarea>
             </div>
             <div class="form-group">
               <label for="lang">Язык</label>
-              <input type="text" class="form-control" id="lang" name="lang" maxlength="255" value="{{ (old('lang')) ? old('lang') : '' }}">
+              <input type="text" class="form-control" id="lang" name="lang" value="{{ (old('lang')) ? old('lang') : '' }}">
             </div>
             <div class="form-group">
               <label for="status">Статус:</label>
@@ -101,4 +185,12 @@
           </form>
         </div>
       </div>
+@endsection
+
+@section('styles')
+  <link href="/css/jasny-bootstrap.min.css" rel="stylesheet">
+@endsection
+
+@section('scripts')
+  <script src="/js/jasny-bootstrap.js"></script>
 @endsection

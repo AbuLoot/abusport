@@ -26,10 +26,10 @@ class OrganizationController extends Controller
 
     public function create()
     {
-    	$org_types = OrgType::all();
-    	$countries = Country::orderBy('sort_id')->get();
-    	$cities = City::orderBy('sort_id')->get();
-    	$districts = District::orderBy('sort_id')->get();
+        $org_types = OrgType::all();
+        $countries = Country::orderBy('sort_id')->get();
+        $cities = City::orderBy('sort_id')->get();
+        $districts = District::orderBy('sort_id')->get();
 
         return view('admin.organizations.create', compact('org_types', 'countries', 'cities', 'districts'));
     }
@@ -40,16 +40,16 @@ class OrganizationController extends Controller
 
         if ($request->hasFile('image')) {
 
-        	$request->file('image')->move(public_path('img/organizations'), $request->image->getClientOriginalName());
+            $request->file('image')->move('img/organizations', $request->image->getClientOriginalName());
 
-        	$organization->logo = $request->image->getClientOriginalName();
+            $organization->logo = $request->image->getClientOriginalName();
         }
 
         $organization->sort_id = ($request->sort_id > 0) ? $request->sort_id : $organization->count() + 1;
         $organization->country_id = $request->country_id;
         $organization->city_id = $request->city_id;
         $organization->district_id = $request->district_id;
-		$organization->org_type_id = $request->org_type_id;
+        $organization->org_type_id = $request->org_type_id;
         $organization->slug = (empty($request->slug)) ? str_slug($request->title) : $request->slug;
         $organization->title = $request->title;
         $organization->phones = $request->phones;
@@ -68,10 +68,10 @@ class OrganizationController extends Controller
 
     public function edit($id)
     {
-    	$org_types = OrgType::all();
-    	$countries = Country::orderBy('sort_id')->get();
-    	$cities = City::orderBy('sort_id')->get();
-    	$districts = District::orderBy('sort_id')->get();
+        $org_types = OrgType::all();
+        $countries = Country::orderBy('sort_id')->get();
+        $cities = City::orderBy('sort_id')->get();
+        $districts = District::orderBy('sort_id')->get();
         $organization = Organization::findOrFail($id);
 
         return view('admin.organizations.edit', compact('org_types', 'countries', 'cities', 'districts', 'organization'));
@@ -83,20 +83,20 @@ class OrganizationController extends Controller
 
         if ($request->hasFile('image')) {
 
-        	$request->file('image')->move(public_path('img/organizations'), $request->image->getClientOriginalName());
+            $request->file('image')->move('img/organizations', $request->image->getClientOriginalName());
 
-        	$organization->image = $request->image->getClientOriginalName();
+            $organization->image = $request->image->getClientOriginalName();
 
-	        if (file_exists(public_path('img/organizations/'.$organization->image))) {
-	        	Storage::delete(public_path('img/organizations/'.$organization->image));
-	        }
+            if (file_exists('img/organizations/'.$organization->image)) {
+                Storage::delete('img/organizations/'.$organization->image);
+            }
         }
 
         $organization->sort_id = ($request->sort_id > 0) ? $request->sort_id : $organization->count() + 1;
         $organization->country_id = $request->country_id;
         $organization->city_id = $request->city_id;
         $organization->district_id = $request->district_id;
-		$organization->org_type_id = $request->org_type_id;
+        $organization->org_type_id = $request->org_type_id;
         $organization->slug = (empty($request->slug)) ? str_slug($request->title) : $request->slug;
         $organization->title = $request->title;
         $organization->phones = $request->phones;
@@ -117,8 +117,8 @@ class OrganizationController extends Controller
     {
         $organization = Organization::find($id);
 
-        if (file_exists(public_path('img/organizations/'.$organization->image))) {
-            Storage::delete(public_path('img/organizations/'.$organization->image));
+        if (file_exists('img/organizations/'.$organization->image)) {
+            Storage::delete('img/organizations/'.$organization->image);
         }
 
         $organization->delete();
