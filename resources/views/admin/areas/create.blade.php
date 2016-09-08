@@ -35,24 +35,7 @@
                 @endforeach
               </select>
             </div>
-            <div class="form-group">
-              <label for="city_id">Города</label>
-              <select id="city_id" name="city_id" class="form-control" required>
-                <option value=""></option>
-                @foreach($cities as $city)
-                  <option value="{{ $city->id }}">{{ $city->title }}</option>
-                @endforeach
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="district_id">Районы</label>
-              <select id="district_id" name="district_id" class="form-control">
-                <option value=""></option>
-                @foreach($districts as $district)
-                  <option value="{{ $district->id }}">{{ $district->title }}</option>
-                @endforeach
-              </select>
-            </div>
+
             <div class="form-group">
               <label for="sort_id">Номер</label>
               <input type="text" class="form-control" id="sort_id" name="sort_id" maxlength="5" value="{{ (old('sort_id')) ? old('sort_id') : NULL }}">
@@ -73,14 +56,40 @@
               <label for="street">Улица</label>
               <input type="text" class="form-control" id="street" name="street" value="{{ (old('street')) ? old('street') : NULL }}">
             </div>
-            <div class="form-group">
-              <label for="latitude">Широта</label>
-              <input type="text" class="form-control" id="latitude" name="latitude" value="{{ (old('latitude')) ? old('latitude') : NULL }}">
+
+            <div class="row">
+                <div class="col-md-6 col-xs-12">
+                    <div class="form-group">
+                        <label for="city_id">Города</label>
+                        <select id="city_id" name="city_id" class="form-control" required>
+                            <option value=""></option>
+                            @foreach($cities as $city)
+                                <option value="{{ $city->id }}">{{ $city->title }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="district_id">Районы</label>
+                        <select id="district_id" name="district_id" class="form-control">
+                            <option value=""></option>
+                            @foreach($districts as $district)
+                                <option value="{{ $district->id }}">{{ $district->title }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Адрес</label>
+                        <input type="hidden" name="latitude" id="latitude">
+                        <input type="hidden" name="longitude" id="longitude">
+                        <textarea class="form-control" rows="5" name="address" id="address"></textarea>
+                        <span class="help-block">Например: Абая 32</span>
+                    </div>
+                </div>
+                <div class="col-md-6 col-xs-12">
+                    <div id="yaMap" style="width: 100%; height: 350px;"></div>
+                </div>
             </div>
-            <div class="form-group">
-              <label for="longitude">Долгота</label>
-              <input type="text" class="form-control" id="longitude" name="longitude" value="{{ (old('longitude')) ? old('longitude') : NULL }}">
-            </div>
+
             <div class="form-group">
               <label for="image">Картинка:</label><br>
               <div class="fileinput fileinput-new" data-provides="fileinput">
@@ -193,4 +202,92 @@
 
 @section('scripts')
   <script src="/js/jasny-bootstrap.js"></script>
+  <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
+
+  <script>
+
+      ymaps.ready(init);
+      var myMap,
+              myPlacemark;
+
+      function init() {
+          myMap = new ymaps.Map("yaMap", {
+              center: [48.136, 67.153],
+              zoom: 4
+          });
+
+          $country = "Казахстан";
+
+          var myGeocoder = ymaps.geocode($.trim($country));
+
+          myGeocoder.then(
+                  function (res) {
+                      var coords = res.geoObjects.get(0).geometry.getCoordinates();
+                      myGeocoder.then(
+                              function (res) {
+                                  myMap.setCenter(coords, 4);
+                                  document.getElementById("latitude").value = coords[0];
+                                  document.getElementById("longitude").value = coords[1];
+                              }
+                      );
+                  });
+
+          $("#city_id").on('change', function () {
+              $city = $("#city_id option[value='" +  $("#city_id").val() + "']").html();
+
+              var myGeocoder = ymaps.geocode($.trim($country)+','+$city);
+
+              myGeocoder.then(
+                      function (res) {
+                          var coords = res.geoObjects.get(0).geometry.getCoordinates();
+                          myGeocoder.then(
+                                  function (res) {
+                                      myMap.setCenter(coords, 10);
+                                      document.getElementById("latitude").value = coords[0];
+                                      document.getElementById("longitude").value = coords[1];
+                                  }
+                          );
+                      });
+          });
+
+          $("#address").bind('keyup', function () {
+              $city = $("#city_id option[value='" +  $("#city_id").val() + "']").html();
+              $address = $("#address").val();
+
+              var myGeocoder = ymaps.geocode($.trim($country)+','+$city+','+$address);
+
+              myGeocoder.then(
+                      function (res) {
+                          var coords = res.geoObjects.get(0).geometry.getCoordinates();
+                          myGeocoder.then(
+                                  function (res) {
+                                      myMap.geoObjects.removeAll();
+                                      var placemark = new ymaps.Placemark(coords, {}, {
+                                          draggable: true
+                                      });
+                                      myMap.geoObjects.add(placemark);
+                                      myMap.setCenter(coords, 16);
+
+                                      placemark.events.add("drag", function (event) {
+                                          coords = placemark.geometry.getCoordinates();
+                                          document.getElementById("latitude").value = coords[0];
+                                          document.getElementById("longitude").value = coords[1];
+                                      });
+                                      document.getElementById("latitude").value = coords[0];
+                                      document.getElementById("longitude").value = coords[1];
+                                  }
+                          );
+                      });
+          });
+
+      }
+      /**
+       *  Global Ajax Settings
+       */
+      $.ajaxSetup({
+          headers: { 'X-CSRF-TOKEN': $('input[name="_token"]').val() }
+      });
+
+  </script>
+
 @endsection
