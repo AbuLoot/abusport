@@ -43,14 +43,13 @@ class AreaController extends Controller
         if ($request->hasFile('image')) {
 
             if ( ! file_exists('img/organizations/'.$request->org_id)) {
-                Storage::makeDirectory('img/organizations/'.$request->org_id);
+                mkdir('img/organizations/'.$request->org_id);
             }
 
             $imageName = 'preview-image-'.str_random(10).'.'.$request->image->getClientOriginalExtension();
             $imagePath = 'img/organizations/'.$request->org_id.'/'.$imageName;
 
-            $this->createImage($request->image, 200, 150, $imagePath, 100);
-
+            $this->resizeImage($request->image, 200, 150, $imagePath, 100);
             $area->image = $imageName;
         }
 
@@ -60,7 +59,7 @@ class AreaController extends Controller
             $images = [];
 
             if ( ! file_exists('img/organizations/'.$request->org_id)) {
-                Storage::makeDirectory('img/organizations/'.$request->org_id);
+                mkdir('img/organizations/'.$request->org_id);
             }
 
             foreach ($request->file('images') as $key => $image)
@@ -71,18 +70,18 @@ class AreaController extends Controller
 
                     // Creating images
                     $imagePath = 'img/organizations/'.$request->org_id.'/'.$imageName;
-                    $this->createImage($image, 800, 400, $imagePath, 100);
+                    $this->resizeImage($image, 800, 400, $imagePath, 100);
 
                     // Creating mini images
                     $imagePath = 'img/organizations/'.$request->org_id.'/mini-'.$imageName;
-                    $this->createImage($image, 400, 200, $imagePath, 100);
+                    $this->resizeImage($image, 400, 200, $imagePath, 100);
 
                     $images[$key]['image'] = $imageName;
                     $images[$key]['mini_image'] = 'mini-'.$imageName;
                 }
             }
 
-            $area->images = json_encode($images);
+            $area->images = serialize($images);
         }
 
         $area->sort_id = ($request->sort_id > 0) ? $request->sort_id : $area->count() + 1;
@@ -92,10 +91,10 @@ class AreaController extends Controller
         $area->district_id = $request->district_id;
         $area->slug = (empty($request->slug)) ? str_slug($request->title) : $request->slug;
         $area->title = $request->title;
-        $area->street = $request->street;
+        // $area->address = $request->address;
         $area->latitude = $request->latitude;
         $area->longitude = $request->longitude;
-        $area->description = $request->description;
+        // $area->description = $request->description;
         $area->status = ($request->status == 'on') ? 1 : 0;
         $area->save();
 
@@ -104,13 +103,13 @@ class AreaController extends Controller
 
     public function edit($id)
     {
+        $sports = Sport::all();
         $organizations = Organization::all();
-        $countries = Country::orderBy('sort_id')->get();
         $cities = City::orderBy('sort_id')->get();
         $districts = District::orderBy('sort_id')->get();
         $area = Area::findOrFail($id);
 
-        return view('admin.areas.edit', compact('organizations', 'countries', 'cities', 'districts', 'organization'));
+        return view('admin.areas.edit', compact('sports', 'organizations', 'cities', 'districts', 'area'));
     }
 
     public function update(AreaRequest $request, $id)
@@ -119,13 +118,62 @@ class AreaController extends Controller
 
         if ($request->hasFile('image')) {
 
-            $request->file('image')->move('img/organizations', $request->image->getClientOriginalName());
-
-            $area->image = $request->image->getClientOriginalName();
-
-            if (file_exists('img/organizations/'.$area->image)) {
-                Storage::delete('img/organizations/'.$area->image);
+            if ( ! file_exists('img/organizations/'.$request->org_id)) {
+                mkdir('img/organizations/'.$request->org_id);
             }
+
+            if (file_exists('img/organizations/'.$area->org_id)) {
+                Storage::delete('img/organizations/'.$area->org_id.'/'.$area->image);
+            }
+
+            $imageName = 'preview-image-'.str_random(10).'.'.$request->image->getClientOriginalExtension();
+            $imagePath = 'img/organizations/'.$request->org_id.'/'.$imageName;
+
+            $this->resizeImage($request->image, 200, 150, $imagePath, 100);
+            $area->image = $imageName;
+        }
+
+        if ($request->hasFile('images')) {
+
+            $images = unserialize($area->images);
+
+            if ( ! file_exists('img/organizations/'.$request->org_id)) {
+                mkdir('img/organizations/'.$request->org_id);
+            }
+
+            foreach ($request->file('images') as $key => $image)
+            {
+                if (isset($image)) {
+
+                    $imageName = 'image-'.$key.'-'.str_random(10).'.'.$image->getClientOriginalExtension();
+
+                    // Creating images
+                    $imagePath = 'img/organizations/'.$request->org_id.'/'.$imageName;
+                    $this->resizeImage($image, 800, 400, $imagePath, 100);
+
+                    // Creating mini images
+                    $imagePath = 'img/organizations/'.$request->org_id.'/mini-'.$imageName;
+                    $this->resizeImage($image, 400, 200, $imagePath, 100);
+
+                    if (isset($images[$key])) {
+
+                        Storage::delete([
+                            'img/organizations/'.$request->org_id.'/'.$images[$key]->image,
+                            'img/organizations/'.$request->org_id.'/'.$images[$key]->mini_image
+                        ]);
+
+                        $images[$key]->image = $imageName;
+                        $images[$key]->mini_image = 'mini-'.$imageName;
+                    }
+                    else {
+                        $images[$key]->image = $imageName;
+                        $images[$key]->mini_image = 'mini-'.$imageName;
+                    }
+                }
+            }
+
+            $images = array_sort_recursive($images);
+            $area->images = serialize($images);
         }
 
         $area->sort_id = ($request->sort_id > 0) ? $request->sort_id : $area->count() + 1;
@@ -135,10 +183,7 @@ class AreaController extends Controller
         $area->district_id = $request->district_id;
         $area->slug = (empty($request->slug)) ? str_slug($request->title) : $request->slug;
         $area->title = $request->title;
-        // $area->image = $request->image;
-        $area->images = $request->images;
-        $area->street = $request->street;
-        $area->house = $request->house;
+        $area->address = $request->address;
         $area->latitude = $request->latitude;
         $area->longitude = $request->longitude;
         $area->description = $request->description;
@@ -161,7 +206,7 @@ class AreaController extends Controller
         return redirect('/admin/areas')->with('status', 'Запись удалена!');
     }
 
-    public function createImage($image, $width, $height, $path, $quality, $color = '#ffffff')
+    public function resizeImage($image, $width, $height, $path, $quality, $color = '#ffffff')
     {
         $frame = Image::canvas($width, $height, $color);
         $newImage = Image::make($image);
@@ -177,11 +222,18 @@ class AreaController extends Controller
             });
         }
 
-        // if ($newImage->width() > $width OR $newImage->height() > $height) {
-        //     $newImage->crop($width, $height);
-        // }
-
         $frame->insert($newImage, 'center');
         $frame->save($path, $quality);
+    }
+
+    public function cropImage($image, $width, $height, $path, $quality)
+    {
+        $newImage = Image::make($image);
+
+        if ($newImage->width() > $width OR $newImage->height() > $height) {
+            $newImage->crop($width, $height);
+        }
+
+        $newImage->save($path, $quality);
     }
 }

@@ -52,11 +52,6 @@
               <label for="emails">Emails</label>
               <input type="text" class="form-control" id="emails" name="emails" value="{{ (old('emails')) ? old('emails') : NULL }}">
             </div>
-            <div class="form-group">
-              <label for="street">Улица</label>
-              <input type="text" class="form-control" id="street" name="street" value="{{ (old('street')) ? old('street') : NULL }}">
-            </div>
-
             <div class="row">
                 <div class="col-md-6 col-xs-12">
                     <div class="form-group">
@@ -175,8 +170,8 @@
               </div>
             </div>
             <div class="form-group">
-              <label for="content">Контент</label>
-              <textarea class="form-control" id="content" name="content" rows="5">{{ (old('content')) ? old('content') : '' }}</textarea>
+              <label for="description">Описание</label>
+              <textarea class="form-control" id="description" name="description" rows="5">{{ (old('description')) ? old('description') : '' }}</textarea>
             </div>
             <div class="form-group">
               <label for="lang">Язык</label>

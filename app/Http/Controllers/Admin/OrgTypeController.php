@@ -27,7 +27,7 @@ class OrgTypeController extends Controller
     public function store(Request $request)
     {    	
         $validator = Validator::make($request->all(), [
-            'title' => 'required|min:5|max:60|unique:org_types',
+            'title' => 'required|max:60|unique:org_types',
         ]);
 
         if ($validator->fails()) {
@@ -56,7 +56,7 @@ class OrgTypeController extends Controller
     public function update(Request $request, $id)
     {    	
         $validator = Validator::make($request->all(), [
-            'title' => 'required|min:5|max:60',
+            'title' => 'required|max:60',
         ]);
 
         if ($validator->fails()) {

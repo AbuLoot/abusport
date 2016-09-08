@@ -11,7 +11,7 @@
             {!! csrf_field() !!}
             <div class="form-group">
               <label for="short_title">Аббревиатура</label>
-              <input type="text" class="form-control" id="short_title" name="short_title" minlength="5" maxlength="80" value="{{ (old('short_title')) ? old('short_title') : '' }}" required>
+              <input type="text" class="form-control" id="short_title" name="short_title" maxlength="80" value="{{ (old('short_title')) ? old('short_title') : '' }}" required>
             </div>
             <div class="form-group">
               <label for="title">Название</label>
