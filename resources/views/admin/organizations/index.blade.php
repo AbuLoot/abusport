@@ -13,6 +13,7 @@
             <td>№</td>
             <td>Название</td>
             <td>Номер</td>
+            <td>Аббревиатура</td>
             <td>Статус</td>
             <td class="text-right">Функции</td>
           </tr>
@@ -24,6 +25,7 @@
               <td>{{ $i++ }}</td>
               <td>{{ $organization->title }}</td>
               <td>{{ $organization->sort_id }}</td>
+              <td>{{ $organization->org_type->short_title }}</td>
               @if ($organization->status == 1)
                 <td class="text-success">Активен</td>
               @else

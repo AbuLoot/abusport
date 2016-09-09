@@ -14,25 +14,21 @@
               <input type="text" class="form-control" id="title" name="title" minlength="5" maxlength="80" value="{{ (old('title')) ? old('title') : '' }}" required>
             </div>
             <div class="form-group">
-              <label for="slug">Slug</label>
-              <input type="text" class="form-control" id="slug" name="slug" minlength="5" maxlength="80" value="{{ (old('slug')) ? old('slug') : '' }}">
-            </div>
-            <div class="form-group">
-              <label for="country_id">Страны</label>
-              <select id="country_id" name="country_id" class="form-control" required>
-                <option value=""></option>
-                @foreach($countries as $country)
-                  <option value="{{ $country->id }}">{{ $country->title }}</option>
-                @endforeach
-              </select>
-            </div>
-            <div class="form-group">
               <label for="sort_id">Номер</label>
               <input type="text" class="form-control" id="sort_id" name="sort_id" maxlength="5" value="{{ (old('sort_id')) ? old('sort_id') : NULL }}">
             </div>
             <div class="form-group">
-              <label for="lang">Язык</label>
-              <input type="text" class="form-control" id="lang" name="lang" maxlength="255" value="{{ (old('lang')) ? old('lang') : '' }}">
+              <label for="area_id">Площадки</label>
+              <select id="area_id" name="area_id" class="form-control" required>
+                <option value=""></option>
+                @foreach($areas as $area)
+                  <option value="{{ $area->id }}">{{ $area->title }}</option>
+                @endforeach
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="size">Размер</label>
+              <input type="text" class="form-control" id="size" name="size" maxlength="5" value="{{ (old('size')) ? old('size') : '' }}">
             </div>
             <div class="form-group">
               <label for="status">Статус:</label>

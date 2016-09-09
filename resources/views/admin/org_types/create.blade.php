@@ -30,12 +30,6 @@
               <input type="text" class="form-control" id="lang" name="lang" maxlength="255" value="{{ (old('lang')) ? old('lang') : '' }}">
             </div>
             <div class="form-group">
-              <label for="status">Статус:</label>
-              <label>
-                <input type="checkbox" id="status" name="status" checked> Активен
-              </label>
-            </div>
-            <div class="form-group">
               <button type="submit" class="btn btn-primary">Создать</button>
             </div>
           </form>
