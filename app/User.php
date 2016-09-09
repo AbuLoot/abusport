@@ -18,7 +18,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'surname', 'name', 'email', 'password',
+        'id', 'surname', 'name', 'email', 'password',
     ];
 
     /**
@@ -29,4 +29,30 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public $userProfile = null;
+
+    public function getUserProfile() {
+        if($this->userProfile == null) {
+            $this->userProfile = Profile::join('users', 'users.id', '=', 'profiles.user_id')
+                ->where('profiles.user_id', '=', $this->id)
+                ->get();
+        }
+
+        return $this->userProfile;
+    }
+
+    public $userCity = null;
+
+    public function getUserCity() {
+        if($this->userCity == null) {
+            $this->userCity = City::join('profiles', 'profiles.city_id', '=', 'cities.id')
+                ->where('profiles.user_id', '=', $this->id)
+                ->orderBy('cities.sort_id')
+                ->get(['cities.*', 'profiles.user_id']);
+        }
+
+        return $this->userCity;
+    }
+
 }

@@ -91,10 +91,13 @@ class AreaController extends Controller
         $area->district_id = $request->district_id;
         $area->slug = (empty($request->slug)) ? str_slug($request->title) : $request->slug;
         $area->title = $request->title;
-        // $area->address = $request->address;
+        $area->phones = $request->phones;
+        $area->emails = $request->emails;
+        $area->address = $request->address;
         $area->latitude = $request->latitude;
         $area->longitude = $request->longitude;
-        // $area->description = $request->description;
+        $area->description = $request->description;
+        $area->lang = $request->lang;
         $area->status = ($request->status == 'on') ? 1 : 0;
         $area->save();
 
@@ -183,10 +186,13 @@ class AreaController extends Controller
         $area->district_id = $request->district_id;
         $area->slug = (empty($request->slug)) ? str_slug($request->title) : $request->slug;
         $area->title = $request->title;
+        $area->phones = $request->phones;
+        $area->emails = $request->emails;
         $area->address = $request->address;
         $area->latitude = $request->latitude;
         $area->longitude = $request->longitude;
         $area->description = $request->description;
+        $area->lang = $request->lang;
         $area->status = ($request->status == 'on') ? 1 : 0;
         $area->save();
 
