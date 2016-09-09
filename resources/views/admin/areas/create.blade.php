@@ -201,10 +201,8 @@
   <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
 
   <script>
-
     ymaps.ready(init);
-    var myMap,
-      myPlacemark;
+    var myMap, myPlacemark;
 
     function init() {
       myMap = new ymaps.Map("yaMap", {
