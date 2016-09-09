@@ -50,7 +50,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
 // Route::get('/home', 'HomeController@index');
 
 Route::get('test', function() {
-    echo 'asSalyam alaikum';
+    echo 'asSalyam alaikum Erasyl!';
 });
 
 Route::get('add-sports', function() {
