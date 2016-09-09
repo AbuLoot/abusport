@@ -64,7 +64,7 @@
             </div>
             <div class="form-group">
               <label for="district_id">Районы</label>
-              <select id="district_id" name="district_id" class="form-control" required>
+              <select id="district_id" name="district_id" class="form-control">
                 <option value=""></option>
                 @foreach($districts as $district)
                   @if ($district->id == $area->district_id)
@@ -102,7 +102,7 @@
                   <span class="btn btn-default btn-sm btn-file">
                     <span class="fileinput-new"><i class="glyphicon glyphicon-folder-open"></i>&nbsp; Выбрать</span>
                     <span class="fileinput-exists"><i class="glyphicon glyphicon-folder-open"></i>&nbsp;</span>
-                    <input type="file" name="image" accept="image/*" required>
+                    <input type="file" name="image" accept="image/*">
                   </span>
                   <a href="#" class="btn btn-default btn-sm fileinput-exists" data-dismiss="fileinput"><i class="glyphicon glyphicon-trash"></i> Удалить</a>
                 </div>
