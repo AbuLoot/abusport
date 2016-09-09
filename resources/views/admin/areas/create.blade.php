@@ -52,6 +52,7 @@
               <label for="emails">Emails</label>
               <input type="text" class="form-control" id="emails" name="emails" value="{{ (old('emails')) ? old('emails') : NULL }}">
             </div>
+
             <div class="row">
                 <div class="col-md-6 col-xs-12">
                     <div class="form-group">
@@ -201,87 +202,88 @@
 
   <script>
 
-      ymaps.ready(init);
-      var myMap,
-              myPlacemark;
+    ymaps.ready(init);
+    var myMap,
+      myPlacemark;
 
-      function init() {
-          myMap = new ymaps.Map("yaMap", {
-              center: [48.136, 67.153],
-              zoom: 4
-          });
-
-          $country = "Казахстан";
-
-          var myGeocoder = ymaps.geocode($.trim($country));
-
-          myGeocoder.then(
-                  function (res) {
-                      var coords = res.geoObjects.get(0).geometry.getCoordinates();
-                      myGeocoder.then(
-                              function (res) {
-                                  myMap.setCenter(coords, 4);
-                                  document.getElementById("latitude").value = coords[0];
-                                  document.getElementById("longitude").value = coords[1];
-                              }
-                      );
-                  });
-
-          $("#city_id").on('change', function () {
-              $city = $("#city_id option[value='" +  $("#city_id").val() + "']").html();
-
-              var myGeocoder = ymaps.geocode($.trim($country)+','+$city);
-
-              myGeocoder.then(
-                      function (res) {
-                          var coords = res.geoObjects.get(0).geometry.getCoordinates();
-                          myGeocoder.then(
-                                  function (res) {
-                                      myMap.setCenter(coords, 10);
-                                      document.getElementById("latitude").value = coords[0];
-                                      document.getElementById("longitude").value = coords[1];
-                                  }
-                          );
-                      });
-          });
-
-          $("#address").bind('keyup', function () {
-              $city = $("#city_id option[value='" +  $("#city_id").val() + "']").html();
-              $address = $("#address").val();
-
-              var myGeocoder = ymaps.geocode($.trim($country)+','+$city+','+$address);
-
-              myGeocoder.then(
-                      function (res) {
-                          var coords = res.geoObjects.get(0).geometry.getCoordinates();
-                          myGeocoder.then(
-                                  function (res) {
-                                      myMap.geoObjects.removeAll();
-                                      var placemark = new ymaps.Placemark(coords, {}, {
-                                          draggable: true
-                                      });
-                                      myMap.geoObjects.add(placemark);
-                                      myMap.setCenter(coords, 16);
-
-                                      placemark.events.add("drag", function (event) {
-                                          coords = placemark.geometry.getCoordinates();
-                                          document.getElementById("latitude").value = coords[0];
-                                          document.getElementById("longitude").value = coords[1];
-                                      });
-                                      document.getElementById("latitude").value = coords[0];
-                                      document.getElementById("longitude").value = coords[1];
-                                  }
-                          );
-                      });
-          });
-
-      }
-      /**
-       *  Global Ajax Settings
-       */
-      $.ajaxSetup({
-          headers: { 'X-CSRF-TOKEN': $('input[name="_token"]').val() }
+    function init() {
+      myMap = new ymaps.Map("yaMap", {
+        center: [48.136, 67.153],
+        zoom: 4
       });
+
+      $country = "Казахстан";
+
+      var myGeocoder = ymaps.geocode($.trim($country));
+
+      myGeocoder.then(
+        function (res) {
+          var coords = res.geoObjects.get(0).geometry.getCoordinates();
+          myGeocoder.then(
+            function (res) {
+              myMap.setCenter(coords, 4);
+              document.getElementById("latitude").value = coords[0];
+              document.getElementById("longitude").value = coords[1];
+            }
+          );
+        });
+
+      $("#city_id").on('change', function () {
+        $city = $("#city_id option[value='" +  $("#city_id").val() + "']").html();
+
+        var myGeocoder = ymaps.geocode($.trim($country)+','+$city);
+
+        myGeocoder.then(
+          function (res) {
+            var coords = res.geoObjects.get(0).geometry.getCoordinates();
+            myGeocoder.then(
+              function (res) {
+                myMap.setCenter(coords, 10);
+                document.getElementById("latitude").value = coords[0];
+                document.getElementById("longitude").value = coords[1];
+              }
+            );
+          }
+        );
+      });
+
+      $("#address").bind('keyup', function () {
+        $city = $("#city_id option[value='" +  $("#city_id").val() + "']").html();
+        $address = $("#address").val();
+
+        var myGeocoder = ymaps.geocode($.trim($country)+','+$city+','+$address);
+
+        myGeocoder.then(
+          function (res) {
+            var coords = res.geoObjects.get(0).geometry.getCoordinates();
+            myGeocoder.then(
+              function (res) {
+                myMap.geoObjects.removeAll();
+                var placemark = new ymaps.Placemark(coords, {}, {
+                  draggable: true
+                });
+                myMap.geoObjects.add(placemark);
+                myMap.setCenter(coords, 16);
+
+                placemark.events.add("drag", function (event) {
+                  coords = placemark.geometry.getCoordinates();
+                  document.getElementById("latitude").value = coords[0];
+                  document.getElementById("longitude").value = coords[1];
+                });
+                document.getElementById("latitude").value = coords[0];
+                document.getElementById("longitude").value = coords[1];
+              }
+            );
+          });
+      });
+
+    }
+    /**
+     *  Global Ajax Settings
+     */
+    $.ajaxSetup({
+      headers: { 'X-CSRF-TOKEN': $('input[name="_token"]').val() }
+    });
 
   </script>
 
