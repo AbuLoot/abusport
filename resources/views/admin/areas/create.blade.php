@@ -45,10 +45,6 @@
               <input type="text" class="form-control" id="phones" name="phones" value="{{ (old('phones')) ? old('phones') : NULL }}">
             </div>
             <div class="form-group">
-              <label for="website">Website</label>
-              <input type="text" class="form-control" id="website" name="website" value="{{ (old('website')) ? old('website') : NULL }}">
-            </div>
-            <div class="form-group">
               <label for="emails">Emails</label>
               <input type="text" class="form-control" id="emails" name="emails" value="{{ (old('emails')) ? old('emails') : NULL }}">
             </div>

@@ -1,7 +1,6 @@
-@extends('layout')
+@extends('admin.layouts')
 
 @section('content')
-      @include('partials.admin_menu')
       <div class="panel panel-default">
         <div class="panel-body">
           <div class="row">
@@ -13,9 +12,9 @@
                     <tr class="active">
                       <td>№</td>
                       <td>Имя</td>
+                      <td>Фамилия</td>
                       <td>Email</td>
                       <td>Город</td>
-                      <td>Рейтинг</td>
                       <td>ip</td>
                       <td>Номер</td>
                       <td>Статус</td>
@@ -37,6 +36,9 @@
                           <input type="text" class="form-control input-sm" name="name" placeholder="Имя">
                         </th>
                         <th>
+                          <input type="text" class="form-control input-sm" name="surname" placeholder="Фамилия">
+                        </th>
+                        <th>
                           <input type="text" class="form-control input-sm" name="email" placeholder="Email">
                         </th>
                         <th>
@@ -45,16 +47,6 @@
                             @foreach($cities as $city)
                               <option value="{{ $city->id }}">{{ $city->title }}</option>
                             @endforeach
-                          </select>
-                        </th>
-                        <th>
-                          <select class="form-control input-sm" name="stars">
-                            <option>-</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
                           </select>
                         </th>
                         <th>
@@ -78,32 +70,24 @@
                   </thead>
                   <tbody>
                     <?php $i = 1; ?>
-                    @forelse ($profiles as $profile)
+                    @forelse ($users->getUserProfile() as $user)
                       <tr>
                         <td>{{ $i++ }}</td>
-                        <td><a href="/profile/{{ $profile->id }}" target="_blank">{{ $profile->user->name }}</a></td>
-                        <td>{{ $profile->user->email }}</td>
-                        <td>{{ ($profile->city_id == 0) ? 'Не указан' : $profile->city->title }}</td>
-                        <td class="text-nowrap">
-                          @for ($s = 1; $s <= 5; $s++)
-                            @if ($s <= $profile->stars)
-                              <i class="glyphicon glyphicon-star text-success"></i>
-                            @else
-                              <i class="glyphicon glyphicon-star text-muted"></i>
-                            @endif
-                          @endfor
-                        </td>
-                        <td>{{ $profile->user->ip }}</td>
-                        <td>{{ $profile->sort_id }}</td>
-                        @if ($profile->user->status == 1)
+                        <td><a href="/profile/{{ $user->id }}" target="_blank">{{ $user->name }}</a></td>
+                        <td>{{ $user->surname }}</td>
+                        <td>{{ $user->email }}</td>
+                        <td class="text-nowrap">{{ ($user->city_id == 0) ? 'Не указан' : 'asd' }}</td>
+                        <td>{{ $user->ip }}</td>
+                        <td>{{ $user->sort_id }}</td>
+                        @if ( $user->status == 1)
                           <td class="text-success">Активен</td>
                         @else
                           <td class="text-danger">Неактивен</td>
                         @endif
                         <td class="text-right text-nowrap">
-                          <a class="btn btn-primary btn-xs" href="{{ route('admin.users.show', $profile->id) }}" title="Просмотр профиля"><span class="glyphicon glyphicon-file"></span></a>
-                          <a class="btn btn-primary btn-xs" href="{{ route('admin.users.edit', $profile->id) }}" title="Редактировать"><span class="glyphicon glyphicon-edit"></span></a>
-                          <form method="POST" action="{{ route('admin.users.destroy', $profile->user->id) }}" accept-charset="UTF-8" class="btn-delete" title="Удалить">
+                          <a class="btn btn-primary btn-xs" href="{{ route('admin.users.show', $user->id) }}" title="Просмотр профиля"><span class="glyphicon glyphicon-file"></span></a>
+                          <a class="btn btn-primary btn-xs" href="{{ route('admin.users.edit', $user->id) }}" title="Редактировать"><span class="glyphicon glyphicon-edit"></span></a>
+                          <form method="POST" action="{{ route('admin.users.destroy', $user->id) }}" accept-charset="UTF-8" class="btn-delete" title="Удалить">
                             <input name="_method" type="hidden" value="DELETE">
                             <input name="_token" type="hidden" value="{{ csrf_token() }}">
                             <button type="submit" class="btn btn-danger btn-xs" onclick="return confirm('Удалить запись?')"><span class="glyphicon glyphicon-trash"></span></button>
