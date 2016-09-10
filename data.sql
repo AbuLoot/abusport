@@ -41,7 +41,7 @@ INSERT INTO `districts` (`sort_id`, `city_id`, `slug`, `title`, `lang`) VALUES
 (8, 1, 'turksibskij', 'Турксибский район', 'ru');
 
 
--- sports
+-- Sports
 INSERT INTO `sports` (`sort_id`, `slug`, `title`, `image`, `lang`) VALUES
 (1, 'football', 'Футбол', '', 'ru'),
 (2, 'basketball', 'Баскетбол', '', 'ru'),
@@ -53,30 +53,30 @@ INSERT INTO `sports` (`sort_id`, `slug`, `title`, `image`, `lang`) VALUES
 (8, 'golf', 'Гольф', '', 'ru');
 
 
--- org_types
-INSERT INTO `org_types` (`title`, `short_title`) VALUES
-('Товарищество с ограниченной ответственностью', 'тоо'),
-('Индивидуальное предпринимательство', 'ип'),
-('Товарищество с дополнительной ответственностью', 'тдо'),
-('Гос предприятие', 'гп'),
-('Гос предприятие на праве хозяйственного ведения', 'гпнпхв'),
-('Гос предприятие на праве оперативного управления', 'гпнпоу'),
-('Хозяйственное товарищество', 'хт'),
-('Полное товарищество', 'пт'),
-('Коммандитное  товарищество', 'кт'),
-('Акционерное общество', 'ао'),
-('Другая организационно-правовые форма', 'допф'),
-('Производственный кооператив', 'пк'),
-('Учреждение', 'у'),
-('Общественное объединение', 'оу'),
-('Потребительский кооператив', 'пк'),
-('Фонд', 'ф'),
-('Религиозное объединение', 'ро'),
-('Объединение  юридических лиц в форме  ассоциации', 'оюлвфа'),
-('Сельскохозяйственное товарищество', 'ст'),
-('Личное предпринимательство', 'лп'),
-('Индивидуальное пр-во на основе совместного пр-ва', 'ипносп'),
-('Простое товарищество', 'пп'),
-('Предпринимательство супругов', 'пс'),
-('Семейное предпринимательство', 'сп'),
-('Иная форма некоммерческой организации', 'иопфно');
+-- Organization types
+INSERT INTO `org_types` (`slug`, `title`, `short_title`) VALUES
+('tovarishchestvo-s-ogranichennoy-otvetstvennostyu', 'Товарищество с ограниченной ответственностью', 'ТОО'),
+('individualnoe-predprinimatelstvo', 'Индивидуальное предпринимательство', 'ИП'),
+('tovarishchestvo-s-dopolnitelnoy-otvetstvennostyu', 'Товарищество с дополнительной ответственностью', 'ТДО'),
+('gos-predpriyatie', 'Гос предприятие', 'ГП'),
+('gos-predpriyatie-na-prave-khozyaystvennogo-vedeniya', 'Гос предприятие на праве хозяйственного ведения', 'ГПНПХВ'),
+('gos-predpriyatie-na-prave-operativnogo-upravleniya', 'Гос предприятие на праве оперативного управления', 'ГПНПОУ'),
+('khozyaystvennoe-tovarishchestvo', 'Хозяйственное товарищество', 'ХТ'),
+('polnoe-tovarishchestvo', 'Полное товарищество', 'ПТ'),
+('kommanditnoe-tovarishchestvo', 'Коммандитное товарищество', 'КТ'),
+('aktsionernoe-obshchestvo', 'Акционерное общество', 'АО'),
+('drugaya-organizatsionno-pravovye-forma', 'Другая организационно-правовые форма', 'ДОПФ'),
+('proizvodstvennyy-kooperativ', 'Производственный кооператив', 'ПК'),
+('uchrezhdenie', 'Учреждение', 'У'),
+('obshchestvennoe-obedinenie', 'Общественное объединение', 'ОУ'),
+('potrebitelskiy-kooperativ', 'Потребительский кооператив', 'ПК'),
+('fond', 'Фонд', 'Ф'),
+('religioznoe-obedinenie', 'Религиозное объединение', 'РО'),
+('obedinenie-yuridicheskikh-lits-v-forme-assotsiatsii', 'Объединение юридических лиц в форме ассоциации', 'ОЮЛВФА'),
+('selskokhozyaystvennoe-tovarishchestvo', 'Сельскохозяйственное товарищество', 'СТ'),
+('lichnoe-predprinimatelstvo', 'Личное предпринимательство', 'ЛП'),
+('individualnoe-pr-vo-na-osnove-sovmestnogo-pr-va', 'Индивидуальное пр-во на основе совместного пр-ва', 'ИПНОСП'),
+('prostoe-tovarishchestvo', 'Простое товарищество', 'ПП'),
+('predprinimatelstvo-suprugov', 'Предпринимательство супругов', 'ПС'),
+('semeynoe-predprinimatelstvo', 'Семейное предпринимательство', 'СП'),
+('inaya-forma-nekommercheskoy-organizatsii', 'Иная форма некоммерческой организации', 'ИОПФНО');

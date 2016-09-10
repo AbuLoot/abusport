@@ -42,27 +42,17 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
 
     Route::resource('sports', 'Admin\SportController');
     Route::resource('areas', 'Admin\AreaController');
+    Route::resource('fields', 'Admin\FieldController');
+    Route::resource('options', 'Admin\OptionController');
     Route::resource('matches', 'Admin\MatchController');
 });
 
+Route::get('add-data', function() {
 
-// Test
-// Route::get('/home', 'HomeController@index');
-
-Route::get('test', function() {
-    echo 'asSalyam alaikum';
-});
-
-Route::get('add-sports', function() {
-
-	$sport = new App\Sport;
-
-	$faker = Faker\Factory::create('ru_RU');
-
-	for ($i=0; $i < 30; $i++) { 
-		echo $faker->name . '<br>';
-		echo $faker->phoneNumber . '<br>';
-		echo $faker->address . '<hr>';
-	} 
+	// for ($i=0; $i < 30; $i++) { 
+	// 	echo $faker->name . '<br>';
+	// 	echo $faker->phoneNumber . '<br>';
+	// 	echo $faker->address . '<hr>';
+	// } 
 
 });

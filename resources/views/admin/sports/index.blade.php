@@ -11,6 +11,7 @@
         <thead>
           <tr class="active">
             <td>№</td>
+            <td>URI</td>
             <td>Название</td>
             <td>Номер</td>
             <td>Статус</td>
@@ -22,6 +23,7 @@
           @forelse ($sports as $sport)
             <tr>
               <td>{{ $i++ }}</td>
+              <td>{{ $sport->slug }}</td>
               <td>{{ $sport->title }}</td>
               <td>{{ $sport->sort_id }}</td>
               @if ($sport->status == 1)
