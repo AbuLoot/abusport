@@ -20,17 +20,10 @@
                       <td>Статус</td>
                       <td class="text-right">Функции</td>
                     </tr>
-                    <form action="/">
+                    <form action="/admin/users">
                       <tr>
                         <th style="width: 70px;">
-                          <select class="form-control input-sm" name="count">
-                            <option value="50">50</option>
-                            <option value="100">100</option>
-                            <option value="200">200</option>
-                            <option value="500">500</option>
-                            <option value="1000">1000</option>
-                            <option value="all">Все</option>
-                          </select>
+
                         </th>
                         <th>
                           <input type="text" class="form-control input-sm" name="name" placeholder="Имя">
@@ -43,7 +36,7 @@
                         </th>
                         <th>
                           <select class="form-control input-sm" name="city_id">
-                            <option>-</option>
+                            <option value="null">Выберите</option>
                             @foreach($cities as $city)
                               <option value="{{ $city->id }}">{{ $city->title }}</option>
                             @endforeach
@@ -57,7 +50,7 @@
                         </th>
                         <th>
                           <select class="form-control input-sm" name="status">
-                            <option>-</option>
+                            <option value="null">Выберите</option>
                             <option value="1">Активен</option>
                             <option value="0">Неактивен</option>
                           </select>
@@ -70,13 +63,13 @@
                   </thead>
                   <tbody>
                     <?php $i = 1; ?>
-                    @forelse ($users->getUserProfile() as $user)
+                    @forelse ($users as $user)
                       <tr>
                         <td>{{ $i++ }}</td>
-                        <td><a href="/profile/{{ $user->id }}" target="_blank">{{ $user->name }}</a></td>
+                        <td>{{ $user->name }}</td>
                         <td>{{ $user->surname }}</td>
                         <td>{{ $user->email }}</td>
-                        <td class="text-nowrap">{{ ($user->city_id == 0) ? 'Не указан' : 'asd' }}</td>
+                        <td class="text-nowrap">{{ ($user->profile->city_id == 0) ? 'Не указан' : $user->profile->city->title }}</td>
                         <td>{{ $user->ip }}</td>
                         <td>{{ $user->sort_id }}</td>
                         @if ( $user->status == 1)
