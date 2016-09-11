@@ -33,6 +33,19 @@
               </select>
             </div>
             <div class="form-group">
+              <label for="options_id">Опции</label>
+              <select id="options_id" name="options_id[]" class="form-control" multiple>
+                <option value=""></option>
+                @foreach($options as $option)
+                  @if (in_array($option->id, $field->options->lists('id')->toArray()))
+                    <option value="{{ $option->id }}" selected>{{ $option->title }}</option>
+                  @else
+                    <option value="{{ $option->id }}">{{ $option->title }}</option>
+                  @endif
+                @endforeach
+              </select>
+            </div>
+            <div class="form-group">
               <label for="size">Размер</label>
               <input type="text" class="form-control" id="size" name="size" maxlength="5" value="{{ (old('size')) ? old('size') : $field->size }}">
             </div>

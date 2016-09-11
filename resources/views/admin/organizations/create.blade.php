@@ -22,16 +22,7 @@
               <select id="org_type_id" name="org_type_id" class="form-control" required>
                 <option value=""></option>
                 @foreach($org_types as $org_type)
-                  <option value="{{ $org_type->id }}">{{ $org_type->title }}</option>
-                @endforeach
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="country_id">Страны</label>
-              <select id="country_id" name="country_id" class="form-control" required>
-                <option value=""></option>
-                @foreach($countries as $country)
-                  <option value="{{ $country->id }}">{{ $country->title }}</option>
+                  <option value="{{ $org_type->id }}">{{ $org_type->title.' - '.$org_type->short_title }}</option>
                 @endforeach
               </select>
             </div>
@@ -51,9 +42,17 @@
               <label for="emails">Emails</label>
               <input type="text" class="form-control" id="emails" name="emails" value="{{ (old('emails')) ? old('emails') : NULL }}">
             </div>
-
             <div class="row">
               <div class="col-md-6 col-xs-12">
+                <div class="form-group">
+                  <label for="country_id">Страны</label>
+                  <select id="country_id" name="country_id" class="form-control" required>
+                    <option value=""></option>
+                    @foreach($countries as $country)
+                      <option value="{{ $country->id }}">{{ $country->title }}</option>
+                    @endforeach
+                  </select>
+                </div>
                 <div class="form-group">
                   <label for="city_id">Города</label>
                   <select id="city_id" name="city_id" class="form-control" required>
@@ -108,7 +107,6 @@
 @endsection
 
 @section('scripts')
-  <script src="/js/jasny-bootstrap.js"></script>
   <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
 
   <script>
@@ -120,24 +118,25 @@
     function init() {
       myMap = new ymaps.Map("yaMap", {
         center: [48.136, 67.153],
-        zoom: 4
+        zoom: 1
       });
 
-      $country = "Казахстан";
+      $("#country_id").on('change', function () {
+        $country = $("#country_id option[value='" +  $("#country_id").val() + "']").html();
+        var myGeocoder = ymaps.geocode($.trim($country));
 
-      var myGeocoder = ymaps.geocode($.trim($country));
-
-      myGeocoder.then(
-        function (res) {
-          var coords = res.geoObjects.get(0).geometry.getCoordinates();
-          myGeocoder.then(
-            function (res) {
-              myMap.setCenter(coords, 4);
-              document.getElementById("latitude").value = coords[0];
-              document.getElementById("longitude").value = coords[1];
-            }
-          );
-        });
+        myGeocoder.then(
+          function (res) {
+            var coords = res.geoObjects.get(0).geometry.getCoordinates();
+            myGeocoder.then(
+              function (res) {
+                myMap.setCenter(coords, 4);
+                document.getElementById("latitude").value = coords[0];
+                document.getElementById("longitude").value = coords[1];
+              }
+            );
+          });
+      });
 
       $("#city_id").on('change', function () {
         $city = $("#city_id option[value='" +  $("#city_id").val() + "']").html();

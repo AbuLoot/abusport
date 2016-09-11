@@ -3,7 +3,6 @@
 namespace App;
 
 use App\HasRole;
-
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
@@ -18,7 +17,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'surname', 'name', 'email', 'password',
+        'id', 'surname', 'name', 'email', 'password',
     ];
 
     /**
@@ -29,4 +28,9 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+    
+    public function profile()
+    {
+        return $this->hasOne('App\Profile');
+    }
 }

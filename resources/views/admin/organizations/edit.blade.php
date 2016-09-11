@@ -29,48 +29,9 @@
                 <option value=""></option>
                 @foreach($org_types as $org_type)
                   @if ($org_type->id == $organization->org_type_id)
-                    <option value="{{ $org_type->id }}" selected>{{ $org_type->title }}</option>
+                    <option value="{{ $org_type->id }}" selected>{{ $org_type->title.' - '.$org_type->short_title }}</option>
                   @else
-                    <option value="{{ $org_type->id }}">{{ $org_type->title }}</option>
-                  @endif
-                @endforeach
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="country_id">Страны</label>
-              <select id="country_id" name="country_id" class="form-control" required>
-                <option value=""></option>
-                @foreach($countries as $country)
-                  @if ($country->id == $organization->country_id)
-                    <option value="{{ $country->id }}" selected>{{ $country->title }}</option>
-                  @else
-                    <option value="{{ $country->id }}">{{ $country->title }}</option>
-                  @endif
-                @endforeach
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="city_id">Города</label>
-              <select id="city_id" name="city_id" class="form-control" required>
-                <option value=""></option>
-                @foreach($cities as $city)
-                  @if ($city->id == $organization->city_id)
-                    <option value="{{ $city->id }}" selected>{{ $city->title }}</option>
-                  @else
-                    <option value="{{ $city->id }}">{{ $city->title }}</option>
-                  @endif
-                @endforeach
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="district_id">Районы</label>
-              <select id="district_id" name="district_id" class="form-control" required>
-                <option value=""></option>
-                @foreach($districts as $district)
-                  @if ($district->id == $organization->district_id)
-                    <option value="{{ $district->id }}" selected>{{ $district->title }}</option>
-                  @else
-                    <option value="{{ $district->id }}">{{ $district->title }}</option>
+                    <option value="{{ $org_type->id }}">{{ $org_type->title.' - '.$org_type->short_title }}</option>
                   @endif
                 @endforeach
               </select>
@@ -87,17 +48,58 @@
               <label for="emails">Emails</label>
               <input type="text" class="form-control" id="emails" name="emails" value="{{ (old('emails')) ? old('emails') : $organization->emails }}">
             </div>
-            <div class="form-group">
-              <label for="street">Улица</label>
-              <input type="text" class="form-control" id="street" name="street" value="{{ (old('street')) ? old('street') : $organization->street }}">
-            </div>
-            <div class="form-group">
-              <label for="latitude">Широта</label>
-              <input type="text" class="form-control" id="latitude" name="latitude" value="{{ (old('latitude')) ? old('latitude') : $organization->latitude }}">
-            </div>
-            <div class="form-group">
-              <label for="longitude">Долгота</label>
-              <input type="text" class="form-control" id="longitude" name="longitude" value="{{ (old('longitude')) ? old('longitude') : $organization->longitude }}">
+            <div class="row">
+              <div class="col-md-6 col-xs-12">
+                <div class="form-group">
+                  <label for="country_id">Страны</label>
+                  <select id="country_id" name="country_id" class="form-control" required>
+                    <option value=""></option>
+                    @foreach($countries as $country)
+                      @if ($country->id == $organization->country_id)
+                        <option value="{{ $country->id }}" selected>{{ $country->title }}</option>
+                      @else
+                        <option value="{{ $country->id }}">{{ $country->title }}</option>
+                      @endif
+                    @endforeach
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="city_id">Города</label>
+                  <select id="city_id" name="city_id" class="form-control" required>
+                    <option value=""></option>
+                    @foreach($cities as $city)
+                      @if ($city->id == $organization->city_id)
+                        <option value="{{ $city->id }}" selected>{{ $city->title }}</option>
+                      @else
+                        <option value="{{ $city->id }}">{{ $city->title }}</option>
+                      @endif
+                    @endforeach
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="district_id">Районы</label>
+                  <select id="district_id" name="district_id" class="form-control" required>
+                    <option value=""></option>
+                    @foreach($districts as $district)
+                      @if ($district->id == $organization->district_id)
+                        <option value="{{ $district->id }}" selected>{{ $district->title }}</option>
+                      @else
+                        <option value="{{ $district->id }}">{{ $district->title }}</option>
+                      @endif
+                    @endforeach
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="address">Адрес</label>
+                  <input type="hidden" name="latitude" id="latitude">
+                  <input type="hidden" name="longitude" id="longitude">
+                  <textarea class="form-control" rows="5" name="address" id="address">{{$organization->address}}</textarea>
+                  <span class="help-block">Например: Абая 32</span>
+                </div>
+              </div>
+              <div class="col-md-6 col-xs-12">
+                <div id="yaMap" style="width: 100%; height: 350px;"></div>
+              </div>
             </div>
             <div class="form-group">
               <label>Основная картинка</label>
@@ -122,4 +124,127 @@
           </form>
         </div>
       </div>
+@endsection
+
+@section('scripts')
+  <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
+
+  <script>
+
+    ymaps.ready(init);
+    var myMap,
+      myPlacemark;
+
+    function init() {
+      myMap = new ymaps.Map("yaMap", {
+        center: [48.136, 67.153],
+        zoom: 1
+      });
+
+      $country = $("#country_id option[value='" +  $("#country_id").val() + "']").html();
+      $city = $("#city_id option[value='" +  $("#city_id").val() + "']").html();
+      $address = $("#address").val();
+
+      var myGeocoder = ymaps.geocode($.trim($country)+','+$city+','+$address);
+
+      myGeocoder.then(
+        function (res) {
+          var coords = res.geoObjects.get(0).geometry.getCoordinates();
+          myGeocoder.then(
+            function (res) {
+              myMap.geoObjects.removeAll();
+              var placemark = new ymaps.Placemark(coords, {}, {
+                draggable: true
+              });
+              myMap.geoObjects.add(placemark);
+              myMap.setCenter(coords, 16);
+
+              placemark.events.add("drag", function (event) {
+                coords = placemark.geometry.getCoordinates();
+                document.getElementById("latitude").value = coords[0];
+                document.getElementById("longitude").value = coords[1];
+              });
+              document.getElementById("latitude").value = coords[0];
+              document.getElementById("longitude").value = coords[1];
+            }
+          );
+        }
+      );
+
+      $("#country_id").on('change', function () {
+        $country = $("#country_id option[value='" +  $("#country_id").val() + "']").html();
+        var myGeocoder = ymaps.geocode($.trim($country));
+
+        myGeocoder.then(
+          function (res) {
+            var coords = res.geoObjects.get(0).geometry.getCoordinates();
+            myGeocoder.then(
+              function (res) {
+                myMap.setCenter(coords, 4);
+                document.getElementById("latitude").value = coords[0];
+                document.getElementById("longitude").value = coords[1];
+              }
+            );
+          });
+      });
+
+      $("#city_id").on('change', function () {
+        $city = $("#city_id option[value='" +  $("#city_id").val() + "']").html();
+
+        var myGeocoder = ymaps.geocode($.trim($country)+','+$city);
+
+        myGeocoder.then(
+          function (res) {
+            var coords = res.geoObjects.get(0).geometry.getCoordinates();
+            myGeocoder.then(
+              function (res) {
+                myMap.setCenter(coords, 10);
+                document.getElementById("latitude").value = coords[0];
+                document.getElementById("longitude").value = coords[1];
+              }
+            );
+          }
+        );
+      });
+
+      $("#address").bind('keyup', function () {
+        $city = $("#city_id option[value='" +  $("#city_id").val() + "']").html();
+        $address = $("#address").val();
+
+        var myGeocoder = ymaps.geocode($.trim($country)+','+$city+','+$address);
+
+        myGeocoder.then(
+          function (res) {
+            var coords = res.geoObjects.get(0).geometry.getCoordinates();
+            myGeocoder.then(
+              function (res) {
+                myMap.geoObjects.removeAll();
+                var placemark = new ymaps.Placemark(coords, {}, {
+                  draggable: true
+                });
+                myMap.geoObjects.add(placemark);
+                myMap.setCenter(coords, 16);
+
+                placemark.events.add("drag", function (event) {
+                  coords = placemark.geometry.getCoordinates();
+                  document.getElementById("latitude").value = coords[0];
+                  document.getElementById("longitude").value = coords[1];
+                });
+                document.getElementById("latitude").value = coords[0];
+                document.getElementById("longitude").value = coords[1];
+              }
+            );
+          });
+      });
+
+    }
+    /**
+     *  Global Ajax Settings
+     */
+    $.ajaxSetup({
+      headers: { 'X-CSRF-TOKEN': $('input[name="_token"]').val() }
+    });
+
+  </script>
+
 @endsection

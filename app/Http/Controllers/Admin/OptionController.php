@@ -40,7 +40,6 @@ class OptionController extends Controller
         $option->slug = (empty($request->slug)) ? str_slug($request->title) : $request->slug;
         $option->title = $request->title;
         $option->lang = $request->lang;
-        $option->status = ($request->status == 'on') ? 1 : 0;
         $option->save();
 
         return redirect('/admin/options')->with('status', 'Запись добавлена!');

@@ -12,4 +12,9 @@ class Field extends Model
     {
     	return $this->belongsTo('App\Area', 'area_id');
     }
+
+    public function options()
+    {
+        return $this->belongsToMany('App\Option', 'field_option', 'field_id', 'option_id');
+    }
 }
