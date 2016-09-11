@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddStatusToFieldsTable extends Migration
+class AddLangToOptionsAndFieldsTables extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,11 @@ class AddStatusToFieldsTable extends Migration
     public function up()
     {
         Schema::table('fields', function (Blueprint $table) {
-            $table->integer('status')->default(1)->after('size');
+            $table->char('lang', 4)->after('size');
+        });
+
+        Schema::table('options', function (Blueprint $table) {
+            $table->char('lang', 4)->after('title');
         });
     }
 
@@ -25,7 +29,11 @@ class AddStatusToFieldsTable extends Migration
     public function down()
     {
         Schema::table('fields', function (Blueprint $table) {
-            $table->dropColumn('status');
+            $table->dropColumn('lang');
+        });
+
+        Schema::table('options', function (Blueprint $table) {
+            $table->dropColumn('lang');
         });
     }
 }
