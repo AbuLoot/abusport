@@ -29,9 +29,9 @@
                 <option value=""></option>
                 @foreach($org_types as $org_type)
                   @if ($org_type->id == $organization->org_type_id)
-                    <option value="{{ $org_type->id }}" selected>{{ $org_type->title }}</option>
+                    <option value="{{ $org_type->id }}" selected>{{ $org_type->title.' - '.$org_type->short_title }}</option>
                   @else
-                    <option value="{{ $org_type->id }}">{{ $org_type->title }}</option>
+                    <option value="{{ $org_type->id }}">{{ $org_type->title.' - '.$org_type->short_title }}</option>
                   @endif
                 @endforeach
               </select>

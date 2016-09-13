@@ -31,12 +31,6 @@
               <input type="text" class="form-control" id="lang" name="lang" maxlength="255" value="{{ (old('lang')) ? old('lang') : $org_type->lang }}">
             </div>
             <div class="form-group">
-              <label for="status">Статус:</label>
-              <label>
-                <input type="checkbox" id="status" name="status" @if ($org_type->status == 1) checked @endif> Активен
-              </label>
-            </div>
-            <div class="form-group">
               <button type="submit" class="btn btn-primary">Изменить</button>
             </div>
           </form>

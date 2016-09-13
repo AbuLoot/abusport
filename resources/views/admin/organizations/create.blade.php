@@ -22,7 +22,7 @@
               <select id="org_type_id" name="org_type_id" class="form-control" required>
                 <option value=""></option>
                 @foreach($org_types as $org_type)
-                  <option value="{{ $org_type->id }}">{{ $org_type->title }}</option>
+                  <option value="{{ $org_type->id }}">{{ $org_type->title.' - '.$org_type->short_title }}</option>
                 @endforeach
               </select>
             </div>

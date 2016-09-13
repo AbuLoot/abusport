@@ -85,5 +85,4 @@ class DistrictController extends Controller
 
         return redirect('/admin/districts')->with('status', 'Запись удалена!');
     }
-
 }
