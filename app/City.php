@@ -17,4 +17,9 @@ class City extends Model
     {
         return $this->hasMany('App\District');
     }
+    
+    public function profile()
+    {
+        return $this->hasMany('App\Profile');
+    }
 }

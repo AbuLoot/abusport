@@ -50,36 +50,36 @@
             </div>
 
             <div class="row">
-                <div class="col-md-6 col-xs-12">
-                    <div class="form-group">
-                        <label for="city_id">Города</label>
-                        <select id="city_id" name="city_id" class="form-control" required>
-                            <option value=""></option>
-                            @foreach($cities as $city)
-                                <option value="{{ $city->id }}">{{ $city->title }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="district_id">Районы</label>
-                        <select id="district_id" name="district_id" class="form-control">
-                            <option value=""></option>
-                            @foreach($districts as $district)
-                                <option value="{{ $district->id }}">{{ $district->title }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="address">Адрес</label>
-                        <input type="hidden" name="latitude" id="latitude">
-                        <input type="hidden" name="longitude" id="longitude">
-                        <textarea class="form-control" rows="5" name="address" id="address"></textarea>
-                        <span class="help-block">Например: Абая 32</span>
-                    </div>
+              <div class="col-md-6 col-xs-12">
+                <div class="form-group">
+                  <label for="city_id">Города</label>
+                  <select id="city_id" name="city_id" class="form-control" required>
+                    <option value=""></option>
+                    @foreach($cities as $city)
+                      <option value="{{ $city->id }}">{{ $city->title }}</option>
+                    @endforeach
+                  </select>
                 </div>
-                <div class="col-md-6 col-xs-12">
-                    <div id="yaMap" style="width: 100%; height: 350px;"></div>
+                <div class="form-group">
+                  <label for="district_id">Районы</label>
+                  <select id="district_id" name="district_id" class="form-control">
+                    <option value=""></option>
+                    @foreach($districts as $district)
+                      <option value="{{ $district->id }}">{{ $district->title }}</option>
+                    @endforeach
+                  </select>
                 </div>
+                <div class="form-group">
+                  <label for="address">Адрес</label>
+                  <input type="hidden" name="latitude" id="latitude">
+                  <input type="hidden" name="longitude" id="longitude">
+                  <textarea class="form-control" rows="5" name="address" id="address"></textarea>
+                  <span class="help-block">Например: Абая 32</span>
+                </div>
+              </div>
+              <div class="col-md-6 col-xs-12">
+                <div id="yaMap" style="width: 100%; height: 350px;"></div>
+              </div>
             </div>
 
             <div class="form-group">

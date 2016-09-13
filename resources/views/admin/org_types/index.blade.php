@@ -14,7 +14,6 @@
             <td>Аббревиатура</td>
             <td>Название</td>
             <td>Номер</td>
-            <td>Статус</td>
             <td class="text-right">Функции</td>
           </tr>
         </thead>
@@ -26,11 +25,6 @@
               <td>{{ $org_type->short_title }}</td>
               <td>{{ $org_type->title }}</td>
               <td>{{ $org_type->sort_id }}</td>
-              @if ($org_type->status == 1)
-                <td class="text-success">Активен</td>
-              @else
-                <td class="text-danger">Неактивен</td>
-              @endif
               <td class="text-right">
                 <a class="btn btn-primary btn-xs" href="{{ route('admin.org_types.edit', $org_type->id) }}" title="Редактировать"><span class="glyphicon glyphicon-edit"></span></a>
                 <form method="POST" action="{{ route('admin.org_types.destroy', $org_type->id) }}" accept-charset="UTF-8" class="btn-delete">

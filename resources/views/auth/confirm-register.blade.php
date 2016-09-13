@@ -20,9 +20,7 @@
               <form class="form-horizontal" role="form" method="POST" action="{{ url('/confirm-register') }}">
                 {{ csrf_field() }}
 
-                <input type="hidden" name="id" value="{{ session('user_id') }}">
-
-                <div class="form-group{{ $errors->has('phone') ? ' has-error' : '' }}">
+                <div class="form-group {{ $errors->has('phone') ? 'has-error' : '' }}">
                   <label for="phone" class="col-md-4 control-label">Номер Телефона</label>
 
                   <div class="col-md-6">
@@ -36,7 +34,7 @@
                   </div>
                 </div>
 
-                <div class="form-group{{ $errors->has('code') ? ' has-error' : '' }}">
+                <div class="form-group {{ $errors->has('code') ? 'has-error' : '' }}">
                   <label for="code" class="col-md-4 control-label">Код</label>
 
                   <div class="col-md-3">

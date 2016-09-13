@@ -31,10 +31,12 @@ Route::get('areas', ['as' => 'areas', 'uses' => 'AreaController@getAreas']);
 // Administration
 Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
 
-	Route::resource('pages', 'Admin\PageController');
+    Route::resource('pages', 'Admin\PageController');
     Route::resource('users', 'Admin\UserController');
     Route::resource('organizations', 'Admin\OrganizationController');
     Route::resource('org_types', 'Admin\OrgTypeController');
+    Route::resource('roles', 'Admin\RoleController');
+    Route::resource('permissions', 'Admin\PermissionController');
 
     Route::resource('countries', 'Admin\CountryController');
     Route::resource('cities', 'Admin\CityController');
@@ -42,27 +44,20 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
 
     Route::resource('sports', 'Admin\SportController');
     Route::resource('areas', 'Admin\AreaController');
+    Route::resource('fields', 'Admin\FieldController');
+    Route::resource('options', 'Admin\OptionController');
     Route::resource('matches', 'Admin\MatchController');
 });
 
+// Route::get('add-sports', function() {
 
-// Test
-// Route::get('/home', 'HomeController@index');
+// 	$sport = new App\Sport;
 
-Route::get('test', function() {
-    echo 'asSalyam alaikum Erasyl!';
-});
+// 	$faker = Faker\Factory::create('ru_RU');
 
-Route::get('add-sports', function() {
-
-	$sport = new App\Sport;
-
-	$faker = Faker\Factory::create('ru_RU');
-
-	for ($i=0; $i < 30; $i++) { 
-		echo $faker->name . '<br>';
-		echo $faker->phoneNumber . '<br>';
-		echo $faker->address . '<hr>';
-	} 
-
-});
+// 	for ($i=0; $i < 30; $i++) { 
+// 		echo $faker->name . '<br>';
+// 		echo $faker->phoneNumber . '<br>';
+// 		echo $faker->address . '<hr>';
+// 	}
+// });
