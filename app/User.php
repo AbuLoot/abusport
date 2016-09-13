@@ -2,7 +2,7 @@
 
 namespace App;
 
-use App\HasRole;
+use App\HasRoles;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable

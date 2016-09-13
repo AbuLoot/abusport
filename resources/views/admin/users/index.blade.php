@@ -7,8 +7,8 @@
         <thead>
           <tr class="active">
             <td>№</td>
-            <td>Имя</td>
             <td>Фамилия</td>
+            <td>Имя</td>
             <td>Email</td>
             <td>Город</td>
             <td>ip</td>
@@ -18,14 +18,12 @@
           </tr>
           <form action="/admin/users">
             <tr>
-              <th style="width: 70px;">
-
+              <th style="width: 70px;"> </th>
+              <th>
+                <input type="text" class="form-control input-sm" name="surname" placeholder="Фамилия">
               </th>
               <th>
                 <input type="text" class="form-control input-sm" name="name" placeholder="Имя">
-              </th>
-              <th>
-                <input type="text" class="form-control input-sm" name="surname" placeholder="Фамилия">
               </th>
               <th>
                 <input type="text" class="form-control input-sm" name="email" placeholder="Email">
@@ -62,8 +60,8 @@
           @forelse ($users as $user)
             <tr>
               <td>{{ $i++ }}</td>
-              <td>{{ $user->name }}</td>
               <td>{{ $user->surname }}</td>
+              <td>{{ $user->name }}</td>
               <td>{{ $user->email }}</td>
               <td class="text-nowrap">{{ ($user->profile->city_id == 0) ? 'Не указан' : $user->profile->city->title }}</td>
               <td>{{ $user->ip }}</td>

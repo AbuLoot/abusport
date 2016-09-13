@@ -31,10 +31,12 @@ Route::get('areas', ['as' => 'areas', 'uses' => 'AreaController@getAreas']);
 // Administration
 Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
 
-	Route::resource('pages', 'Admin\PageController');
+    Route::resource('pages', 'Admin\PageController');
     Route::resource('users', 'Admin\UserController');
     Route::resource('organizations', 'Admin\OrganizationController');
     Route::resource('org_types', 'Admin\OrgTypeController');
+    Route::resource('roles', 'Admin\RoleController');
+    Route::resource('permissions', 'Admin\PermissionController');
 
     Route::resource('countries', 'Admin\CountryController');
     Route::resource('cities', 'Admin\CityController');

@@ -45,7 +45,7 @@ class AuthCustomController extends Controller
             'surname' => 'required|min:2|max:40',
             'name' => 'required|min:2|max:40',
             'phone' => 'required|min:11|max:11|unique:users',
-            // 'email' => 'required|email|max:255|unique:users',
+            'email' => 'required|email|max:255|unique:users',
             // 'day' => 'required|numeric|between:1,31',
             // 'month' => 'required|numeric|between:1,12',
             // 'year' => 'required|numeric',
@@ -81,6 +81,7 @@ class AuthCustomController extends Controller
             $user->surname = $request->surname;
             $user->name = $request->name;
             $user->phone = $request->phone;
+            $user->email = $request->email;
             $user->password = bcrypt($request->password);
             $user->ip = $request->ip();
             $user->location = serialize($request->ips());
@@ -101,7 +102,9 @@ class AuthCustomController extends Controller
             $sms->code = $code;
             $sms->save();
 
-            return redirect('confirm-register')->with('user_id', $user->id)->withInput()->withStatus('На ваш номер был отправлен sms c кодом, введите его для подтверждение регистрации.');
+            // $request->merge(['user_id' => $user->id]);
+
+            return redirect('confirm-register')->withInput()->withInfo('На ваш номер был отправлен sms c кодом, введите его для подтверждение регистрации.');
         }
         else {
             return redirect()->back()->withInput()->withErrors('Неверный Номер Телефона');
@@ -128,15 +131,15 @@ class AuthCustomController extends Controller
             $request->merge(['phone' => substr_replace($request->phone, '7', 0, 1)]);
         }
 
-        $sms = SMS::where('user_id', $request->id)
-            ->where('phone', $request->phone)
+        $sms = SMS::where('phone', $request->phone)
+            // ->where('user_id', $request->id)
             ->where('code', $request->code)
             ->orderBy('created_at', 'desc')
             ->first();
 
         if ($sms == true) {
 
-            $user = User::where('phone', $sms->phone)->where('id', $request->id)->first();
+            $user = User::where('phone', $sms->phone)->first();
             $user->status = 1;
             $user->save();
 

@@ -8,6 +8,7 @@ use Image;
 use Storage;
 
 use App\User;
+use App\Role;
 use App\City;
 use App\Profile;
 use App\Http\Requests;
@@ -34,12 +35,12 @@ class UserController extends Controller
 	public function edit($id)
 	{
 		$user = User::findOrFail($id);
-
+		$roles = Role::all();
 		$cities = City::orderBy('sort_id')->get();
 
-		return view('admin.users.edit', compact('user', 'cities'));
+		return view('admin.users.edit', compact('user', 'roles', 'cities'));
 	}
-	
+
 	public function update(Request $request, $id)
 	{
 		$user = User::findOrFail($id);

@@ -24,13 +24,25 @@
           <input type="text" class="form-control" name="surname" id="surname" minlength="3" maxlength="60" value="{{ $user->surname }}" required>
         </div>
         <div class="form-group">
-          <label for="phone">Город:</label>
+          <label for="city_id">Город:</label>
           <select class="form-control" name="city_id" id="city">
             @foreach($cities as $city)
               @if ($city->id == $user->profile->city_id)
                 <option value="{{ $city->id }}" selected>{{ $city->title }}</option>
               @else
                 <option value="{{ $city->id }}">{{ $city->title }}</option>
+              @endif
+            @endforeach
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="role_id">Роли:</label>
+          <select class="form-control" name="role_id" id="city">
+            @foreach($roles as $role)
+              @if ($role->id == $user->roles)
+                <option value="{{ $role->id }}" selected>{{ $role->title }}</option>
+              @else
+                <option value="{{ $role->id }}">{{ $role->title }}</option>
               @endif
             @endforeach
           </select>
