@@ -49,6 +49,13 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::resource('matches', 'Admin\MatchController');
 });
 
+Route::group(['middleware' => 'auth'], function () {
+    Route::resource('profile', 'ProfileController');
+    Route::resource('friend', 'FriendController');
+
+    Route::get('all_users', 'FriendController@all_users');
+});
+
 // Route::get('add-sports', function() {
 
 // 	$sport = new App\Sport;

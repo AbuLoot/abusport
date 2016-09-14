@@ -74,7 +74,7 @@ class UserController extends Controller
 		$user->profile->birthday = $request->birthday;
 		$user->profile->growth = $request->growth;
 		$user->profile->weight = $request->weight;
-		$user->profile->sex = ($request->sex == 'man') ? 1 : 0;
+		$user->profile->sex = $request->sex;
 		$user->profile->save();
 
 		return redirect('/admin/users')->with('status', 'Запись обновлена!');
