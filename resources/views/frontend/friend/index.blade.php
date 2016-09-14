@@ -2,14 +2,10 @@
 
 @section('tabs')
 
-@section('tabs')
-
   <ul class="tabs-panel">
     <li class="active"><a href="/friend">Все друзья</a></li>
     <li><a href="/all_users">Другие пользователи</a></li>
   </ul>
-
-@endsection
 
 @endsection
 
