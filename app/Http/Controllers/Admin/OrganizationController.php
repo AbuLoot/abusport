@@ -102,7 +102,7 @@ class OrganizationController extends Controller
         $organization->phones = $request->phones;
         $organization->website = $request->website;
         $organization->emails = $request->emails;
-        $organization->street = $request->street;
+        $organization->address = $request->address;
         $organization->latitude = $request->latitude;
         $organization->longitude = $request->longitude;
         $organization->balance = $request->balance;

@@ -23,11 +23,13 @@ class CreateAreasTable extends Migration
             $table->string('title');
             $table->string('image');
             $table->string('images');
-            $table->string('street');
-            $table->string('house');
+            $table->string('phones');
+            $table->string('emails');
+            $table->string('address');
             $table->text('description');
             $table->string('latitude');
             $table->string('longitude');
+            $table->char('lang', 4);
             $table->integer('status')->default(1);
             $table->timestamps();
         });
