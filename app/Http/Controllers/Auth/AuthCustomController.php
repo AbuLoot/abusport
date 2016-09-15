@@ -143,6 +143,8 @@ class AuthCustomController extends Controller
             $user->status = 1;
             $user->save();
 
+            $user->assignRole('user');
+
             return redirect('login')->withInput()->withStatus('Вы успешно подтвердили регистрацию, теперь войдите через свой номер и пароль');
         }
         else {
