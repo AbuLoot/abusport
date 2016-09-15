@@ -54,6 +54,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('friend', 'FriendController');
 
     Route::get('all_users', 'FriendController@all_users');
+    Route::get('user/{id}', 'FriendController@user');
+    Route::get('add/{id}', 'FriendController@getAdd');
+    Route::get('accept/{id}', 'FriendController@getAccept');
 });
 
 // Route::get('add-sports', function() {

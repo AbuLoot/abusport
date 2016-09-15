@@ -12,31 +12,45 @@
 @section('content')
 
   <div class="panel panel-default">
-    <div class="panel-heading">My Friends</div>
+    <div class="panel-heading">{{ Auth::user()->name }}'s friends! </div>
     <div class="panel-body">
 
       @include('partials.alerts')
 
-        @foreach($users as $user)
-          <div class="row">
-            <div class="form-group">
-              <div class="col-lg-3 col-md-3">
-                @if(!empty($user->profile->avatar))
-                  <img src="/img/profiles/{{ $user->profile->id . '/' . $user->profile->avatar }}" style="width: 150px; height: 150px;">
-                @else
-                  <img src="/img/user-default.jpg" style="width: 150px; height: 150px;">
-                @endif
-
-              </div>
-              <div class="col-lg-9 col-md-9">
-                <p>{{ $user->surname }} {{  $user->name }}</p>
-                <p>{{ $user->profile->city->title }}</p>
-                <p>{{ $user->profile->birthday }}</p>
-              </div>
+      @if(!$user->friends()->count())
+        <div class="row">
+          <div class="form-group">
+            <div class="col-lg-12 col-md-12">
+              <p>{{ $user->name }} has no friends</p>
             </div>
           </div>
-          <hr>
-         @endforeach
+        </div>
+      @else
+
+        @foreach($user->friends() as $user)
+        <div class="row">
+          <div class="form-group">
+            <div class="col-lg-3 col-md-3">
+              @if(!empty($user->profile->avatar))
+                <img src="/img/profiles/{{ $user->profile->id . '/' . $user->profile->avatar }}" style="width: 150px; height: 150px;">
+              @else
+                <img src="/img/user-default.jpg" style="width: 150px; height: 150px;">
+              @endif
+
+            </div>
+            <div class="col-lg-6 col-md-6">
+              <p><a href="/user/{{ $user->id }}">{{ $user->surname }} {{  $user->name }}</a></p>
+              <p>{{ $user->profile->city->title }}</p>
+              <p>{{ $user->profile->birthday }}</p>
+            </div>
+            <div class="col-lg-3 col-md-3">
+
+            </div>
+          </div>
+        </div>
+        <hr>
+        @endforeach
+      @endif
     </div>
   </div>
 

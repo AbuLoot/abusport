@@ -4,11 +4,11 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Friends extends Model
+class Friend extends Model
 {
     protected $table = 'friends';
     
     protected $fillable = [
-        'id', 'friend1_id', 'friend2_id', 'friend_check_1', 'friend_check_2',
+        'id', 'user_id', 'friend_id', 'accepted'
     ];
 }
