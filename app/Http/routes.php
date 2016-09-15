@@ -29,7 +29,7 @@ Route::get('areas', ['as' => 'areas', 'uses' => 'AreaController@getAreas']);
 
 
 // Administration
-Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
+Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'role:root', 'role:admin']], function () {
 
     Route::resource('pages', 'Admin\PageController');
     Route::resource('users', 'Admin\UserController');
@@ -48,16 +48,3 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::resource('options', 'Admin\OptionController');
     Route::resource('matches', 'Admin\MatchController');
 });
-
-// Route::get('add-sports', function() {
-
-// 	$sport = new App\Sport;
-
-// 	$faker = Faker\Factory::create('ru_RU');
-
-// 	for ($i=0; $i < 30; $i++) { 
-// 		echo $faker->name . '<br>';
-// 		echo $faker->phoneNumber . '<br>';
-// 		echo $faker->address . '<hr>';
-// 	}
-// });
