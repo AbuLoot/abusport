@@ -91,10 +91,13 @@ class AreaController extends Controller
         $area->district_id = $request->district_id;
         $area->slug = (empty($request->slug)) ? str_slug($request->title) : $request->slug;
         $area->title = $request->title;
-        // $area->address = $request->address;
+        $area->phones = $request->phones;
+        $area->emails = $request->emails;
+        $area->address = $request->address;
         $area->latitude = $request->latitude;
         $area->longitude = $request->longitude;
-        // $area->description = $request->description;
+        $area->description = $request->description;
+        $area->lang = $request->lang;
         $area->status = ($request->status == 'on') ? 1 : 0;
         $area->save();
 
@@ -158,16 +161,16 @@ class AreaController extends Controller
                     if (isset($images[$key])) {
 
                         Storage::delete([
-                            'img/organizations/'.$request->org_id.'/'.$images[$key]->image,
-                            'img/organizations/'.$request->org_id.'/'.$images[$key]->mini_image
+                            'img/organizations/'.$request->org_id.'/'.$images[$key]['image'],
+                            'img/organizations/'.$request->org_id.'/'.$images[$key]['mini_image']
                         ]);
 
-                        $images[$key]->image = $imageName;
-                        $images[$key]->mini_image = 'mini-'.$imageName;
+                        $images[$key]['image'] = $imageName;
+                        $images[$key]['mini_image'] = 'mini-'.$imageName;
                     }
                     else {
-                        $images[$key]->image = $imageName;
-                        $images[$key]->mini_image = 'mini-'.$imageName;
+                        $images[$key]['image'] = $imageName;
+                        $images[$key]['mini_image'] = 'mini-'.$imageName;
                     }
                 }
             }
@@ -177,16 +180,19 @@ class AreaController extends Controller
         }
 
         $area->sort_id = ($request->sort_id > 0) ? $request->sort_id : $area->count() + 1;
-        $area->country_id = $request->country_id;
+        $area->sport_id = $request->sport_id;
         $area->org_id = $request->org_id;
         $area->city_id = $request->city_id;
         $area->district_id = $request->district_id;
         $area->slug = (empty($request->slug)) ? str_slug($request->title) : $request->slug;
         $area->title = $request->title;
+        $area->phones = $request->phones;
+        $area->emails = $request->emails;
         $area->address = $request->address;
         $area->latitude = $request->latitude;
         $area->longitude = $request->longitude;
         $area->description = $request->description;
+        $area->lang = $request->lang;
         $area->status = ($request->status == 'on') ? 1 : 0;
         $area->save();
 

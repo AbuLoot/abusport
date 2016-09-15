@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 
+use Validator;
+
 use App\Option;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -19,15 +21,13 @@ class OptionController extends Controller
 
     public function create()
     {
-        $cities = City::orderBy('sort_id')->get();
-
-        return view('admin.options.create', compact('cities'));
+        return view('admin.options.create');
     }
 
     public function store(Request $request)
     {    	
         $validator = Validator::make($request->all(), [
-            'title' => 'required|min:5|max:60|unique:options',
+            'title' => 'required|max:60|unique:options',
         ]);
 
         if ($validator->fails()) {
@@ -47,16 +47,15 @@ class OptionController extends Controller
 
     public function edit($id)
     {
-    	$cities = City::orderBy('sort_id')->get();
         $option = Option::findOrFail($id);
 
-        return view('admin.options.edit', compact('cities', 'district'));
+        return view('admin.options.edit', compact('option'));
     }
 
     public function update(Request $request, $id)
     {    	
         $validator = Validator::make($request->all(), [
-            'title' => 'required|min:5|max:60',
+            'title' => 'required|max:60',
         ]);
 
         if ($validator->fails()) {
@@ -65,7 +64,6 @@ class OptionController extends Controller
 
         $option = Option::findOrFail($id);
         $option->sort_id = ($request->sort_id > 0) ? $request->sort_id : $option->count() + 1;
-        $option->city_id = $request->city_id;
         $option->slug = (empty($request->slug)) ? str_slug($request->title) : $request->slug;
         $option->title = $request->title;
         $option->lang = $request->lang;

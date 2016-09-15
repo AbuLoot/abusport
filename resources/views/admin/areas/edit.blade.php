@@ -50,46 +50,52 @@
               </select>
             </div>
             <div class="form-group">
-              <label for="city_id">Города</label>
-              <select id="city_id" name="city_id" class="form-control" required>
-                <option value=""></option>
-                @foreach($cities as $city)
-                  @if ($city->id == $area->city_id)
-                    <option value="{{ $city->id }}" selected>{{ $city->title }}</option>
-                  @else
-                    <option value="{{ $city->id }}">{{ $city->title }}</option>
-                  @endif
-                @endforeach
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="district_id">Районы</label>
-              <select id="district_id" name="district_id" class="form-control">
-                <option value=""></option>
-                @foreach($districts as $district)
-                  @if ($district->id == $area->district_id)
-                    <option value="{{ $district->id }}" selected>{{ $district->title }}</option>
-                  @else
-                    <option value="{{ $district->id }}">{{ $district->title }}</option>
-                  @endif
-                @endforeach
-              </select>
-            </div>
-            <div class="form-group">
               <label for="phones">Номера телефонов</label>
               <input type="text" class="form-control" id="phones" name="phones" value="{{ (old('phones')) ? old('phones') : $area->phones }}">
-            </div>
-            <div class="form-group">
-              <label for="website">Website</label>
-              <input type="text" class="form-control" id="website" name="website" value="{{ (old('website')) ? old('website') : $area->website }}">
             </div>
             <div class="form-group">
               <label for="emails">Emails</label>
               <input type="text" class="form-control" id="emails" name="emails" value="{{ (old('emails')) ? old('emails') : $area->emails }}">
             </div>
-            <div class="form-group">
-              <label for="street">Улица</label>
-              <input type="text" class="form-control" id="street" name="street" value="{{ (old('street')) ? old('street') : $area->street }}">
+            <div class="row">
+              <div class="col-md-6 col-xs-12">
+                <div class="form-group">
+                  <label for="city_id">Города</label>
+                  <select id="city_id" name="city_id" class="form-control" required>
+                    <option value=""></option>
+                    @foreach($cities as $city)
+                      @if ($city->id == $area->city_id)
+                        <option value="{{ $city->id }}" selected>{{ $city->title }}</option>
+                      @else
+                        <option value="{{ $city->id }}">{{ $city->title }}</option>
+                      @endif
+                    @endforeach
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="district_id">Районы</label>
+                  <select id="district_id" name="district_id" class="form-control">
+                    <option value=""></option>
+                    @foreach($districts as $district)
+                      @if ($district->id == $area->district_id)
+                        <option value="{{ $district->id }}" selected>{{ $district->title }}</option>
+                      @else
+                        <option value="{{ $district->id }}">{{ $district->title }}</option>
+                      @endif
+                    @endforeach
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="address">Адрес</label>
+                  <input type="hidden" name="latitude" id="latitude">
+                  <input type="hidden" name="longitude" id="longitude">
+                  <textarea class="form-control" rows="5" name="address" id="address">{{ $area->address }}</textarea>
+                  <span class="help-block">Например: Абая 32</span>
+                </div>
+              </div>
+              <div class="col-md-6 col-xs-12">
+                <div id="yaMap" style="width: 100%; height: 350px;"></div>
+              </div>
             </div>
             <div class="form-group">
               <label for="image">Картинка:</label><br>
@@ -169,30 +175,63 @@
   <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
 
   <script>
+
     ymaps.ready(init);
-    var myMap, myPlacemark;
+    var myMap,
+      myPlacemark;
 
     function init() {
       myMap = new ymaps.Map("yaMap", {
         center: [48.136, 67.153],
-        zoom: 4
+        zoom: 1
       });
 
-      $country = "Казахстан";
+      $country = $("#country_id option[value='" +  $("#country_id").val() + "']").html();
+      $city = $("#city_id option[value='" +  $("#city_id").val() + "']").html();
+      $address = $("#address").val();
 
-      var myGeocoder = ymaps.geocode($.trim($country));
+      var myGeocoder = ymaps.geocode($.trim($country)+','+$city+','+$address);
 
       myGeocoder.then(
         function (res) {
           var coords = res.geoObjects.get(0).geometry.getCoordinates();
           myGeocoder.then(
             function (res) {
-              myMap.setCenter(coords, 4);
+              myMap.geoObjects.removeAll();
+              var placemark = new ymaps.Placemark(coords, {}, {
+                draggable: true
+              });
+              myMap.geoObjects.add(placemark);
+              myMap.setCenter(coords, 16);
+
+              placemark.events.add("drag", function (event) {
+                coords = placemark.geometry.getCoordinates();
+                document.getElementById("latitude").value = coords[0];
+                document.getElementById("longitude").value = coords[1];
+              });
               document.getElementById("latitude").value = coords[0];
               document.getElementById("longitude").value = coords[1];
             }
           );
-        });
+        }
+      );
+
+      $("#country_id").on('change', function () {
+        $country = $("#country_id option[value='" +  $("#country_id").val() + "']").html();
+        var myGeocoder = ymaps.geocode($.trim($country));
+
+        myGeocoder.then(
+          function (res) {
+            var coords = res.geoObjects.get(0).geometry.getCoordinates();
+            myGeocoder.then(
+              function (res) {
+                myMap.setCenter(coords, 4);
+                document.getElementById("latitude").value = coords[0];
+                document.getElementById("longitude").value = coords[1];
+              }
+            );
+          });
+      });
 
       $("#city_id").on('change', function () {
         $city = $("#city_id option[value='" +  $("#city_id").val() + "']").html();

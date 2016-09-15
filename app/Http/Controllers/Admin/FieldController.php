@@ -8,6 +8,7 @@ use Validator;
 
 use App\Area;
 use App\Field;
+use App\Option;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
@@ -23,8 +24,9 @@ class FieldController extends Controller
     public function create()
     {
     	$areas = Area::orderBy('sort_id')->get();
+        $options = Option::all();
 
-        return view('admin.fields.create', compact('areas'));
+        return view('admin.fields.create', compact('areas', 'options'));
     }
 
     public function store(Request $request)
@@ -46,6 +48,8 @@ class FieldController extends Controller
         $field->status = ($request->status == 'on') ? 1 : 0;
         $field->save();
 
+        $field->options()->attach($request->options_id);
+
         return redirect('/admin/fields')->with('status', 'Запись добавлена!');
     }
 
@@ -53,8 +57,9 @@ class FieldController extends Controller
     {
     	$areas = Area::orderBy('sort_id')->get();
         $field = Field::findOrFail($id);
+        $options = Option::all();
 
-        return view('admin.fields.edit', compact('areas', 'field'));
+        return view('admin.fields.edit', compact('areas', 'field', 'options'));
     }
 
     public function update(Request $request, $id)
@@ -75,6 +80,8 @@ class FieldController extends Controller
         $field->size = $request->size;
         $field->status = ($request->status == 'on') ? 1 : 0;
         $field->save();
+
+        $field->options()->sync($request->options_id);
 
         return redirect('/admin/fields')->with('status', 'Запись обновлена!');
     }

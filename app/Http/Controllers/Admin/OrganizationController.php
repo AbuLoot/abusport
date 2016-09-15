@@ -55,10 +55,10 @@ class OrganizationController extends Controller
         $organization->phones = $request->phones;
         $organization->website = $request->website;
         $organization->emails = $request->emails;
-        $organization->street = $request->street;
+        $organization->address = $request->address;
         $organization->latitude = $request->latitude;
         $organization->longitude = $request->longitude;
-        $organization->balance = $request->balance;
+        $organization->balance = $request->balance?$request->balance:0;
         $organization->lang = $request->lang;
         $organization->status = ($request->status == 'on') ? 1 : 0;
         $organization->save();
@@ -102,7 +102,7 @@ class OrganizationController extends Controller
         $organization->phones = $request->phones;
         $organization->website = $request->website;
         $organization->emails = $request->emails;
-        $organization->street = $request->street;
+        $organization->address = $request->address;
         $organization->latitude = $request->latitude;
         $organization->longitude = $request->longitude;
         $organization->balance = $request->balance;

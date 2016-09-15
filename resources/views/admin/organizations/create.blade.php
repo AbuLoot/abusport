@@ -14,7 +14,7 @@
               <input type="text" class="form-control" id="title" name="title" minlength="5" maxlength="80" value="{{ (old('title')) ? old('title') : '' }}" required>
             </div>
             <div class="form-group">
-              <label for="slug">Slug</label>git
+              <label for="slug">Slug</label>
               <input type="text" class="form-control" id="slug" name="slug" minlength="5" maxlength="80" value="{{ (old('slug')) ? old('slug') : '' }}">
             </div>
             <div class="form-group">
@@ -22,16 +22,7 @@
               <select id="org_type_id" name="org_type_id" class="form-control" required>
                 <option value=""></option>
                 @foreach($org_types as $org_type)
-                  <option value="{{ $org_type->id }}">{{ $org_type->title }}</option>
-                @endforeach
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="country_id">Страны</label>
-              <select id="country_id" name="country_id" class="form-control" required>
-                <option value=""></option>
-                @foreach($countries as $country)
-                  <option value="{{ $country->id }}">{{ $country->title }}</option>
+                  <option value="{{ $org_type->id }}">{{ $org_type->title.' - '.$org_type->short_title }}</option>
                 @endforeach
               </select>
             </div>
@@ -51,9 +42,17 @@
               <label for="emails">Emails</label>
               <input type="text" class="form-control" id="emails" name="emails" value="{{ (old('emails')) ? old('emails') : NULL }}">
             </div>
-
             <div class="row">
               <div class="col-md-6 col-xs-12">
+                <div class="form-group">
+                  <label for="country_id">Страны</label>
+                  <select id="country_id" name="country_id" class="form-control" required>
+                    <option value=""></option>
+                    @foreach($countries as $country)
+                      <option value="{{ $country->id }}">{{ $country->title }}</option>
+                    @endforeach
+                  </select>
+                </div>
                 <div class="form-group">
                   <label for="city_id">Города</label>
                   <select id="city_id" name="city_id" class="form-control" required>
@@ -86,8 +85,19 @@
             </div>
 
             <div class="form-group">
-              <label for="image">Картинка</label>
-              <input type="file" id="image" name="image" accept="image/*" required>
+              <label for="image">Картинка:</label><br>
+              <div class="fileinput fileinput-new" data-provides="fileinput">
+                <div class="fileinput-new thumbnail" style="width:300px;height:200px;"></div>
+                <div class="fileinput-preview fileinput-exists thumbnail" style="max-width:300px;max-height:200px;"></div>
+                <div>
+                  <span class="btn btn-default btn-sm btn-file">
+                    <span class="fileinput-new"><i class="glyphicon glyphicon-folder-open"></i>&nbsp; Выбрать</span>
+                    <span class="fileinput-exists"><i class="glyphicon glyphicon-folder-open"></i>&nbsp;</span>
+                    <input type="file" name="image" accept="image/*" required>
+                  </span>
+                  <a href="#" class="btn btn-default btn-sm fileinput-exists" data-dismiss="fileinput"><i class="glyphicon glyphicon-trash"></i> Удалить</a>
+                </div>
+              </div>
             </div>
             <div class="form-group">
               <label for="lang">Язык</label>
@@ -107,12 +117,15 @@
       </div>
 @endsection
 
+@section('styles')
+  <link href="/css/jasny-bootstrap.min.css" rel="stylesheet">
+@endsection
+
 @section('scripts')
   <script src="/js/jasny-bootstrap.js"></script>
   <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
 
   <script>
-
     ymaps.ready(init);
     var myMap,
       myPlacemark;
@@ -120,24 +133,25 @@
     function init() {
       myMap = new ymaps.Map("yaMap", {
         center: [48.136, 67.153],
-        zoom: 4
+        zoom: 1
       });
 
-      $country = "Казахстан";
+      $("#country_id").on('change', function () {
+        $country = $("#country_id option[value='" +  $("#country_id").val() + "']").html();
+        var myGeocoder = ymaps.geocode($.trim($country));
 
-      var myGeocoder = ymaps.geocode($.trim($country));
-
-      myGeocoder.then(
-        function (res) {
-          var coords = res.geoObjects.get(0).geometry.getCoordinates();
-          myGeocoder.then(
-            function (res) {
-              myMap.setCenter(coords, 4);
-              document.getElementById("latitude").value = coords[0];
-              document.getElementById("longitude").value = coords[1];
-            }
-          );
-        });
+        myGeocoder.then(
+          function (res) {
+            var coords = res.geoObjects.get(0).geometry.getCoordinates();
+            myGeocoder.then(
+              function (res) {
+                myMap.setCenter(coords, 4);
+                document.getElementById("latitude").value = coords[0];
+                document.getElementById("longitude").value = coords[1];
+              }
+            );
+          });
+      });
 
       $("#city_id").on('change', function () {
         $city = $("#city_id option[value='" +  $("#city_id").val() + "']").html();

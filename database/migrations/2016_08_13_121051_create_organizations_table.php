@@ -25,8 +25,7 @@ class CreateOrganizationsTable extends Migration
             $table->string('phones');
             $table->string('website');
             $table->string('emails');
-            $table->string('street');
-            $table->string('house');
+            $table->string('address');
             $table->string('latitude');
             $table->string('longitude');
             $table->string('balance');
