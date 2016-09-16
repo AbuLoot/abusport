@@ -30,7 +30,7 @@ class FieldController extends Controller
     }
 
     public function store(Request $request)
-    {    	
+    {
         $validator = Validator::make($request->all(), [
         	'area_id' => 'required|numeric',
             'title' => 'required|max:60|unique:fields',
