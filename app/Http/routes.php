@@ -25,7 +25,7 @@ Route::post('confirm-register', 'Auth\AuthCustomController@postConfirmRegister')
 
 // Board
 Route::get('/', ['as' => 'index', 'uses' => 'SportController@getSports']);
-Route::get('areas', ['as' => 'areas', 'uses' => 'AreaController@getAreas']);
+Route::get('sport/{sport}', ['as' => 'areas', 'uses' => 'SportController@getAreas']);
 
 
 // Administration

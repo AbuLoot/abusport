@@ -41,16 +41,17 @@ INSERT INTO `districts` (`sort_id`, `city_id`, `slug`, `title`, `lang`) VALUES
 (8, 1, 'turksibskij', 'Турксибский район', 'ru');
 
 
+
 -- Sports
 INSERT INTO `sports` (`sort_id`, `slug`, `title`, `image`, `lang`) VALUES
-(1, 'football', 'Футбол', 'football.png', 'ru'),
-(2, 'basketball', 'Баскетбол', 'basketball.png', 'ru'),
-(3, 'volleyball', 'Волейбол', 'volleyball.png', 'ru'),
-(4, 'paintball', 'Пейнтбол', 'paintball.png', 'ru'),
-(5, 'hockey', 'Хоккей', 'hockey.png', 'ru'),
-(6, 'tennis', 'Теннис', 'tennis.png', 'ru'),
-(7, 'table-tennis', 'Настольный теннис', 'table-tennis.png', 'ru'),
-(8, 'golf', 'Гольф', 'golf.png', 'ru');
+(1, 'football', 'Футбол', 'football.jpg', 'ru'),
+(2, 'basketball', 'Баскетбол', 'basketball.jpg', 'ru'),
+(3, 'volleyball', 'Волейбол', 'volleyball.jpg', 'ru'),
+(4, 'paintball', 'Пейнтбол', 'paintball.jpg', 'ru'),
+(5, 'hockey', 'Хоккей', 'hockey.jpg', 'ru'),
+(6, 'tennis', 'Теннис', 'tennis.jpg', 'ru'),
+(7, 'table-tennis', 'Настольный теннис', 'table-tennis.jpg', 'ru'),
+(8, 'golf', 'Гольф', 'golf.jpg', 'ru');
 
 
 -- Organization types
