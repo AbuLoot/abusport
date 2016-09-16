@@ -4,7 +4,7 @@
 
   <ul class="tabs-panel">
 
-    
+
   </ul>
 
 @endsection

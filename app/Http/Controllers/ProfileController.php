@@ -20,7 +20,7 @@ class ProfileController extends Controller
     {
         $user = Auth::user();
         
-        return view('frontend.profile.index', compact('user'));
+        return view('profile.index', compact('user'));
     }
 
     public function edit($id)
@@ -28,7 +28,7 @@ class ProfileController extends Controller
         $user = Auth::user();
         $cities = City::orderBy('sort_id')->get();
     
-        return view('frontend.profile.edit', compact('user', 'cities'));
+        return view('profile.edit', compact('user', 'cities'));
     }
 
     public function update(Request $request, $id)

@@ -15,22 +15,20 @@ class FriendController extends Controller
     {
         $user = Auth::user();
         
-        //$users = User::all();
-        
-        return view('frontend.friend.index', compact('user'));
+        return view('friend.index', compact('user'));
     }
     
     public function user($id)
     {
         $user = User::findOrFail($id);
         
-        return view('frontend.user.index', compact('user'));
+        return view('user.index', compact('user'));
     }
     
     public function all_users()
     {
         $users = User::all();
-        return view('frontend.friend.all_users', compact('users'));
+        return view('friend.all_users', compact('users'));
     }
 
     public function getAdd($id){
