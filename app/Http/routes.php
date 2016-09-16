@@ -48,3 +48,13 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'role:root', 'role:a
     Route::resource('options', 'Admin\OptionController');
     Route::resource('matches', 'Admin\MatchController');
 });
+
+Route::group(['middleware' => 'auth'], function () {
+    Route::resource('profile', 'ProfileController');
+    Route::resource('friend', 'FriendController');
+
+    Route::get('all_users', 'FriendController@all_users');
+    Route::get('user/{id}', 'FriendController@user');
+    Route::get('add/{id}', 'FriendController@getAdd');
+    Route::get('accept/{id}', 'FriendController@getAccept');
+});

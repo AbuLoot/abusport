@@ -92,8 +92,8 @@
 
           <ul class="nav nav-pills nav-stacked">
             <li role="presentation"><a href="#">Wallet <small class="text-left text-success">6000 тг</small></a></li>
-            <li role="presentation" class=""><a href="#">My Profile</a></li>
-            <li role="presentation"><a href="#">My Friends <span class="badge">42</span></a></li>
+            <li role="presentation" class=""><a href="/profile">My Profile</a></li>
+            <li role="presentation"><a href="/friend">My Friends <span class="badge">42</span></a></li>
             <li role="presentation"><a href="#">My Matches <span class="badge">5</span></a></li>
             <li role="presentation"><a href="#">Notifications <span class="badge">2</span></a></li>
             <li role="presentation"><a href="#">Settings</a></li>
