@@ -45,14 +45,6 @@ class UserController extends Controller
 	{
 		$user = User::findOrFail($id);
 
-		$user->sort_id = ($request->sort_id > 0) ? $request->sort_id : $user->count() + 1;
-		$user->name = $request->name;
-		$user->surname = $request->surname;
-		$user->phone = $request->phone;
-		$user->email = $request->email;
-		$user->status = ($request->status == 1) ? 1 : 0;
-		$user->save();
-
 		if ($request->hasFile('avatar')) {
 
 			if (!file_exists('img/profiles/'.$id)) {
@@ -69,6 +61,16 @@ class UserController extends Controller
 			$this->resizeImage($request->avatar, 200, 150, $imagePath, 100);
 			$user->profile->avatar = $imageName;
 		}
+
+		$user->sort_id = ($request->sort_id > 0) ? $request->sort_id : $user->count() + 1;
+		$user->name = $request->name;
+		$user->surname = $request->surname;
+		$user->phone = $request->phone;
+		$user->email = $request->email;
+		$user->status = ($request->status == 1) ? 1 : 0;
+		$user->save();
+
+		$user->roles()->sync($request->roles_id);
 
 		$user->profile->city_id = $request->city_id;
 		$user->profile->birthday = $request->birthday;

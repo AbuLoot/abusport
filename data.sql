@@ -43,14 +43,14 @@ INSERT INTO `districts` (`sort_id`, `city_id`, `slug`, `title`, `lang`) VALUES
 
 -- Sports
 INSERT INTO `sports` (`sort_id`, `slug`, `title`, `image`, `lang`) VALUES
-(1, 'football', 'Футбол', '', 'ru'),
-(2, 'basketball', 'Баскетбол', '', 'ru'),
-(3, 'volleyball', 'Волейбол', '', 'ru'),
-(4, 'paintball', 'Пейнтбол', '', 'ru'),
-(5, 'hockey', 'Хоккей', '', 'ru'),
-(6, 'tennis', 'Теннис', '', 'ru'),
-(7, 'table-tennis', 'Настольный теннис', '', 'ru'),
-(8, 'golf', 'Гольф', '', 'ru');
+(1, 'football', 'Футбол', 'football.png', 'ru'),
+(2, 'basketball', 'Баскетбол', 'basketball.png', 'ru'),
+(3, 'volleyball', 'Волейбол', 'volleyball.png', 'ru'),
+(4, 'paintball', 'Пейнтбол', 'paintball.png', 'ru'),
+(5, 'hockey', 'Хоккей', 'hockey.png', 'ru'),
+(6, 'tennis', 'Теннис', 'tennis.png', 'ru'),
+(7, 'table-tennis', 'Настольный теннис', 'table-tennis.png', 'ru'),
+(8, 'golf', 'Гольф', 'golf.png', 'ru');
 
 
 -- Organization types

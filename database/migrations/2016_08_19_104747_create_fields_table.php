@@ -19,6 +19,8 @@ class CreateFieldsTable extends Migration
             $table->foreign('area_id')->references('id')->on('areas')->onDelete('cascade');
             $table->string('title');
             $table->string('size');
+            $table->char('lang', 4);
+            $table->integer('status')->default(1);
             $table->timestamps();
         });
 
@@ -27,6 +29,7 @@ class CreateFieldsTable extends Migration
             $table->integer('sort_id')->nullable();
             $table->string('slug');
             $table->string('title');
+            $table->char('lang', 4);
             $table->timestamps();
         });
 
