@@ -41,16 +41,12 @@ class UserController extends Controller
 
 	public function update(Request $request, $id)
 	{
-        $validator = Validator::make($request->all(), [
+        $this->validate($request, [
             'name' => 'required|max:60',
             'surname' => 'required|max:60',
         	'phone' => 'required|unique:users',
         	'email' => 'required|unique:users',
         ]);
-
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
 
 		$user = User::findOrFail($id);
 

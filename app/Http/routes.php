@@ -26,6 +26,23 @@ Route::post('confirm-register', 'Auth\AuthCustomController@postConfirmRegister')
 // Board
 Route::get('/', ['as' => 'index', 'uses' => 'SportController@getSports']);
 Route::get('sport/{sport}', ['as' => 'areas', 'uses' => 'SportController@getAreas']);
+Route::get('sport/{sport}/{area_id}', ['as' => 'matches', 'uses' => 'SportController@getMatches']);
+
+Route::get('create-match', ['uses' => 'SportController@createMatch']);
+Route::post('book-time', ['uses' => 'SportController@bookTime']);
+
+
+// Users
+Route::group(['middleware' => 'auth'], function () {
+
+    Route::resource('profile', 'ProfileController');
+    Route::resource('friend', 'FriendController');
+
+    Route::get('all_users', 'FriendController@all_users');
+    Route::get('user/{id}', 'FriendController@user');
+    Route::get('add/{id}', 'FriendController@getAdd');
+    Route::get('accept/{id}', 'FriendController@getAccept');
+});
 
 
 // Administration
@@ -47,14 +64,4 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'role:root', 'role:a
     Route::resource('fields', 'Admin\FieldController');
     Route::resource('options', 'Admin\OptionController');
     Route::resource('matches', 'Admin\MatchController');
-});
-
-Route::group(['middleware' => 'auth'], function () {
-    Route::resource('profile', 'ProfileController');
-    Route::resource('friend', 'FriendController');
-
-    Route::get('all_users', 'FriendController@all_users');
-    Route::get('user/{id}', 'FriendController@user');
-    Route::get('add/{id}', 'FriendController@getAdd');
-    Route::get('accept/{id}', 'FriendController@getAccept');
 });

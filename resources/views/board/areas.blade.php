@@ -26,13 +26,15 @@
           </div>
           <div class="media-body">
             <div class="pull-left">
-              <h4 class="media-heading"><a href="#">{{ $area->title }}</a></h4>
-              <p>Address: {{ $area->address }}</p>  
+              <h4 class="media-heading"><a href="{{ url('sport/'.$sport->slug.'/'.$area->id) }}">{{ $area->title }}</a></h4>
+              <p><b>Адрес:</b> {{ $area->address }}</p>
             </div>
             <div class="pull-right">
-              <!-- <p class="media-heading">Price: <span class="text-success">8000тг</span></p> -->
-              <p>Players: <span class="badge">59</span></p>
-            </div>              
+              <dl class="dl-horizontal">
+                <dt>Игроков:</dt><dd><span class="badge">59</span></dd>
+                <dt>Матчей:</dt><dd><span class="badge">20</span></dd>
+              </dl>
+            </div>
             <div class="clearfix"></div>
             <p>{{ $area->description }}</p>
           </div>

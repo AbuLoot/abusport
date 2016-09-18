@@ -4,8 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 
-use Validator;
-
 use App\City;
 use App\District;
 use App\Http\Requests;
@@ -28,14 +26,10 @@ class DistrictController extends Controller
     }
 
     public function store(Request $request)
-    {    	
-        $validator = Validator::make($request->all(), [
+    {
+        $this->validate($request, [
             'title' => 'required|min:5|max:60|unique:districts',
         ]);
-
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
 
         $district = new District;
 
@@ -59,13 +53,9 @@ class DistrictController extends Controller
 
     public function update(Request $request, $id)
     {    	
-        $validator = Validator::make($request->all(), [
+        $this->validate($request, [
             'title' => 'required|min:5|max:60',
         ]);
-
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
 
         $district = District::findOrFail($id);
         $district->sort_id = ($request->sort_id > 0) ? $request->sort_id : $district->count() + 1;

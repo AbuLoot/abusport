@@ -4,8 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 
-use Validator;
-
 use App\Role;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -25,14 +23,10 @@ class RoleController extends Controller
     }
 
     public function store(Request $request)
-    {    	
-        $validator = Validator::make($request->all(), [
+    {
+        $this->validate($request, [
             'name' => 'required|max:60|unique:roles',
         ]);
-
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
 
         $role = new Role;
         $role->name = $request->name;
@@ -50,14 +44,10 @@ class RoleController extends Controller
     }
 
     public function update(Request $request, $id)
-    {    	
-        $validator = Validator::make($request->all(), [
+    {
+        $this->validate($request, [
             'name' => 'required|max:60',
         ]);
-
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
 
         $role = Role::findOrFail($id);
         $role->name = $request->name;
