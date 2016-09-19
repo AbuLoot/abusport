@@ -52,6 +52,12 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
 Route::group(['middleware' => 'auth'], function () {
     Route::resource('profile', 'ProfileController');
     Route::resource('friend', 'FriendController');
+    Route::resource('payment', 'Payment\EpayController');
+
+
+    Route::any('postlink', 'Payment\EpayController@postLink');
+    Route::any('postlinktest', 'Payment\EpayController@postLinkTest');
+
 
     Route::get('all_users', 'FriendController@all_users');
     Route::get('user/{id}', 'FriendController@user');
