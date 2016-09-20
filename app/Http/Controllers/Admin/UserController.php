@@ -13,8 +13,6 @@ use App\City;
 use App\Profile;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\UserRequest;
-use App\Http\Requests\ProfileRequest;
 
 class UserController extends Controller
 {
@@ -43,6 +41,13 @@ class UserController extends Controller
 
 	public function update(Request $request, $id)
 	{
+        $this->validate($request, [
+            'name' => 'required|max:60',
+            'surname' => 'required|max:60',
+        	'phone' => 'required|unique:users',
+        	'email' => 'required|unique:users',
+        ]);
+
 		$user = User::findOrFail($id);
 
 		if ($request->hasFile('avatar')) {

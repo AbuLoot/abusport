@@ -23,6 +23,10 @@ class AuthCustomController extends Controller
 
         $request->merge(['phone' => $phone]);
 
+        $this->validate($request, [
+            'phone' => 'required|min:11|max:11'
+        ]);
+
         if ($request->phone[0] == 8) {
             $request->merge(['phone' => substr_replace($request->phone, '7', 0, 1)]);
         }

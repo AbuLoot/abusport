@@ -4,8 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 
-use Validator;
-
 use App\Country;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -25,14 +23,10 @@ class CountryController extends Controller
     }
 
     public function store(Request $request)
-    {    	
-        $validator = Validator::make($request->all(), [
+    {
+        $this->validate($request, [
             'title' => 'required|min:5|max:60|unique:countries',
         ]);
-
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
 
         $country = new Country;
 
@@ -54,14 +48,10 @@ class CountryController extends Controller
     }
 
     public function update(Request $request, $id)
-    {    	
-        $validator = Validator::make($request->all(), [
+    {
+        $this->validate($request, [
             'title' => 'required|min:5|max:60',
         ]);
-
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
 
         $country = Country::findOrFail($id);
         $country->sort_id = ($request->sort_id > 0) ? $request->sort_id : $country->count() + 1;

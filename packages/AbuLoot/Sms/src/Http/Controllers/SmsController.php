@@ -9,7 +9,6 @@ class SmsController extends Controller
 	public function index()
 	{
 		$apiKey = config('sms.key');
-		dd($apiKey);
 		$mobizonApi = new Mobizon($apiKey);
 
 		if ($mobizonApi->call('user', 'GetOwnBalance') && $mobizonApi->hasData('balance')) {

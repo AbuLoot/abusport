@@ -15,7 +15,7 @@
             </div>
             <div class="form-group">
               <label for="slug">Slug</label>
-              <input type="text" class="form-control" id="slug" name="slug" minlength="5" maxlength="80" value="{{ (old('slug')) ? old('slug') : '' }}">
+              <input type="text" class="form-control" id="slug" name="slug" minlength="2" maxlength="80" value="{{ (old('slug')) ? old('slug') : '' }}">
             </div>
             <div class="form-group">
               <label for="sort_id">Номер</label>
