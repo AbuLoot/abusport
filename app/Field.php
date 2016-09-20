@@ -18,11 +18,6 @@ class Field extends Model
         return $this->hasMany('App\Schedule');
     }
 
-    public function todaySchedule()
-    {
-        return $this->schedules()->where('week', date('w'))->get();
-    }
-
     public function options()
     {
         return $this->belongsToMany('App\Option', 'field_option', 'field_id', 'option_id');
