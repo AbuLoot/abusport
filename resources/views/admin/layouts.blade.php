@@ -93,7 +93,7 @@
         </li>
         <li @if (Request::is('admin/sports', 'admin/sports/*')) class="active" @endif><a href="/admin/sports">Спорт</a></li>
         <li @if (Request::is('admin/areas', 'admin/areas/*')) class="active" @endif><a href="/admin/areas">Площадки</a></li>
-        <li @if (Request::is('admin/schedules', 'admin/schedules/*')) class="active" @endif><a href="#/admin/schedules">Расписания</a></li>
+        <li @if (Request::is('admin/schedules', 'admin/schedules/*')) class="active" @endif><a href="/admin/schedules">Расписания</a></li>
         <li @if (Request::is('admin/fields', 'admin/fields/*')) class="active" @endif><a href="/admin/fields">Поля</a></li>
         <li @if (Request::is('admin/options', 'admin/options/*')) class="active" @endif><a href="/admin/options">Опции</a></li>
         <li @if (Request::is('admin/matches', 'admin/matches/*')) class="active" @endif><a href="/admin/matches">Матчи</a></li>

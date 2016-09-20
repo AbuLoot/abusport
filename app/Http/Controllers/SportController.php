@@ -45,6 +45,15 @@ class SportController extends Controller
         return view('board.create-match', compact('cities', 'sports', 'areas', 'fields', 'matches'));
     }
 
+    public function createMatch2()
+    {
+        $cities = City::all();
+        $sports = Sport::all();
+        $areas = Area::all();
+
+        return view('board.create-match2', compact('cities', 'sports', 'areas', 'fields', 'matches'));
+    }
+
     public function bookTime(Request $request)
     {
         $this->validate($request, [
@@ -55,9 +64,10 @@ class SportController extends Controller
         ]);
 
         $area = Area::findOrFail($request->area_id);
-        $fields = $area->fields();
+        // $today = date('');
+        // $matches = Match::where();
 
-        return view('board.book-time')->with('data', $request);
+        return view('board.book-time', compact('request', 'area'));
     }
 
     public function storeMatch(Request $request)
