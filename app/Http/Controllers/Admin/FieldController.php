@@ -4,8 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 
-use Validator;
-
 use App\Area;
 use App\Field;
 use App\Option;
@@ -30,15 +28,11 @@ class FieldController extends Controller
     }
 
     public function store(Request $request)
-    {    	
-        $validator = Validator::make($request->all(), [
+    {
+        $this->validate($request, [
         	'area_id' => 'required|numeric',
             'title' => 'required|max:60|unique:fields',
         ]);
-
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
 
         $field = new Field;
         $field->sort_id = ($request->sort_id > 0) ? $request->sort_id : $field->count() + 1;
@@ -63,15 +57,11 @@ class FieldController extends Controller
     }
 
     public function update(Request $request, $id)
-    {    	
-        $validator = Validator::make($request->all(), [
+    {
+        $this->validate($request, [
         	'area_id' => 'required|numeric',
             'title' => 'required|max:60',
         ]);
-
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
 
         $field = Field::findOrFail($id);
         $field->sort_id = ($request->sort_id > 0) ? $request->sort_id : $field->count() + 1;

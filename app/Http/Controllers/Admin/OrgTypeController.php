@@ -4,8 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 
-use Validator;
-
 use App\OrgType;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -25,14 +23,10 @@ class OrgTypeController extends Controller
     }
 
     public function store(Request $request)
-    {    	
-        $validator = Validator::make($request->all(), [
+    {
+        $this->validate($request, [
             'title' => 'required|max:60|unique:org_types',
         ]);
-
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
 
         $org_type = new OrgType;
         $org_type->sort_id = ($request->sort_id > 0) ? $request->sort_id : $org_type->count() + 1;
@@ -54,14 +48,10 @@ class OrgTypeController extends Controller
     }
 
     public function update(Request $request, $id)
-    {    	
-        $validator = Validator::make($request->all(), [
+    {
+        $this->validate($request, [
             'title' => 'required|max:60',
         ]);
-
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
 
         $org_type = OrgType::findOrFail($id);
         $org_type->sort_id = ($request->sort_id > 0) ? $request->sort_id : $org_type->count() + 1;

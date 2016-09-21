@@ -23,6 +23,10 @@ class AuthCustomController extends Controller
 
         $request->merge(['phone' => $phone]);
 
+        $this->validate($request, [
+            'phone' => 'required|min:11|max:11'
+        ]);
+
         if ($request->phone[0] == 8) {
             $request->merge(['phone' => substr_replace($request->phone, '7', 0, 1)]);
         }
@@ -142,6 +146,8 @@ class AuthCustomController extends Controller
             $user = User::where('phone', $sms->phone)->first();
             $user->status = 1;
             $user->save();
+
+            $user->assignRole('user');
 
             return redirect('login')->withInput()->withStatus('Вы успешно подтвердили регистрацию, теперь войдите через свой номер и пароль');
         }

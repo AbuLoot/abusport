@@ -26,7 +26,7 @@ class SportRequest extends Request
         return [
             'sort_id' => 'numeric',
             'title' => 'required|min:5|max:80',
-            'slug' => 'min:5|max:80',
+            'slug' => 'min:2|max:80',
         ];
     }
 }
