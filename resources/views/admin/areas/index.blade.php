@@ -14,6 +14,7 @@
             <td>Название</td>
             <td>Номер</td>
             <td>Организация</td>
+            <td>Спорт</td>
             <td>Статус</td>
             <td class="text-right">Функции</td>
           </tr>
@@ -26,6 +27,7 @@
               <td>{{ $area->title }}</td>
               <td>{{ $area->sort_id }}</td>
               <td>{{ $area->organization->title }}</td>
+              <td>{{ $area->sport->title }}</td>
               @if ($area->status == 1)
                 <td class="text-success">Активен</td>
               @else
@@ -42,7 +44,7 @@
             </tr>
           @empty
             <tr>
-              <td colspan="6">Нет записи</td>
+              <td colspan="7">Нет записи</td>
             </tr>
           @endforelse
         </tbody>

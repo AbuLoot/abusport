@@ -46,7 +46,7 @@
           @if (Auth::guest())
             <li><a href="{{ url('/login') }}"><span class="glyphicon glyphicon-log-in"></span> Войти</a></li>
           @else
-            <li><a href="#"><span class="glyphicon glyphicon-plus"></span> Создать матч</a></li>
+            <li><a href="{{ url('/create-match') }}"><span class="glyphicon glyphicon-plus"></span> Создать матч</a></li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ Auth::user()->name }} <span class="caret"></span></a>
               <ul class="dropdown-menu">
@@ -92,8 +92,8 @@
 
           <ul class="nav nav-pills nav-stacked">
             <li role="presentation"><a href="#">Wallet <small class="text-left text-success">6000 тг</small></a></li>
-            <li role="presentation" class=""><a href="#">My Profile</a></li>
-            <li role="presentation"><a href="#">My Friends <span class="badge">42</span></a></li>
+            <li role="presentation" class=""><a href="/profile">My Profile</a></li>
+            <li role="presentation"><a href="/friend">My Friends <span class="badge">42</span></a></li>
             <li role="presentation"><a href="#">My Matches <span class="badge">5</span></a></li>
             <li role="presentation"><a href="#">Notifications <span class="badge">2</span></a></li>
             <li role="presentation"><a href="#">Settings</a></li>
