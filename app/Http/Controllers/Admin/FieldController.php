@@ -31,7 +31,7 @@ class FieldController extends Controller
     {
         $this->validate($request, [
         	'area_id' => 'required|numeric',
-            'title' => 'required|max:60|unique:fields',
+            'title' => 'required|max:60',
         ]);
 
         $field = new Field;
