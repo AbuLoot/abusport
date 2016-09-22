@@ -18,6 +18,11 @@ class Field extends Model
         return $this->hasMany('App\Schedule');
     }
 
+    public function matches()
+    {
+        return $this->hasMany('App\Match');
+    }
+
     public function options()
     {
         return $this->belongsToMany('App\Option', 'field_option', 'field_id', 'option_id');
