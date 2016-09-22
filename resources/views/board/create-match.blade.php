@@ -100,19 +100,28 @@
                     </td>
                     <td>
                       @if ($current_hour >= $hour)
-                        <span class="text-muted">Время прошло</span>
-                      @else
+                        <?php $game = false; ?>
                         @foreach($field->matches->where('date', date('Y-m-d')) as $match)
                           @if ($match->start_time <= $hour AND $match->end_time >= $hour)
-                            <span class="text-success">Игра</span>
+                            <span class="text-default">Игра состоялось</span>
                             <?php $game = true; ?>
-                          @else
-                            <?php $game = false; ?>
                           @endif
                         @endforeach
 
                         @if ($game == false)
-                          <label class="checkbox-inline text-success">
+                          <span class="text-muted">Время прошло</span>
+                        @endif
+                      @else
+                        <?php $game = false; ?>
+                        @foreach($field->matches->where('date', date('Y-m-d')) as $match)
+                          @if ($match->start_time <= $hour AND $match->end_time >= $hour)
+                            <span class="text-success">Игра</span>
+                            <?php $game = true; ?>
+                          @endif
+                        @endforeach
+
+                        @if ($game == false)
+                          <label class="checkbox-inline text-info">
                             <input type="checkbox" name="hours[]" value="{{ $hour }}"> Забронировать
                           </label>
                         @endif

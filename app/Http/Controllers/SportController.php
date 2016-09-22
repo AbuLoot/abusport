@@ -82,7 +82,7 @@ class SportController extends Controller
         $month = [];
 
         $date_min = date("Y-m-d");
-        $date_max = date("Y-m-d",strtotime($date_min." + 7 day"));
+        $date_max = date("Y-m-d",strtotime($date_min." + 4 day"));
         $start = new \DateTime($date_min);
         $end = new \DateTime($date_max);   
         $interval = \DateInterval::createFromDateString("1 day");
@@ -121,8 +121,8 @@ class SportController extends Controller
         $match->user_id = $request->user()->id;
         $match->field_id = $request->field_id;
         $match->start_time = $request->hours[0];
-        $match->end_time = $request->hours[1];
-        $match->date = date('Y-m-d');
+        $match->end_time = (isset($request->hours[1])) ? $request->hours[1] : $request->hours[0];
+        $match->date = date('Y-m-d');  // Доработать 
         $match->match_type = $request->match_type;
         $match->number_of_players = $request->number_of_players;
         // $match->price = $field->schedule->price;
