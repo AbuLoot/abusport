@@ -28,6 +28,41 @@ class SportController extends Controller
     	return view('board.areas', compact('sport', 'areas'));
     }
 
+    public function getAreasWithMap($sport)
+    {
+        $sport = Sport::where('slug', $sport)->first();
+        $areas = $sport->areas()->get();
+
+        $data = [
+            'type' => 'FeatureCollection',
+            'features' => []
+        ];
+
+        foreach ($areas as $id => $single) {
+            $single_array = [
+                'type' => 'Feature',
+                'id' => $single->id,
+                'geometry' => [
+                    'type' => 'Point',
+                    'coordinates' => [
+                        $single->latitude,
+                        $single->longitude,
+                    ]
+                ],
+                'properties' => [
+                    'balloonContent' => view('map.view', ['area' => $single, 'sport' => $sport])->render(),
+                    'clusterCaption' => $single->name,
+                    'hintContent' => $single->name,
+                ]
+            ];
+            $data['features'][] = $single_array;
+        }
+
+        //dd($areas);
+
+        return view('map.areas', compact('sport', 'data'));
+    }
+
     public function getMatches($sport, $area_id)
     {
         $sport = Sport::where('slug', $sport)->first();
