@@ -82,7 +82,7 @@ class SportController extends Controller
         $month = [];
 
         $date_min = date("Y-m-d");
-        $date_max = date("Y-m-d",strtotime($date_min." + 4 day"));
+        $date_max = date("Y-m-d", strtotime($date_min." + 3 day"));
         $start = new \DateTime($date_min);
         $end = new \DateTime($date_max);   
         $interval = \DateInterval::createFromDateString("1 day");
@@ -112,24 +112,44 @@ class SportController extends Controller
             'city_id' => 'required|numeric',
             'sport_id' => 'required|numeric',
             'area_id' => 'required|numeric',
-            'number_of_players' => 'required|numeric'
+            'number_of_players' => 'required|numeric',
+            'hours' => 'required',
         ]);
+
+        foreach ($request->hours as $key => $date_hour)
+        {
+            list($date[], $hours[]) = explode(' ', $date_hour);
+
+            if ($key >= 1) {
+
+                $i = $key - 1;
+                list($num_hour, $zeros) = explode(':', $hours[$i]);
+                $num_hour = $num_hour + 1;
+
+                if ($num_hour.':00' != $hours[$key]) {
+                    return redirect()->back()->withInput()->withInfo('Между началом и концом матча не должно быть свободного времени');
+                }
+
+                if ($date[$i] != $date[$key]) {
+                    return redirect()->back()->withInput()->withInfo('Матч должен состоятся в один день');
+                }
+            }
+        }
 
         $area = Area::findOrFail($request->area_id);
 
         $match = new Match();
         $match->user_id = $request->user()->id;
         $match->field_id = $request->field_id;
-        $match->start_time = $request->hours[0];
-        $match->end_time = (isset($request->hours[1])) ? $request->hours[1] : $request->hours[0];
-        $match->date = date('Y-m-d');  // Доработать 
+        $match->start_time = $hours[0];
+        $match->end_time = last($hours);
+        $match->date = $date;  // Доработать 
         $match->match_type = $request->match_type;
         $match->number_of_players = $request->number_of_players;
         // $match->price = $field->schedule->price;
         $match->save();
 
         return redirect('/create-match')->with('status', 'Запись добавлена!');
-
     }
 
     public function storeMatch(Request $request)
@@ -138,6 +158,5 @@ class SportController extends Controller
             'city_id' => 'required|min:11|max:11',
             'sport_id' => 'required',
         ]);
-
     }
 }
