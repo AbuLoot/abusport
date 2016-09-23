@@ -8,7 +8,7 @@
 
     <ul class="tabs-panel">
       <li class="active"><a href="#">Площадки</a></li>
-      <li><a href="#">На карте</a></li>
+      <li><a href="{{ action('SportController@getAreasWithMap', $sport->slug) }}">На карте</a></li>
       <li><a href="#">Горячие матчи</a></li>
     </ul>
 

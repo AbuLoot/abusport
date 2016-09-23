@@ -26,6 +26,8 @@ Route::post('confirm-register', 'Auth\AuthCustomController@postConfirmRegister')
 // Board
 Route::get('/', ['as' => 'index', 'uses' => 'SportController@getSports']);
 Route::get('sport/{sport}', ['as' => 'areas', 'uses' => 'SportController@getAreas']);
+Route::get('sport/map/{sport}', 'SportController@getAreasWithMap');
+
 Route::get('sport/{sport}/{area_id}', ['as' => 'matches', 'uses' => 'SportController@getMatches']);
 
 Route::get('create-match', ['uses' => 'SportController@createMatch']);
