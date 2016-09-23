@@ -246,7 +246,8 @@ class ApiController extends Controller
 			 $start = new \DateTime($date_min);
              $end = new \DateTime($date_max);   
 		     $interval = \DateInterval::createFromDateString("1 day");
-			 $period   = new \DatePeriod($start, $interval, $end);			 
+			 $period   = new \DatePeriod($start, $interval, $end);
+
 		   foreach($period as $dt){
 						$month_r=array(
 						"01" => "Янв",	
@@ -269,23 +270,26 @@ class ApiController extends Controller
 						"5" => "Птн", 
 						"6" => "Сбт", 
 						"0" => "Вск"); 
-							  $result["year"] = $dt->format("Y-m-d");					
-							  $result["month"] = $month_r[$dt->format("m")];												  						  						  
-							  $result["day"]= $dt->format("d");     
-							  $result["weekday"]=$day_r[$dt->format("w")];
-							  array_push($days,$result);
-							  
-			}	
-           $response['days'] =$days;
+
+				$result["year"] = $dt->format("Y-m-d");					
+				$result["month"] = $month_r[$dt->format("m")];												  						  						  
+				$result["day"]= $dt->format("d");     
+				$result["weekday"]=$day_r[$dt->format("w")];
+
+				array_push($days,$result);
+			}
+
+            $response['days'] =$days;
 			$schedules = DB::table('schedules')->join('fields', 'schedules.field_id', '=', 'fields.id')->select('fields.title','schedules.*')->where('schedules.area_id', '=', $playgroundid)->where('schedules.date', '=', $selecteddate)->get();						 
 			$response['schedules']= $schedules;
 			$response['error']=false;
-		}catch (Exception $e){
-			$response['error']=true;
-		}finally{
+		} catch (Exception $e) {
+			$response['error'] = true;
+		} finally {
 			return Response::json($response);
 		}
 	}
+
 	public function requestmatchcreate($userid,$fieldid,$starttime,$endtime,$date,$matchtype,$gametype,$numberofplayers,$format,$price,$description,$playgroundid)
 	{	
 		        $match = new Match;				
