@@ -16,6 +16,37 @@
 
     @include('partials.alerts')
 
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#DateTime">Забронировать</button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="DateTime" tabindex="-1" role="dialog" aria-labelledby="myDateTime">
+          <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+              </div>
+              <div class="modal-body">
+
+                <ul class="nav nav-tabs nav-justified">
+                  <li role="presentation" class="active"><a href="#">24 Ср</a></li>
+                  <li role="presentation"><a href="#">25 Чт</a></li>
+                  <li role="presentation" ><a href="#">26 Пт</a></li>
+                  <li role="presentation"><a href="#">27 Сб</a></li>
+                  <li role="presentation" ><a href="#">28 Вс</a></li>
+                  <li role="presentation"><a href="#">29 Пн</a></li>
+                  <li role="presentation" ><a href="#">30 Вт</a></li>
+                </ul>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
     <form action="{{ url('book-time') }}" method="post">
       {!! csrf_field() !!}
       <div class="form-group">
@@ -82,6 +113,58 @@
         <?php $current_hour = date('H').':00'; ?>
         <?php $current_week = (int) date('w'); ?>
         <?php $current_date = date('Y-m-d'); ?>
+
+        @foreach($active_area->fields as $field)
+          <h3>{{ $field->title }}</h3>
+          <input type="hidden" name="field_id" value="{{ $field->id }}">
+          <div class="table-responsive">
+            <table class="table table-striped table-hover table-bordered">
+              <tbody>
+                @foreach(trans('data.hours') as $hour)
+                  <tr>
+                    <td>{{ $hour }}</td>
+                    <td>
+                      @foreach($field->schedules->where('week', $current_week) as $schedule)
+                        @if ($schedule->start_time <= $hour AND $schedule->end_time >= $hour)
+                          {{ $schedule->price }}
+                        @endif
+                      @endforeach
+                    </td>
+                    <td>
+                      @if ($current_hour >= $hour)
+                        <?php $game = false; ?>
+                        @foreach($field->matches->where('date', date('Y-m-d')) as $match)
+                          @if ($match->start_time <= $hour AND $match->end_time >= $hour)
+                            <span class="text-default">Игра состоялось</span>
+                            <?php $game = true; ?>
+                          @endif
+                        @endforeach
+
+                        @if ($game == false)
+                          <span class="text-muted">Время прошло</span>
+                        @endif
+                      @else
+                        <?php $game = false; ?>
+                        @foreach($field->matches->where('date', date('Y-m-d')) as $match)
+                          @if ($match->start_time <= $hour AND $match->end_time >= $hour)
+                            <span class="text-success">Игра</span>
+                            <?php $game = true; ?>
+                          @endif
+                        @endforeach
+
+                        @if ($game == false)
+                          <label class="checkbox-inline text-info">
+                            <input type="checkbox" name="hours[]" value="{{ $hour }}"> Забронировать
+                          </label>
+                        @endif
+                      @endif
+                    </td>
+                  </tr>
+                @endforeach
+              </tbody>
+            </table>
+          </div>
+        @endforeach
 
         @foreach($active_area->fields as $field)
           <h3>{{ $field->title }}</h3>
