@@ -16,11 +16,67 @@ use App\Sport;
 use App\Area; 
 use App\MatchUser; 
 use App\Match; 
+use App\Feedback;
 use App\Http\Controllers\Controller;
 use AbuLoot\Sms\MobizonApi as Mobizon;
 class ApiController extends Controller
 {
-
+	public function requestprofile(Request $request)
+	{
+	$response=array();						
+						
+			if(isset($request->userid) && $request->userid!=''){
+			 $user= User::find($request->userid);
+						$user->name = $request->name;
+						$user->surname =$request->surname;
+						$user->email = $request->email;
+						$user->save();
+						$response['profile']=$user;
+						$response['error']=false;						 				
+			}else{
+			
+				$response['error']=true;	
+			}
+			
+			return Response::json($response);
+			
+   }
+	public function requestcallbacklist($userid)
+	{
+	   try {   
+            $callbacks = DB::table('feedbacks')->where('user_id', '=', $userid)->get();	       
+            $response['callbacks']= $callbacks;
+            $response['error']=false;
+        }catch (Exception $e){
+            $response['error']=true;
+        }finally{
+            return Response::json($response);
+        }
+	}
+	public function requestnewcallback(Request $request)
+	{
+	$response=array();						
+						
+			if(isset($request->userid) && $request->userid!=''){
+			    $response['error']=false;
+			    $feedback = new Feedback;				
+				$feedback->user_id = $request->userid;
+				$feedback->email = $request->email;	
+				$feedback->text = $request->text;
+						if($feedback->save()){ 
+							$response['error']=false;
+						}
+						else{  	 	     
+						     $response['error']=true;
+						}						 				
+			}else{
+			
+				$response['error']=true;	
+			}
+			
+			return Response::json($response);
+			
+   }
 	public function requestsms($mobile,$name,$surname,$email,$password,$sex)
 	{
 		  
@@ -54,6 +110,7 @@ class ApiController extends Controller
 						$user->ip = \Request::ip();
 						$user->location = serialize(\Request::ips());
 						$user->status = 0;
+						$user->balance="0";
 						$user->save();
 
 						$profile = new Profile;
@@ -273,10 +330,9 @@ class ApiController extends Controller
 							  $result["month"] = $month_r[$dt->format("m")];												  						  						  
 							  $result["day"]= $dt->format("d");     
 							  $result["weekday"]=$day_r[$dt->format("w")];
-							  array_push($days,$result);
-							  
+							  array_push($days,$result);							  
 			}	
-           $response['days'] =$days;
+            $response['days'] =$days;
 			$schedules = DB::table('schedules')->join('fields', 'schedules.field_id', '=', 'fields.id')->select('fields.title','schedules.*')->where('schedules.area_id', '=', $playgroundid)->where('schedules.date', '=', $selecteddate)->get();						 
 			$response['schedules']= $schedules;
 			$response['error']=false;

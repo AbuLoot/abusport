@@ -100,7 +100,7 @@ Route::get('date', function(){
 });
 
 // Administration
-Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'role:root', 'role:admin']], function () {
+Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function () {
 
     Route::resource('pages', 'Admin\PageController');
     Route::resource('users', 'Admin\UserController');
@@ -122,9 +122,11 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'role:root', 'role:a
 });
 
 // Api
+Route::post('api/requestprofile/','ApiController@requestprofile');
+Route::get('api/requestcallbacklist/{userid}','ApiController@requestcallbacklist');
+Route::post('api/requestnewcallback/','ApiController@requestnewcallback');
 Route::get('api/requestlogin/{phone}/{password}','ApiController@requestlogin');
 Route::get('api/requestsms/{mobile}/{name}/{surname}/{email}/{password}/{sex}','ApiController@requestsms');
-
 Route::get('api/requestverifyotp/{otp}','ApiController@requestverifyotp');
 Route::get('api/requestsports','ApiController@requestsports');
 Route::get('api/requestplaygrounds/{sportid}','ApiController@requestplaygrounds');	
