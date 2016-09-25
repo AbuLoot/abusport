@@ -26,6 +26,8 @@ Route::post('confirm-register', 'Auth\AuthCustomController@postConfirmRegister')
 // Board
 Route::get('/', ['as' => 'index', 'uses' => 'SportController@getSports']);
 Route::get('sport/{sport}', ['as' => 'areas', 'uses' => 'SportController@getAreas']);
+Route::get('sport/map/{sport}', 'SportController@getAreasWithMap');
+
 Route::get('sport/{sport}/{area_id}', ['as' => 'matches', 'uses' => 'SportController@getMatches']);
 
 Route::get('create-match', ['uses' => 'SportController@createMatch']);
@@ -47,11 +49,12 @@ Route::group(['middleware' => 'auth'], function () {
 
 Route::get('date', function(){
 
-    $days=array();
-    $result=array();
-    $month_r = array();
-    $date_min= date("Y-m-d");
-    $date_max= date("Y-m-d",strtotime($date_min." + 7 day"));
+    $days = [];
+    $result = [];
+    $month = [];
+
+    $date_min = date("Y-m-d");
+    $date_max = date("Y-m-d",strtotime($date_min." + 7 day"));
     $start = new \DateTime($date_min);
     $end = new \DateTime($date_max);   
     $interval = \DateInterval::createFromDateString("1 day");
@@ -59,37 +62,12 @@ Route::get('date', function(){
 
     foreach($period as $dt)
     {
-        $month_r=array(
-            "01" => "Янв",  
-            "02" => "Фев", 
-            "03" => "Март", 
-            "04" => "Апр", 
-            "05" => "Май", 
-            "06" => "Июнь", 
-            "07" => "Июль", 
-            "08" => "Авг", 
-            "09" => "Сен", 
-            "10" => "Окт", 
-            "11" => "Нбр", 
-            "12" => "Дек"
-        );
-
-        $day_r = array( 
-            "1" => "Пнд", 
-            "2" => "Втр", 
-            "3" => "Срд", 
-            "4" => "Чтв", 
-            "5" => "Птн", 
-            "6" => "Сбт", 
-            "0" => "Вск"
-        );
-
         $result["year"] = $dt->format("Y-m-d");
-        $result["month"] = $month_r[$dt->format("m")];
+        $result["month"] = trans('data.month.'.$dt->format("m"));
         $result["day"] = $dt->format("d");
-        $result["weekday"]= $day_r[$dt->format("w")];
+        $result["weekday"] = trans('data.week.'.$dt->format("w"));
 
-        array_push($days,$result);
+        array_push($days, $result);
     }
 
     print_r($days);

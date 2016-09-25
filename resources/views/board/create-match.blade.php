@@ -82,8 +82,9 @@
         <?php $current_hour = date('H').':00'; ?>
         <?php $current_week = (int) date('w'); ?>
 
-        @foreach($area->fields as $field)
+        @foreach($active_area->fields as $field)
           <h3>{{ $field->title }}</h3>
+          <input type="hidden" name="field_id" value="{{ $field->id }}">
           <div class="table-responsive">
             <table class="table table-striped table-hover table-bordered">
               <tbody>
@@ -99,11 +100,31 @@
                     </td>
                     <td>
                       @if ($current_hour >= $hour)
-                        <span class="text-muted">Время прошло</span>
+                        <?php $game = false; ?>
+                        @foreach($field->matches->where('date', date('Y-m-d')) as $match)
+                          @if ($match->start_time <= $hour AND $match->end_time >= $hour)
+                            <span class="text-default">Игра состоялось</span>
+                            <?php $game = true; ?>
+                          @endif
+                        @endforeach
+
+                        @if ($game == false)
+                          <span class="text-muted">Время прошло</span>
+                        @endif
                       @else
-                        <label class="checkbox-inline text-success">
-                          <input type="checkbox" name="hours[]" value="{{ $hour }}"> Забронировать
-                        </label>
+                        <?php $game = false; ?>
+                        @foreach($field->matches->where('date', date('Y-m-d')) as $match)
+                          @if ($match->start_time <= $hour AND $match->end_time >= $hour)
+                            <span class="text-success">Игра</span>
+                            <?php $game = true; ?>
+                          @endif
+                        @endforeach
+
+                        @if ($game == false)
+                          <label class="checkbox-inline text-info">
+                            <input type="checkbox" name="hours[]" value="{{ $hour }}"> Забронировать
+                          </label>
+                        @endif
                       @endif
                     </td>
                   </tr>
