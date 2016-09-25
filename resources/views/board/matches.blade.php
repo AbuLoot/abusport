@@ -8,7 +8,7 @@
 
     <ul class="tabs-panel">
       <li class="active"><a href="#">Матчи</a></li>
-      <li><a href="{{ action('SportController@getCalendar', $sport->slug) }}">Календарь</a></li>
+      <li><a href="{{ action('SportController@getMatchesWithCalendar', [$sport->slug, $area->id]) }}">Календарь</a></li>
       <li><a href="#">Информация</a></li>
     </ul>
 
@@ -41,6 +41,7 @@
               <tr>
                 <th>Номер</th>
                 <th>Игроки</th>
+                <th>Цена</th>
                 <th>Время старта</th>
               </tr>
             </thead>
@@ -54,9 +55,16 @@
                       @if ($match->start_time <= $hour AND $match->end_time >= $hour)
                         <td>
                           Матч {{ $match->id }}
-                          <span class="pull-right label label-default">Игра прошла</span>
+                          <span class="pull-right label label-default">Конец игры</span>
                         </td>
                         <td>{{ '0/'.$match->number_of_players }}</td>
+                        <td>
+                          @foreach($field->schedules->where('week', $days[]['short_weekday'][$date]) as $schedule)
+                            @if ($schedule->start_time <= $hour AND $schedule->end_time >= $hour)
+                              {{ $schedule->price }} тг
+                            @endif
+                          @endforeach
+                        </td>
                         <td>{{ $hour }}</td>
                         <?php $game = true; ?>
                       @endif
@@ -69,6 +77,13 @@
                         <span>Время прошло</span>
                       </td>
                       <td>{{ '0' }}</td>
+                      <td>
+                        @foreach($field->schedules->where('week', $days[]['short_weekday'][$date]) as $schedule)
+                          @if ($schedule->start_time <= $hour AND $schedule->end_time >= $hour)
+                            {{ $schedule->price }} тг
+                          @endif
+                        @endforeach
+                      </td>
                       <td>{{ $hour }}</td>
                     </tr>
                   @endif
@@ -89,6 +104,13 @@
                           </a>
                         </td>
                         <td>{{ '0/'.$match->number_of_players }}</td>
+                        <td>
+                          @foreach($field->schedules->where('week', $days[]['short_weekday'][$date]) as $schedule)
+                            @if ($schedule->start_time <= $hour AND $schedule->end_time >= $hour)
+                              {{ $schedule->price }} тг
+                            @endif
+                          @endforeach
+                        </td>
                         <td>{{ $hour }}</td>
                       </tr>
                     @endif
@@ -100,6 +122,13 @@
                         <span>Поле свободно</span>
                       </td>
                       <td>{{ '0' }}</td>
+                      <td>
+                        @foreach($field->schedules->where('week', $days[]['short_weekday'][$date]) as $schedule)
+                          @if ($schedule->start_time <= $hour AND $schedule->end_time >= $hour)
+                            {{ $schedule->price }} тг
+                          @endif
+                        @endforeach
+                      </td>
                       <td>{{ $hour }}</td>
                     </tr>
                   @endif

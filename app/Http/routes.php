@@ -27,13 +27,26 @@ Route::post('confirm-register', 'Auth\AuthCustomController@postConfirmRegister')
 Route::get('/', 'SportController@getSports');
 Route::get('sport/{sport}', 'SportController@getAreas');
 Route::get('sport/map/{sport}', 'SportController@getAreasWithMap');
-Route::get('sport/{sport}/{area_id}/{date?}', ['as' => 'matches', 'uses' => 'SportController@getMatches']);
-// Route::get('sport/{sport}/{area_id}/{date?}', ['as' => 'players', 'uses' => 'SportController@getMatches']);
+Route::get('sport/calendar/{sport}/{area_id}/{setDays?}', 'SportController@getMatchesWithCalendar');
+Route::get('sport/{sport}/{area_id}/{date?}', 'SportController@getMatches');
+
+// Route::get('sport/calendar/{sport}/{area_id}', 'SportController@getRoom');
 
 Route::get('create-match/{setDays?}', 'SportController@createMatch');
 Route::post('store-match', 'SportController@storeMatch');
 // Route::get('create-match2', 'SportController@createMatch2');
 
+Route::get('elo', function(){
+    $area = \App\Area::first();
+
+    $fields = $area->fields->toArray();
+
+    
+
+    $schedules = $area->fields->schedules->toArray();
+
+    dd($fields);
+});
 
 // Users
 Route::group(['middleware' => 'auth'], function () {

@@ -73,19 +73,20 @@ class SportController extends Controller
         // Get days
         $days = $this->getDays(7);
 
+        dd($days[1]['year']);
+
         return view('board.matches', compact('sport', 'area', 'days', 'date'));
     }
 
-    public function getCalendar($sport, $area_id, $date = '')
+    public function getMatchesWithCalendar($sport, $area_id, $setDays = 3)
     {
         $sport = Sport::where('slug', $sport)->first();
         $area = Area::find($area_id);
-        $date = ($date) ? $date : date('Y-m-d');
 
         // Get days
-        $days = $this->getDays(7);
+        $days = $this->getDays($setDays);
 
-        return view('board.calendar', compact('sport', 'area', 'days', 'date'));
+        return view('board.calendar', compact('sport', 'area', 'days'));
     }
 
     public function createMatch($setDays = 3)
