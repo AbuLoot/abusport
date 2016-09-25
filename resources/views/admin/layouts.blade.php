@@ -36,7 +36,7 @@
             </span>
           </button>
 
-          <a class="navbar-brand" href="{{ route('index') }}">AbuSport</a>
+          <a class="navbar-brand" href="/admin">AbuSport</a>
         </div>
 
         <!-- Account system -->

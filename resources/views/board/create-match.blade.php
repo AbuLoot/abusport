@@ -16,20 +16,8 @@
 
     @include('partials.alerts')
 
-    <form action="{{ url('book-time') }}" method="post">
+    <form action="{{ url('store-match') }}" method="post">
       {!! csrf_field() !!}
-      <div class="form-group">
-        <label for="city_id">Города</label>
-        <select id="city_id" name="city_id" class="form-control" required>
-          @foreach($cities as $city)
-            @if(old('city_id') == $city->id)
-              <option value="{{ $city->id }}" selected>{{ $city->title }}</option>
-            @else
-              <option value="{{ $city->id }}">{{ $city->title }}</option>
-            @endif
-          @endforeach
-        </select>
-      </div>
       <div class="form-group">
         <label for="sport_id">Спорт</label>
         <select id="sport_id" name="sport_id" class="form-control" required>
@@ -76,98 +64,95 @@
           <input type="radio" name="match_type" id="match_type" checked> Открытый
         </label>
       </div>
-
       <div class="form-group">
         <label for="date_time">Дата и время игры</label><br>
         <?php $current_hour = date('H').':00'; ?>
         <?php $current_week = (int) date('w'); ?>
+        <?php $current_date = date('Y-m-d'); ?>
 
         @foreach($active_area->fields as $field)
           <h3>{{ $field->title }}</h3>
           <input type="hidden" name="field_id" value="{{ $field->id }}">
+
+          <ul class="nav nav-tabs">
+            <li @if (Request::is('create-match/1')) class="active" @endif><a href="{{ url('create-match/1') }}">1 День</a></li>
+            <li @if (Request::is('create-match/3', 'create-match')) class="active" @endif><a href="{{ url('create-match/3') }}">3 дня</a></li>
+            <li @if (Request::is('create-match/7')) class="active" @endif><a href="{{ url('create-match/7') }}">Неделя</a></li>
+          </ul>
+
           <div class="table-responsive">
-            <table class="table table-striped table-hover table-bordered">
+            <table class="table table-hover table-bordered">
+              <thead>
+                <tr>
+                  <th></th>
+                  @foreach($days as $day)
+                    @if ($current_date == $day['year'])
+                      <th class="bg-info" @if (Request::is('create-match/1')) colspan="2" @endif>{{ $day['day'] }}<br>{{$day['weekday'] }}</th>
+                    @else
+                      <th @if (Request::is('create-match/1')) colspan="2" @endif>{{ $day['day'] }}<br>{{$day['weekday'] }}</th>
+                    @endif
+                  @endforeach
+                </tr>
+              </thead>
               <tbody>
                 @foreach(trans('data.hours') as $hour)
+                  @continue($hour < '06:00')
                   <tr>
-                    <td>{{ $hour }}</td>
-                    <td>
-                      @foreach($field->schedules->where('week', $current_week) as $schedule)
-                        @if ($schedule->start_time <= $hour AND $schedule->end_time >= $hour)
-                          {{ $schedule->price }}
-                        @endif
-                      @endforeach
-                    </td>
-                    <td>
-                      @if ($current_hour >= $hour)
-                        <?php $game = false; ?>
-                        @foreach($field->matches->where('date', date('Y-m-d')) as $match)
-                          @if ($match->start_time <= $hour AND $match->end_time >= $hour)
-                            <span class="text-default">Игра состоялось</span>
-                            <?php $game = true; ?>
-                          @endif
-                        @endforeach
+                    <td style="">{{ $hour }}</td>
 
-                        @if ($game == false)
-                          <span class="text-muted">Время прошло</span>
-                        @endif
-                      @else
-                        <?php $game = false; ?>
-                        @foreach($field->matches->where('date', date('Y-m-d')) as $match)
-                          @if ($match->start_time <= $hour AND $match->end_time >= $hour)
-                            <span class="text-success">Игра</span>
-                            <?php $game = true; ?>
-                          @endif
-                        @endforeach
+                    @foreach($days as $day)
 
-                        @if ($game == false)
-                          <label class="checkbox-inline text-info">
-                            <input type="checkbox" name="hours[]" value="{{ $hour }}"> Забронировать
-                          </label>
-                        @endif
+                      @if (Request::is('create-match/1'))
+                        <td>
+                          @foreach($field->schedules->where('week', $current_week) as $schedule)
+                            @if ($schedule->start_time <= $hour AND $schedule->end_time >= $hour)
+                              {{ $schedule->price }} тг
+                            @endif
+                          @endforeach
+                        </td>
                       @endif
-                    </td>
+
+                      @if ($current_date >= $day['year'] AND $current_hour >= $hour)
+                        <td class="bg-warning">
+                          <?php $game = false; ?>
+                          @foreach($field->matches->where('date', $day['year']) as $match)
+                            @if ($match->start_time <= $hour AND $match->end_time >= $hour)
+                              <span>Игра состоялось</span>
+                              <?php $game = true; ?>
+                            @endif
+                          @endforeach
+
+                          @if ($game == false)
+                            <span class="text-muted">Время прошло</span>
+                          @endif
+                        </td>
+                      @else
+                        <td>
+                          <?php $game = false; ?>
+                          @foreach($field->matches->where('date', $day['year']) as $match)
+                            @if ($match->start_time <= $hour AND $match->end_time >= $hour)
+                              <a href="#">Игра {{ $match->id }}</a>
+                              <?php $game = true; ?>
+                            @endif
+                          @endforeach
+
+                          @if ($game == false)
+                            <label class="checkbox-inline text-info">
+                              <input type="checkbox" name="hours[]" value="{{ $day['year'].' '.$hour }}"> Купить
+                            </label>
+                          @endif
+                        </td>
+                      @endif
+                    @endforeach
                   </tr>
                 @endforeach
               </tbody>
             </table>
           </div>
         @endforeach
-
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#DateTime">Забронировать</button>
-
-        <!-- Modal -->
-        <div class="modal fade" id="DateTime" tabindex="-1" role="dialog" aria-labelledby="myDateTime">
-          <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
-              </div>
-              <div class="modal-body">
-
-                <ul class="nav nav-tabs nav-justified">
-                  <li role="presentation" class="active"><a href="#">24 Ср</a></li>
-                  <li role="presentation"><a href="#">25 Чт</a></li>
-                  <li role="presentation" ><a href="#">26 Пт</a></li>
-                  <li role="presentation"><a href="#">27 Сб</a></li>
-                  <li role="presentation" ><a href="#">28 Вс</a></li>
-                  <li role="presentation"><a href="#">29 Пн</a></li>
-                  <li role="presentation" ><a href="#">30 Вт</a></li>
-                </ul>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
-
-      <div class="form-group">
-        <label>Дата и время игры</label><br>
-        <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-time"></span> Забронировать время</button>
+      <div class="form-group text-center">
+        <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-time"></span> Забронировать время</button>
       </div>
     </form>
 

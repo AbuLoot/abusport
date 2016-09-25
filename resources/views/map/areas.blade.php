@@ -3,8 +3,8 @@
 @section('tabs')
 
   <ul class="tabs-panel">
-    <li><a href="#">Площадки</a></li>
-    <li class="active"><a href="{{ action('SportController@getAreasWithMap', $sport->slug) }}">На карте</a></li>
+    <li><a href="{{ action('SportController@getAreas', $sport->slug) }}">Площадки</a></li>
+    <li class="active"><a href="#">На карте</a></li>
     <li><a href="#">Горячие матчи</a></li>
   </ul>
 
@@ -24,8 +24,8 @@
 @section('styles')
 <style>
   #search_on_ya_Map{
-    width: 1000px;
-    height: 800px;
+    width: 100%;
+    height: 500px;
   }
 
   .ymaps-2-1-34-b-cluster-tabs__menu, .ymaps-2-1-34-b-cluster-tabs__content-item {

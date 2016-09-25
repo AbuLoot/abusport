@@ -24,15 +24,15 @@ Route::post('confirm-register', 'Auth\AuthCustomController@postConfirmRegister')
 
 
 // Board
-Route::get('/', ['as' => 'index', 'uses' => 'SportController@getSports']);
-Route::get('sport/{sport}', ['as' => 'areas', 'uses' => 'SportController@getAreas']);
+Route::get('/', 'SportController@getSports');
+Route::get('sport/{sport}', 'SportController@getAreas');
 Route::get('sport/map/{sport}', 'SportController@getAreasWithMap');
+Route::get('sport/{sport}/{area_id}/{date?}', ['as' => 'matches', 'uses' => 'SportController@getMatches']);
+// Route::get('sport/{sport}/{area_id}/{date?}', ['as' => 'players', 'uses' => 'SportController@getMatches']);
 
-Route::get('sport/{sport}/{area_id}', ['as' => 'matches', 'uses' => 'SportController@getMatches']);
-
-Route::get('create-match', ['uses' => 'SportController@createMatch']);
-Route::get('create-match2', ['uses' => 'SportController@createMatch2']);
-Route::post('book-time', ['uses' => 'SportController@bookTime']);
+Route::get('create-match/{setDays?}', 'SportController@createMatch');
+Route::post('store-match', 'SportController@storeMatch');
+// Route::get('create-match2', 'SportController@createMatch2');
 
 
 // Users
@@ -47,39 +47,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('accept/{id}', 'FriendController@getAccept');
 });
 
-Route::get('date', function(){
-
-    $days = [];
-    $result = [];
-    $month = [];
-
-    $date_min = date("Y-m-d");
-    $date_max = date("Y-m-d",strtotime($date_min." + 7 day"));
-    $start = new \DateTime($date_min);
-    $end = new \DateTime($date_max);   
-    $interval = \DateInterval::createFromDateString("1 day");
-    $period   = new \DatePeriod($start, $interval, $end);
-
-    foreach($period as $dt)
-    {
-        $result["year"] = $dt->format("Y-m-d");
-        $result["month"] = trans('data.month.'.$dt->format("m"));
-        $result["day"] = $dt->format("d");
-        $result["weekday"] = trans('data.week.'.$dt->format("w"));
-
-        array_push($days, $result);
-    }
-
-    print_r($days);
-
-    $date = getdate();
-
-    echo $date['hours'] . ' - ' . $date['mday'] . ' - '.$date['wday'];
-});
 
 // Administration
 Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function () {
 
+    Route::get('/', 'Admin\AdminController@index');
     Route::resource('pages', 'Admin\PageController');
     Route::resource('users', 'Admin\UserController');
     Route::resource('organizations', 'Admin\OrganizationController');

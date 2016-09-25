@@ -8,7 +8,12 @@
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title>@yield('title_description', 'AbuSport')</title>
     <meta name="description" content="@yield('meta_description', 'AbuSport')">
-
+    <!-- <link rel="stylesheet" type="text/css" href="http://bootswatch.com/cosmo/bootstrap.min.css"> -->
+    <!-- <link rel="stylesheet" type="text/css" href="http://bootswatch.com/flatly/bootstrap.min.css"> -->
+    <!-- <link rel="stylesheet" type="text/css" href="http://bootswatch.com/cyborg/bootstrap.min.css"> -->
+    <!-- <link rel="stylesheet" type="text/css" href="http://bootswatch.com/darkly/bootstrap.min.css"> -->
+    <!-- <link rel="stylesheet" type="text/css" href="http://bootswatch.com/sandstone/bootstrap.min.css"> -->
+    <!-- <link rel="stylesheet" type="text/css" href="http://bootswatch.com/superhero/bootstrap.min.css"> -->
     <link href="/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/bower_components/bootstrap-offcanvas/dist/css/bootstrap.offcanvas.css">
     <link rel="stylesheet" type="text/css" href="/css/style.css">
@@ -38,7 +43,7 @@
 
           <button type="submit" class="btn btn-success navbar-btn navbar-xs-btn navbar-right hidden-lg hidden-md"><span class="glyphicon glyphicon-plus"></span></button>
 
-          <a class="navbar-brand" href="{{ route('index') }}">AbuSport</a>
+          <a class="navbar-brand" href="/">AbuSport</a>
         </div>
 
         <!-- Account system -->

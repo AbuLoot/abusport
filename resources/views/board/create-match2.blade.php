@@ -88,16 +88,9 @@
           <input type="hidden" name="field_id" value="{{ $field->id }}">
 
           <ul class="nav nav-tabs">
-            <li role="presentation" class="active"><a href="{{ url('create-match2/1') }}">1 День</a></li>
-            <li role="presentation"><a href="{{ url('create-match2/3') }}">3 дня</a></li>
-            <li role="presentation"><a href="{{ url('create-match2/7') }}">Неделя</a></li>
-            <li role="presentation" class="dropdown">
-              <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"> Еще <span class="caret"></span> </a>
-              <ul class="dropdown-menu">
-                <li role="presentation"><a href="{{ url('create-match2/14') }}">2 Недели</a></li>
-                <li role="presentation"><a href="{{ url('create-match2/30') }}">Месяц</a></li>
-              </ul>
-            </li>
+            <li @if (Request::is('create-match/1')) class="active" @endif><a href="{{ url('create-match2/1') }}">1 День</a></li>
+            <li @if (Request::is('create-match/3')) class="active" @endif><a href="{{ url('create-match2/3') }}">3 дня</a></li>
+            <li @if (Request::is('create-match/7')) class="active" @endif><a href="{{ url('create-match2/7') }}">Неделя</a></li>
           </ul>
 
           <div class="table-responsive">
