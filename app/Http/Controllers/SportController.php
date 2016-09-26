@@ -71,9 +71,7 @@ class SportController extends Controller
         $date = ($date) ? $date : date('Y-m-d');
 
         // Get days
-        $days = $this->getDays(7);
-
-        dd($days[1]['year']);
+        $days = $this->getDays(14);
 
         return view('board.matches', compact('sport', 'area', 'days', 'date'));
     }
@@ -112,29 +110,38 @@ class SportController extends Controller
 
         foreach ($request->hours as $key => $date_hour)
         {
-            list($date[], $hours[]) = explode(' ', $date_hour);
+            list($fields[], $date[], $hours[]) = explode(' ', $date_hour);
 
             if ($key >= 1) {
 
                 $i = $key - 1;
                 list($num_hour, $zeros) = explode(':', $hours[$i]);
-                $num_hour = $num_hour + 1;
+                $num_hour = ($num_hour < 9) ? '0'.($num_hour + 1) : $num_hour + 1;
 
-                if ($num_hour.':00' != $hours[$key]) {
-                    return redirect()->back()->withInput()->withInfo('Между началом и концом матча не должно быть свободного времени');
+                // echo $num_hour.':00 - ' . $hours[$key] .'<br>';
+                // continue;
+
+                if ($fields[$i] != $fields[$key]) {
+                    return redirect()->back()->withInput()->withInfo('Матч должен состоятся в одном поле');
                 }
 
                 if ($date[$i] != $date[$key]) {
                     return redirect()->back()->withInput()->withInfo('Матч должен состоятся в один день');
                 }
+
+                if ($num_hour.':00' != $hours[$key]) {
+                    return redirect()->back()->withInput()->withInfo('Выберите время последовательно');
+                }
             }
         }
+
+        // dd(1);
 
         $area = Area::findOrFail($request->area_id);
 
         $match = new Match();
         $match->user_id = $request->user()->id;
-        $match->field_id = $request->field_id;
+        $match->field_id = $fields[0];
         $match->start_time = $hours[0];
         $match->end_time = last($hours);
         $match->date = $date[0];
@@ -166,6 +173,7 @@ class SportController extends Controller
             $result["day"] = $dt->format("d");
             $result["weekday"] = trans('data.week.'.$dt->format("w"));
             $result["short_weekday"] = trans('data.short_week.'.$dt->format("w"));
+            $result["index_weekday"] = $dt->format("w");
 
             array_push($days, $result);
         }

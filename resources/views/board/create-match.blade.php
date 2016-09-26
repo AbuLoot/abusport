@@ -58,10 +58,10 @@
       <div class="form-group">
         <label>Тип матча</label><br>
         <label class="radio-inline">
-          <input type="radio" name="match_type" id="match_type"> Закрытый
+          <input type="radio" name="match_type" id="match_type" value="closed"> Закрытый
         </label>
         <label class="radio-inline">
-          <input type="radio" name="match_type" id="match_type" checked> Открытый
+          <input type="radio" name="match_type" id="match_type" value="open" checked> Открытый
         </label>
       </div>
       <div class="form-group">
@@ -96,7 +96,7 @@
               </thead>
               <tbody>
                 @foreach(trans('data.hours') as $hour)
-                  @continue($hour < '06:00')
+                  @continue($hour < $active_area->start_time)
                   <tr>
                     <td style="">{{ $hour }}</td>
 
@@ -138,7 +138,7 @@
 
                           @if ($game == false)
                             <label class="checkbox-inline text-info">
-                              <input type="checkbox" name="hours[]" value="{{ $day['year'].' '.$hour }}"> Купить
+                              <input type="checkbox" name="hours[]" value="{{ $field->id.' '.$day['year'].' '.$hour }}"> Купить
                             </label>
                           @endif
                         </td>

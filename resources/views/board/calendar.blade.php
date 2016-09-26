@@ -47,7 +47,7 @@
           </thead>
           <tbody>
             @foreach(trans('data.hours') as $hour)
-              @continue($hour < '06:00')
+              @continue($hour < $area->start_time)
               <tr>
                 <td style="">{{ $hour }}</td>
 

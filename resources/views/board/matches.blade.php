@@ -25,11 +25,11 @@
 
       @foreach($area->fields as $field)
         <h4>{{ $area->title.' - '.$field->title }}</h4>
-
         <ul class="nav nav-pills nav-justified">
           @foreach ($days as $day)
             @if ($day['year'] == $date)
               <li class="active"><a href="{{ url('sport/'.$area->sport->slug.'/'.$area->id.'/'.$day['year']) }}">{{ $day['day'].' '.$day['short_weekday'] }}</a></li>
+              <?php $index_weekday = (int) $day['index_weekday']; ?>
             @else
               <li><a href="{{ url('sport/'.$area->sport->slug.'/'.$area->id.'/'.$day['year']) }}">{{ $day['day'].' '.$day['short_weekday'] }}</a></li>
             @endif
@@ -47,8 +47,8 @@
             </thead>
             <tbody>
               @foreach(trans('data.hours') as $hour)
-                @continue($hour < '06:00')
-                @if ($current_date >= $date AND $current_hour >= $hour)
+                @continue($hour < $area->start_time)
+                @if ($current_date >= $date AND $current_hour > $hour)
                   <?php $game = false;?>
                   @foreach ($field->matches->where('date', $date) as $num => $match)
                     <tr>
@@ -59,7 +59,7 @@
                         </td>
                         <td>{{ '0/'.$match->number_of_players }}</td>
                         <td>
-                          @foreach($field->schedules->where('week', $days[]['short_weekday'][$date]) as $schedule)
+                          @foreach($field->schedules->where('week', $index_weekday) as $schedule)
                             @if ($schedule->start_time <= $hour AND $schedule->end_time >= $hour)
                               {{ $schedule->price }} тг
                             @endif
@@ -78,7 +78,7 @@
                       </td>
                       <td>{{ '0' }}</td>
                       <td>
-                        @foreach($field->schedules->where('week', $days[]['short_weekday'][$date]) as $schedule)
+                        @foreach($field->schedules->where('week', $index_weekday) as $schedule)
                           @if ($schedule->start_time <= $hour AND $schedule->end_time >= $hour)
                             {{ $schedule->price }} тг
                           @endif
@@ -92,20 +92,20 @@
                   @foreach ($field->matches->where('date', $date) as $match)
                     @if ($match->start_time <= $hour AND $match->end_time >= $hour)
                       <?php $game = true; ?>
-                      <tr class="bg-success">
+                      <tr>
                         <td>
-                          <a class="match-link" href="#">
+                          <a class="match-link" href="{{ url('') }}">
                             Матч {{ $match->id }}
-                            @if ($match->match_type == 'on')
-                              <span class="pull-right label label-success">Открытый</span>
+                            @if ($match->match_type == 'open')
+                              <span class="pull-right label label-success">Открытая игра</span>
                             @else
-                              <span class="pull-right label label-default">Закрытый</span>
+                              <span class="pull-right label label-default">Закрытая игра</span>
                             @endif
                           </a>
                         </td>
                         <td>{{ '0/'.$match->number_of_players }}</td>
                         <td>
-                          @foreach($field->schedules->where('week', $days[]['short_weekday'][$date]) as $schedule)
+                          @foreach($field->schedules->where('week', $index_weekday) as $schedule)
                             @if ($schedule->start_time <= $hour AND $schedule->end_time >= $hour)
                               {{ $schedule->price }} тг
                             @endif
@@ -123,7 +123,7 @@
                       </td>
                       <td>{{ '0' }}</td>
                       <td>
-                        @foreach($field->schedules->where('week', $days[]['short_weekday'][$date]) as $schedule)
+                        @foreach($field->schedules->where('week', $index_weekday) as $schedule)
                           @if ($schedule->start_time <= $hour AND $schedule->end_time >= $hour)
                             {{ $schedule->price }} тг
                           @endif

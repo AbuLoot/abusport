@@ -29,6 +29,7 @@ Route::get('sport/{sport}', 'SportController@getAreas');
 Route::get('sport/map/{sport}', 'SportController@getAreasWithMap');
 Route::get('sport/calendar/{sport}/{area_id}/{setDays?}', 'SportController@getMatchesWithCalendar');
 Route::get('sport/{sport}/{area_id}/{date?}', 'SportController@getMatches');
+Route::get('sport/match/{sport}/{macth_id}/', 'SportController@getMatche');
 
 // Route::get('sport/calendar/{sport}/{area_id}', 'SportController@getRoom');
 

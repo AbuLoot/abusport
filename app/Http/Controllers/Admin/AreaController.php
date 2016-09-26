@@ -97,6 +97,8 @@ class AreaController extends Controller
         $area->latitude = $request->latitude;
         $area->longitude = $request->longitude;
         $area->description = $request->description;
+        $area->start_time = $request->start_time;
+        $area->end_time = $request->end_time;
         $area->lang = $request->lang;
         $area->status = ($request->status == 'on') ? 1 : 0;
         $area->save();
@@ -192,6 +194,8 @@ class AreaController extends Controller
         $area->latitude = $request->latitude;
         $area->longitude = $request->longitude;
         $area->description = $request->description;
+        $area->start_time = $request->start_time;
+        $area->end_time = $request->end_time;
         $area->lang = $request->lang;
         $area->status = ($request->status == 'on') ? 1 : 0;
         $area->save();
