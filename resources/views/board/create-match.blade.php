@@ -87,9 +87,9 @@
                   <th></th>
                   @foreach($days as $day)
                     @if ($current_date == $day['year'])
-                      <th class="bg-info" @if (Request::is('create-match/1')) colspan="2" @endif>{{ $day['day'] }}<br>{{$day['weekday'] }}</th>
+                      <th class="bg-info" @if (Request::is('create-match/1', 'create-match/3')) colspan="2" @endif>{{ $day['day'] }}<br>{{$day['weekday'] }}</th>
                     @else
-                      <th @if (Request::is('create-match/1')) colspan="2" @endif>{{ $day['day'] }}<br>{{$day['weekday'] }}</th>
+                      <th @if (Request::is('create-match/1', 'create-match/3')) colspan="2" @endif>{{ $day['day'] }}<br>{{$day['weekday'] }}</th>
                     @endif
                   @endforeach
                 </tr>
@@ -101,10 +101,9 @@
                     <td style="">{{ $hour }}</td>
 
                     @foreach($days as $day)
-
-                      @if (Request::is('create-match/1'))
+                      @if (Request::is('create-match/1', 'create-match/3'))
                         <td>
-                          @foreach($field->schedules->where('week', $current_week) as $schedule)
+                          @foreach($field->schedules->where('week', (int) $day['index_weekday']) as $schedule)
                             @if ($schedule->start_time <= $hour AND $schedule->end_time >= $hour)
                               {{ $schedule->price }} тг
                             @endif
@@ -131,15 +130,19 @@
                           <?php $game = false; ?>
                           @foreach($field->matches->where('date', $day['year']) as $match)
                             @if ($match->start_time <= $hour AND $match->end_time >= $hour)
-                              <a href="#">Игра {{ $match->id }}</a>
+                              <a href="{{ url('sport/match/'.$area->id.'/'.$match->id) }}">Игра {{ $match->id }}</a>
                               <?php $game = true; ?>
                             @endif
                           @endforeach
 
                           @if ($game == false)
-                            <label class="checkbox-inline text-info">
-                              <input type="checkbox" name="hours[]" value="{{ $field->id.' '.$day['year'].' '.$hour }}"> Купить
-                            </label>
+                            @foreach($field->schedules->where('week', (int) $day['index_weekday']) as $schedule)
+                              @if ($schedule->start_time <= $hour AND $schedule->end_time >= $hour)
+                                <label class="checkbox-inline text-info">
+                                  <input type="checkbox" name="hours[]" data-price="{{ $schedule->price }}" value="{{ $field->id.' '.$day['year'].' '.$hour }}"> Купить
+                                </label>
+                              @endif
+                            @endforeach
                           @endif
                         </td>
                       @endif

@@ -48,7 +48,7 @@
             <tbody>
               @foreach(trans('data.hours') as $hour)
                 @continue($hour < $area->start_time)
-                @if ($current_date >= $date AND $current_hour > $hour)
+                @if ($current_date >= $date AND $current_hour >= $hour)
                   <?php $game = false;?>
                   @foreach ($field->matches->where('date', $date) as $num => $match)
                     <tr>
@@ -94,7 +94,7 @@
                       <?php $game = true; ?>
                       <tr>
                         <td>
-                          <a class="match-link" href="{{ url('') }}">
+                          <a class="match-link" href="{{ url('sport/match/'.$area->id.'/'.$match->id) }}">
                             Матч {{ $match->id }}
                             @if ($match->match_type == 'open')
                               <span class="pull-right label label-success">Открытая игра</span>

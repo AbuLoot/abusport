@@ -4,11 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\City;
 use App\Sport;
 use App\Area;
-use App\Field;
 use App\Match;
+use App\Schedule;
 use App\Http\Requests;
 
 class SportController extends Controller
@@ -76,6 +75,14 @@ class SportController extends Controller
         return view('board.matches', compact('sport', 'area', 'days', 'date'));
     }
 
+    public function getMatch($sport, $match_id)
+    {
+        $sport = Sport::where('slug', $sport)->first();
+        $match = Match::find($match_id);
+
+        return view('board.match', compact('sport', 'match'));
+    }
+
     public function getMatchesWithCalendar($sport, $area_id, $setDays = 3)
     {
         $sport = Sport::where('slug', $sport)->first();
@@ -118,9 +125,6 @@ class SportController extends Controller
                 list($num_hour, $zeros) = explode(':', $hours[$i]);
                 $num_hour = ($num_hour < 9) ? '0'.($num_hour + 1) : $num_hour + 1;
 
-                // echo $num_hour.':00 - ' . $hours[$key] .'<br>';
-                // continue;
-
                 if ($fields[$i] != $fields[$key]) {
                     return redirect()->back()->withInput()->withInfo('Матч должен состоятся в одном поле');
                 }
@@ -129,15 +133,26 @@ class SportController extends Controller
                     return redirect()->back()->withInput()->withInfo('Матч должен состоятся в один день');
                 }
 
-                if ($num_hour.':00' != $hours[$key]) {
+                if ($num_hour.':'.$zeros != $hours[$key]) {
                     return redirect()->back()->withInput()->withInfo('Выберите время последовательно');
                 }
             }
         }
 
-        // dd(1);
+        $day = $this->getDays(1, $date[0]);
+        $schedules = Schedule::where('field_id', $fields[0])->where('week', (int) $day[0]['index_weekday'])->get();
 
-        $area = Area::findOrFail($request->area_id);
+        $price = 0;
+
+        foreach ($schedules as $schedule)
+        {
+            foreach ($hours as $hour)
+            {
+                if ($schedule->start_time <= $hour AND $schedule->end_time >= $hour) {
+                    $price += $schedule->price;
+                }
+            }
+        }
 
         $match = new Match();
         $match->user_id = $request->user()->id;
@@ -147,22 +162,23 @@ class SportController extends Controller
         $match->date = $date[0];
         $match->match_type = $request->match_type;
         $match->number_of_players = $request->number_of_players;
-        // $match->price = $field->schedule->price;
+        $match->price = $price;
         $match->save();
+
+        $match->users()->attach($request->user()->id);
 
         return redirect()->back()->with('status', 'Запись добавлена!');
     }
 
-    public function getDays($setDays)
+    public function getDays($setDays, $date = '')
     {
         $days = [];
         $result = [];
-        $month = [];
 
-        $date_min = date("Y-m-d");
+        $date_min = ($date) ? $date : date("Y-m-d");
         $date_max = date("Y-m-d", strtotime($date_min." + $setDays day"));
         $start = new \DateTime($date_min);
-        $end = new \DateTime($date_max);   
+        $end = new \DateTime($date_max);
         $interval = \DateInterval::createFromDateString("1 day");
         $period   = new \DatePeriod($start, $interval, $end);
 
