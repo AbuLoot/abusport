@@ -170,6 +170,26 @@ class SportController extends Controller
         return redirect()->back()->with('status', 'Запись добавлена!');
     }
 
+    public function joinMatch(Request $request)
+    {
+        $this->validate($request, [
+            'user_id' => 'required|numeric',
+            'match_id' => 'required|numeric'
+        ]);
+
+        $date = date('Y-m-d');
+        $date_time = date('Y-m-d H:i:s');
+
+        $match = Match::where('created_at', '<', $date_time)
+            ->where('date', '>=', $date)
+            ->where('id', $request->match_id)
+            ->firstOrFail();
+
+        $match->users()->attach($request->user()->id);
+
+        return redirect()->back()->with('status', 'Вы в игре!');
+    }
+
     public function getDays($setDays, $date = '')
     {
         $days = [];

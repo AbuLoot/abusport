@@ -17,4 +17,9 @@ class Match extends Model
     {
     	return $this->belongsToMany('App\User');
     }
+
+    public function getPriceForEachAttribute()
+    {
+    	return ($this->price / $this->number_of_players) . 'тг';
+    }
 }

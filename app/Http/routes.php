@@ -28,25 +28,10 @@ Route::get('/', 'SportController@getSports');
 Route::get('sport/{sport}', 'SportController@getAreas');
 Route::get('sport/map/{sport}', 'SportController@getAreasWithMap');
 Route::get('sport/calendar/{sport}/{area_id}/{setDays?}', 'SportController@getMatchesWithCalendar');
-Route::get('sport/match/{sport}/{match_id}/', 'SportController@getMatch');
-Route::get('sport/{sport}/{area_id}/{date?}', 'SportController@getMatches');
 
-// Route::get('sport/calendar/{sport}/{area_id}', 'SportController@getRoom');
+Route::group(['middleware' => 'auth'], function() {
 
-Route::get('create-match/{setDays?}', 'SportController@createMatch');
-Route::post('store-match', 'SportController@storeMatch');
-// Route::get('create-match2', 'SportController@createMatch2');
-
-Route::get('elo', function(){
-
-    // $now = \ Carbon::now();
-
-    dd($now);
-});
-
-// Users
-Route::group(['middleware' => 'auth'], function () {
-
+    // Users
     Route::resource('profile', 'ProfileController');
     Route::resource('friend', 'FriendController');
 
@@ -54,7 +39,17 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('user/{id}', 'FriendController@user');
     Route::get('add/{id}', 'FriendController@getAdd');
     Route::get('accept/{id}', 'FriendController@getAccept');
+
+    // Match
+    Route::get('create-match/{setDays?}', 'SportController@createMatch');
+    Route::post('store-match', 'SportController@storeMatch');
+    Route::post('join-match', 'SportController@joinMatch');
+
+    Route::get('sport/match/{sport}/{match_id}/', 'SportController@getMatch');
+
 });
+
+Route::get('sport/{sport}/{area_id}/{date?}', 'SportController@getMatches');
 
 
 // Administration
@@ -79,6 +74,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'role:root', 'role:a
     Route::resource('options', 'Admin\OptionController');
     Route::resource('matches', 'Admin\MatchController');
 });
+
 
 // Api
 Route::get('api/requestlogin/{phone}/{password}','ApiController@requestlogin');
