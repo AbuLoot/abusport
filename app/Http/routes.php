@@ -38,15 +38,10 @@ Route::post('store-match', 'SportController@storeMatch');
 // Route::get('create-match2', 'SportController@createMatch2');
 
 Route::get('elo', function(){
-    $area = \App\Area::first();
 
-    $fields = $area->fields->toArray();
+    // $now = \ Carbon::now();
 
-    
-
-    $schedules = $area->fields->schedules->toArray();
-
-    dd($fields);
+    dd($now);
 });
 
 // Users
