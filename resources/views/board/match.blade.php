@@ -18,24 +18,34 @@
 
     @include('partials.alerts')
 
-    <h2 class="text-center">Матч {{ $match->id }}</h2>
+    <h2 class="text-center">Матч {{ $match->id }} <small>{{ $match->matchDate }}</small></h2>
 
     <div class="row">
       <div class="col-md-6">
         <p>
-          <b>Дата и время игры:</b> {{ $match->date.' '.$match->start_time.' - '.$match->end_time }}<br>
+          <b>Время игры:</b> {{ $match->start_time.' - '.$match->end_time }}<br>
           <b>Адрес:</b> {{ $match->field->area->address }}<br>
-          <b>Игроков:</b> {{ '0/'.$match->number_of_players.' '.$match->price.'тг' }}<br>
+          <b>Игроков:</b> {{ $match->users->count().'/'.$match->number_of_players }}<br>
           <b>Цена:</b> {{ $match->price.'тг' }}
         </p>
       </div>
       <div class="col-md-6 text-right">
-        @if (!in_array(Auth::id(), $match->users->lists('id')->toArray()))
+        @if (!in_array(Auth::id(), $match->users->lists('id')->toArray()) AND Auth::id() != $match->user_id)
           <form action="{{ url('join-match') }}" method="post">
             {!! csrf_field() !!}
             <input type="hidden" name="user_id" value="{{ Auth::id() }}">
             <input type="hidden" name="match_id" value="{{ $match->id }}">
             <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Вступить в игру</button>
+          </form>
+        @elseif(Auth::id() != $match->user_id)
+          <form action="{{ url('left-match') }}" method="post">
+            {!! csrf_field() !!}
+            @foreach($match->users as $user)
+              @continue($user->id == Auth::id())
+              <input type="hidden" name="users_id[]" value="{{ $user->id }}">
+            @endforeach
+            <input type="hidden" name="match_id" value="{{ $match->id }}">
+            <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Выйти из игры</button>
           </form>
         @endif
       </div>
@@ -68,23 +78,6 @@
               @endforeach
             </tbody>
           </table>
-        </div>
-
-        <div class="list-group">
-          @foreach($match->users as $number => $user)
-            @if ($user->id == $match->user_id)
-              <a href="#" class="list-group-item active">
-                <b>{{ ++$number.'. '.$user->surname.' '.$user->name }}</b>
-                <b>{{ ($match->user_id == Auth::id()) ? '(Вы Организатор)' : '(Организатор)' }}</b>
-                <span class="badge">{{ $match->price_for_each }}</span>
-              </a>
-            @else
-              <a href="#" class="list-group-item">
-                {{ ++$number.'. '.$user->surname.' '.$user->name }}
-                <span class="badge">{{ $match->price_for_each }}</span>
-              </a>
-            @endif
-          @endforeach
         </div>
 
       </div>

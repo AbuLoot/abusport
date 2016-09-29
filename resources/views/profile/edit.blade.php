@@ -11,7 +11,7 @@
 @section('content')
 
   <div class="panel panel-default">
-    <div class="panel-heading">My Profile</div>
+    <div class="panel-heading">Мой профиль</div>
     <div class="panel-body">
 
       @include('partials.alerts')
@@ -57,7 +57,44 @@
         </div>
         <div class="form-group">
           <label for="birth_date">Дата рождения:</label>
-          <input type="text" class="form-control" name="birthday" id="birth_date" maxlength="200" placeholder="Дата рождения" value="{{ $user->profile->birth_date }}">
+          <div class="row">
+            <div class="col-md-4">
+              <select name="year" id="year" title="Год" class="form-control">
+                <option value="">Год</option>
+                @for ($y = 2012; $y >= 1905; $y--)
+                  @if ($date['year'] == $y)
+                    <option value="{{ $y }}" selected>{{ $y }}</option>
+                  @else
+                    <option value="{{ $y }}">{{ $y }}</option>
+                  @endif
+                @endfor
+              </select>
+            </div>
+            <div class="col-md-4">
+              <select name="month" id="month" title="Месяц" class="form-control">
+                <option value="">Месяц</option>
+                @foreach (trans('data.month') as $num => $month)
+                  @if ($date['month'] == $num)
+                    <option value="{{ $num }}" selected>{{ $month }}</option>
+                  @else
+                    <option value="{{ $num }}">{{ $month }}</option>
+                  @endif
+                @endforeach
+              </select>
+            </div>
+            <div class="col-md-4">
+              <select name="day" id="day" title="День" class="form-control" >
+                <option value="">День</option>
+                @for ($d = 1; $d <= 31; $d++)
+                  @if ($date['day'] == $d)
+                    <option value="{{ $d }}" selected>{{ $d }}</option>
+                  @else
+                    <option value="{{ $d }}">{{ $d }}</option>
+                  @endif
+                @endfor
+              </select>
+            </div>
+          </div>
         </div>
         <div class="form-group">
           <label for="status">Пол:</label>
@@ -69,7 +106,7 @@
           <div class="fileinput fileinput-new" data-provides="fileinput">
             <div class="fileinput-new thumbnail" style="width: 200px; height: 150px;">
               @if(!empty($user->profile->avatar))
-                <img src="/img/profiles/{{ $user->profile->id . '/' . $user->profile->avatar }}">
+                <img src="/img/users/{{ $user->profile->id . '/' . $user->profile->avatar }}">
               @endif
             </div>
             <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;"></div>

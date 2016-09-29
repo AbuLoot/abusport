@@ -32,7 +32,7 @@
             <div class="pull-right">
               <dl class="dl-horizontal">
                 <dt>Игроков:</dt><dd><span class="badge">59</span></dd>
-                <dt>Матчей:</dt><dd><span class="badge">20</span></dd>
+                <dt>Матчей:</dt><dd><span class="badge">25</span></dd>
               </dl>
             </div>
             <div class="clearfix"></div>

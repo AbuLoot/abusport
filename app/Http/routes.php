@@ -33,17 +33,19 @@ Route::group(['middleware' => 'auth'], function() {
 
     // Users
     Route::resource('profile', 'ProfileController');
-    Route::resource('friend', 'FriendController');
+    Route::resource('friends', 'FriendController');
 
-    Route::get('all_users', 'FriendController@all_users');
-    Route::get('user/{id}', 'FriendController@user');
-    Route::get('add/{id}', 'FriendController@getAdd');
-    Route::get('accept/{id}', 'FriendController@getAccept');
+    Route::get('all-users', 'FriendController@allUsers');
+    Route::get('user-profile/{id}', 'FriendController@userProfile');
+    Route::get('add-to-frieds/{id}', 'FriendController@addToFriends');
+    Route::get('accept/{id}', 'FriendController@accept');
+    Route::get('my-matches', 'FriendController@accept');
 
     // Match
     Route::get('create-match/{setDays?}', 'SportController@createMatch');
     Route::post('store-match', 'SportController@storeMatch');
     Route::post('join-match', 'SportController@joinMatch');
+    Route::post('left-match', 'SportController@leftMatch');
 
     Route::get('sport/match/{sport}/{match_id}/', 'SportController@getMatch');
 

@@ -7,9 +7,7 @@
 @section('tabs')
 
     <ul class="tabs-panel">
-      <li class="active"><a href="#">Матчи</a></li>
-      <li><a href="{{ action('SportController@getMatchesWithCalendar', [$sport->slug, $area->id]) }}">Календарь</a></li>
-      <li><a href="#">Информация</a></li>
+      <li class="active"><a href="#">Мои Матчи</a></li>
     </ul>
 
 @endsection
@@ -25,7 +23,7 @@
 
       @foreach($area->fields as $field)
         <h4>{{ $area->title.' - '.$field->title }}</h4>
-        <ul class="nav nav-tabs nav-justified">
+        <ul class="nav nav-pills nav-justified">
           @foreach ($days as $day)
             @if ($day['year'] == $date)
               <li class="active"><a href="{{ url('sport/'.$area->sport->slug.'/'.$area->id.'/'.$day['year']) }}">{{ $day['day'].' '.$day['short_weekday'] }}</a></li>
@@ -34,7 +32,7 @@
               <li><a href="{{ url('sport/'.$area->sport->slug.'/'.$area->id.'/'.$day['year']) }}">{{ $day['day'].' '.$day['short_weekday'] }}</a></li>
             @endif
           @endforeach
-        </ul>
+        </ul><br>
         <div class="table-responsive">
           <table class="table table-hover table-bordered">
             <thead>

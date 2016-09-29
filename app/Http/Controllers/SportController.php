@@ -70,7 +70,7 @@ class SportController extends Controller
         $date = ($date) ? $date : date('Y-m-d');
 
         // Get days
-        $days = $this->getDays(14);
+        $days = $this->getDays(7);
 
         return view('board.matches', compact('sport', 'area', 'days', 'date'));
     }
@@ -185,9 +185,35 @@ class SportController extends Controller
             ->where('id', $request->match_id)
             ->firstOrFail();
 
-        $match->users()->attach($request->user()->id);
+        $match->users->push($request->user());
+        $match->users()->sync($match->users->lists('id')->toArray());
 
         return redirect()->back()->with('status', 'Вы в игре!');
+    }
+
+    public function leftMatch(Request $request)
+    {
+        $this->validate($request, [
+            'match_id' => 'required|numeric'
+        ]);
+
+        $date = date('Y-m-d');
+        $date_time = date('Y-m-d H:i:s');
+
+        $match = Match::where('created_at', '<', $date_time)
+            ->where('date', '>=', $date)
+            ->where('id', $request->match_id)
+            ->firstOrFail();
+
+        $auth_user_id = $request->user()->id;
+
+        $users_id = $match->users->filter(function ($user, $key) use ($auth_user_id) {
+            return $user->id != $auth_user_id;
+        });
+
+        $match->users()->sync($users_id);
+
+        return redirect()->back()->with('status', 'Вы вышли из игры!');
     }
 
     public function getDays($setDays, $date = '')
