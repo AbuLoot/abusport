@@ -72,11 +72,11 @@ class AuthCustomController extends Controller
 
         $code = rand(10000, 99999);
 
-        // $responseApi = $this->sendSms($request->phone, $code);
+        $responseApi = $this->sendSms($request->phone, $code);
 
-        if (true) {
+        // if (true) {
 
-        // if ($responseApi == true) {
+        if ($responseApi == true) {
 
             $user = new User();
             $user->surname = $request->surname;
