@@ -210,7 +210,7 @@ class ApiController extends Controller
 	}
 	public function requestplaygrounds($sportid)
 	{
-	   try {   
+	   try{   
             $playgrounds = DB::table('areas')->where('sport_id', '=', $sportid)->get();	       
             $response['areas']= $playgrounds;
             $response['error']=false;
@@ -294,9 +294,12 @@ class ApiController extends Controller
 			
 	}
 	public function requestweekdays($playgroundid,$selecteddate){
+									//$schedules = DB::table('schedules')->select('schedules.field_id','schedules.start_time','schedules.end_time','schedules.price','schedules.status','schedules.date')->where('schedules.field_id', '=', 1)->where('schedules.week', '=', 1)->get();
 		try{   
 		     $days=array();
 			 $result=array();
+			 $schresult=array();
+			 $fullschedule=array();
 			 $month_r = array();
 			 $date_min= date("Y-m-d");
 			 $date_max= date("Y-m-d",strtotime($date_min." + 7 day"));
@@ -304,7 +307,6 @@ class ApiController extends Controller
              $end = new \DateTime($date_max);   
 		     $interval = \DateInterval::createFromDateString("1 day");
 			 $period   = new \DatePeriod($start, $interval, $end);
-
 		   foreach($period as $dt){
 						$month_r=array(
 						"01" => "Янв",	
@@ -327,27 +329,70 @@ class ApiController extends Controller
 						"5" => "Птн", 
 						"6" => "Сбт", 
 						"0" => "Вск"); 
-<<<<<<< HEAD
 							  $result["year"] = $dt->format("Y-m-d");					
 							  $result["month"] = $month_r[$dt->format("m")];												  						  						  
 							  $result["day"]= $dt->format("d");     
 							  $result["weekday"]=$day_r[$dt->format("w")];
 							  array_push($days,$result);							  
 			}	
-=======
-
-				$result["year"] = $dt->format("Y-m-d");					
-				$result["month"] = $month_r[$dt->format("m")];												  						  						  
-				$result["day"]= $dt->format("d");     
-				$result["weekday"]=$day_r[$dt->format("w")];
-
-				array_push($days,$result);
-			}
-
->>>>>>> 7e113b97fa3ee6b255a5d1d476f32bac57117822
+		$hours=array(
+					'0' => '05:00',
+					'1' => '06:00',
+					'2' => '07:00',
+					'3' => '08:00',
+					'4' => '09:00',
+					'5' => '10:00',
+					'6' => '11:00',
+					'7' => '12:00',
+					'8' => '13:00',
+					'9' => '14:00',
+					'10' => '15:00',
+					'11' => '16:00',
+					'12' => '17:00',
+					'13' => '18:00',
+					'14' => '19:00',
+					'15' => '20:00',
+					'16' => '21:00',
+					'17' => '22:00',
+					'18' => '23:00',
+					'19' => '00:00',
+					'20' => '01:00',
+					'21' => '02:00',
+					'22' => '03:00',
+					'23' => '04:00');
             $response['days'] =$days;
-			$schedules = DB::table('schedules')->join('fields', 'schedules.field_id', '=', 'fields.id')->select('fields.title','schedules.*')->where('schedules.area_id', '=', $playgroundid)->where('schedules.date', '=', $selecteddate)->get();						 
-			$response['schedules']= $schedules;
+			$week = new \DateTime($selecteddate);			
+			$fields = DB::table('fields')->select('fields.id','fields.title')->where('fields.area_id','=',$playgroundid)->where('fields.status','=',1)->get();			
+			foreach($fields as $field){
+				$schedules = DB::table('schedules')->select('schedules.field_id','schedules.start_time','schedules.end_time','schedules.price','schedules.status','schedules.date')->where('schedules.field_id', '=', $field->id)->where('schedules.week', '=', $week->format("w"))->get();
+				$times = DB::table('matches')->select('matches.field_id','matches.start_time','matches.end_time')->where('matches.field_id','=',$field->id)->where('matches.date','=',$selecteddate)->get();							
+				foreach($hours as $hour){
+						$schresult['start_time']=$hour;
+						//$endTime = strtotime("+1 hour", strtotime($hour));
+						//$schresult['end_time'] = date('h:i', $endTime);
+						$schresult['end_time'] = $hour;
+						$schresult['field_id']= $field->id;
+						$schresult['title'] = $field->title;
+						$schresult['status']=0;
+					foreach($schedules as $schedule){
+					    if($schedule->start_time <= $hour AND $schedule->end_time >= $hour){
+						  $schresult['price']=$schedule->price;							  		
+						  $schresult['date']=$schedule->date;							
+						}						
+					}
+					foreach($times as $match){
+					    if($match->start_time <= $hour AND $match->end_time > $hour){
+						    $schresult['status']=1;
+						}else{
+							$schresult['status']=0;
+						}
+					}
+					array_push($fullschedule,$schresult);
+				}			
+			}
+	
+			$response['schedules']= $fullschedule;	
+					
 			$response['error']=false;
 		} catch (Exception $e) {
 			$response['error'] = true;
