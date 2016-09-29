@@ -95,7 +95,7 @@
               <li><a href="#">Баланс <small class="text-left text-success">0 тг</small></a></li>
               <li class=""><a href="/profile">Мой профиль</a></li>
               <li><a href="/friends">Мои друзья <span class="badge">{{ Auth::user()->friends()->count() }}</span></a></li>
-              <li><a href="/matches">Мои матчи <span class="badge">{{ Auth::user()->matches()->count() }}</span></a></li>
+              <li><a href="/my-matches">Мои матчи <span class="badge">{{ Auth::user()->matches()->count() }}</span></a></li>
               <li><a href="#">Уведомления <span class="badge">0</span></a></li>
               <li><a href="#">Настройки</a></li>
             @endif

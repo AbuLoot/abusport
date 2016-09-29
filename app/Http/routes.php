@@ -34,12 +34,12 @@ Route::group(['middleware' => 'auth'], function() {
     // Users
     Route::resource('profile', 'ProfileController');
     Route::resource('friends', 'FriendController');
+    Route::get('my-matches', 'MatchController@myMatches');
 
     Route::get('all-users', 'FriendController@allUsers');
     Route::get('user-profile/{id}', 'FriendController@userProfile');
     Route::get('add-to-frieds/{id}', 'FriendController@addToFriends');
     Route::get('accept/{id}', 'FriendController@accept');
-    Route::get('my-matches', 'FriendController@accept');
 
     // Match
     Route::get('create-match/{setDays?}', 'SportController@createMatch');

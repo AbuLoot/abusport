@@ -29,6 +29,6 @@ class Match extends Model
     {
         list($date['year'], $date['month'], $date['day']) = explode('-', $this->date);
 
-        return '('.$date['day'].' '.trans('data.month.'.$date['month']).'. '.$date['year'].')';
+        return $date['day'].' '.trans('data.month.'.$date['month']).'. '.$date['year'];
     }
 }

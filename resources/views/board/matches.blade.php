@@ -47,7 +47,9 @@
             </thead>
             <tbody>
               @foreach(trans('data.hours') as $hour)
+
                 @continue($hour < $area->start_time)
+
                 @if ($current_date >= $date AND $current_hour >= $hour)
                   <?php $game = false;?>
                   @foreach ($field->matches->where('date', $date) as $num => $match)

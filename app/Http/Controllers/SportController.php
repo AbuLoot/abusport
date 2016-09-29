@@ -103,7 +103,7 @@ class SportController extends Controller
         // Get days
         $days = $this->getDays($setDays);
 
-        return view('board.create-match', compact('sports', 'areas', 'days', 'active_area'));
+        return view('board.create_match', compact('sports', 'areas', 'days', 'active_area'));
     }
 
     public function storeMatch(Request $request)
@@ -223,8 +223,8 @@ class SportController extends Controller
 
         $date_min = ($date) ? $date : date("Y-m-d");
         $date_max = date("Y-m-d", strtotime($date_min." + $setDays day"));
-        $start = new \DateTime($date_min);
-        $end = new \DateTime($date_max);
+        $start    = new \DateTime($date_min);
+        $end      = new \DateTime($date_max);
         $interval = \DateInterval::createFromDateString("1 day");
         $period   = new \DatePeriod($start, $interval, $end);
 
