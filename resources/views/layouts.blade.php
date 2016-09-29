@@ -36,7 +36,9 @@
             </span>
           </button>
 
-          <button type="submit" class="btn btn-success navbar-btn navbar-xs-btn navbar-right hidden-lg hidden-md"><span class="glyphicon glyphicon-plus"></span></button>
+          @if (Auth::check())
+            <a href="{{ url('create-match') }}" class="btn btn-success navbar-btn navbar-xs-btn navbar-right hidden-lg hidden-md"><span class="glyphicon glyphicon-plus"></span></a>
+          @else
 
           <a class="navbar-brand" href="/">AbuSport</a>
         </div>
