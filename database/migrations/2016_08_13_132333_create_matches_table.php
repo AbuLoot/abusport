@@ -17,8 +17,8 @@ class CreateMatchesTable extends Migration
             $table->integer('sort_id')->nullable();
             $table->integer('user_id')->references('id')->on('users');
             $table->integer('field_id')->references('id')->on('fields');
-            $table->time('start_time');
-            $table->time('end_time');
+            $table->char('start_time', 10);
+            $table->char('end_time', 10);
             $table->date('date');
             $table->string('match_type');
             $table->string('game_type');

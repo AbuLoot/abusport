@@ -12,69 +12,59 @@
 @section('content')
 
   <div class="panel panel-default">
-    <div class="panel-heading">My Profile</div>
+    <div class="panel-heading">Мой профиль</div>
     <div class="panel-body">
 
       @include('partials.alerts')
 
-      <form action="{{ route('profile.update', $user->id) }}" method="post" enctype="multipart/form-data">
-        <input name="_method" type="hidden" value="PUT">
-        {!! csrf_field() !!}
-        <div class="form-group text-right">
-          <a href="{{ route('profile.edit', $user->id) }}">Изменить</a>
-        </div>
-        <div class="form-group row">
-          <label for="website" class="col-lg-3 col-md-3 text-right">Аватар:</label></br>
-          <div class="fileinput fileinput-new" data-provides="fileinput">
-            <div class="fileinput-new thumbnail" style="width: 200px; height: 150px;">
-              @if(!empty($user->profile->avatar))
-                <img src="/img/profiles/{{ $user->profile->id . '/' . $user->profile->avatar }}">
-              @endif
-            </div>
-            <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;"></div>
-          </div>
-        </div>
-        <div class="form-group row">
-          <label for="name" class="col-lg-3 col-md-3 text-right">Имя:</label>
-          <p class="col-lg-9 col-md-9">{{ $user->name }}</p>
-        </div>
-        <div class="form-group row">
-          <label for="surname" class="col-lg-3 col-md-3 text-right">Фамилия:</label>
-          <p class="col-lg-9 col-md-9">{{ $user->surname }}</p>
-        </div>
-        <div class="form-group row">
-          <label for="email" class="col-lg-3 col-md-3 text-right">Email:</label>
-          <p class="col-lg-9 col-md-9">{{ $user->email }}</p>
-        </div>
-        <div class="form-group row">
-          <label for="city_id" class="col-lg-3 col-md-3 text-right">Город:</label>
-          <p class="col-lg-9 col-md-9">{{ $user->profile->city->title }}</p>
-        </div>
-        <div class="form-group row">
-          <label for="phone" class="col-lg-3 col-md-3 text-right">Телефон</label>
-          <p class="col-lg-9 col-md-9">{{ $user->phone }}</p>
-        </div>
-        <div class="form-group row">
-          <label for="growth" class="col-lg-3 col-md-3 text-right">Рост:</label>
-          <p class="col-lg-9 col-md-9">{{ $user->profile->growth }}</p>
-        </div>
-        <div class="form-group row">
-          <label for="weight" class="col-lg-3 col-md-3 text-right">Вес:</label>
-          <p class="col-lg-9 col-md-9">{{ $user->profile->weight }}</p>
-        </div>
-        <div class="form-group row">
-          <label for="birth_date" class="col-lg-3 col-md-3 text-right">Дата рождения:</label>
-          <p class="col-lg-9 col-md-9">{{ $user->profile->birthday }}</p>
-        </div>
-        <div class="form-group row">
-          <label for="status" class="col-lg-3 col-md-3 text-right">Пол:</label>
-          <p class="col-lg-9 col-md-9">
-            @if($user->profile->sex == "woman")Женщина
-            @elseif($user->profile->sex == "man")Мужчина
+      <dl class="dl-horizontal">
+        <dt>Фамилия и Имя:</dt>
+        <dd>{{ $user->surname.' '.$user->name }}</dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt>Аватар</dt>
+        <dd>
+          <div style="width: 200px; height: 200px;">
+            @if(empty($user->profile->avatar))
+              <img src="/img/user-default.jpg" class="img-responsive">
+            @else
+              <img src="/img/users/{{ $user->profile->id . '/' . $user->profile->avatar }}">
             @endif
-          </p>
-        </div>
-      </form>
+          </div>
+        </dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt>Email:</dt>
+        <dd>{{ $user->email }}</dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt>Город:</dt>
+        <dd>{{ $user->profile->city->title }}</dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt>Телефон</dt>
+        <dd>{{ $user->phone }}</dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt>Рост:</dt>
+        <dd>{{ $user->profile->growth }} см.</dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt>Вес:</dt>
+        <dd>{{ $user->profile->weight }} кг.</dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt>Дата рождения:</dt>
+        <dd>{{ $user->profile->birthday }}</dd>
+      </dl>
+      <dl class="dl-horizontal">
+        <dt>Пол:</dt>
+        <dd>{{ ($user->profile->sex == "woman") ? 'Женщина' : 'Мужчина' }}</dd>
+      </dl>
+
+      <div class="text-right">
+        <a class="btn btn-primary" href="{{ route('profile.edit', $user->id) }}">Изменить</a>
+      </div>
     </div>
   </div>
 

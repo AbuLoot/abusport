@@ -27,6 +27,8 @@ class CreateAreasTable extends Migration
             $table->string('emails');
             $table->string('address');
             $table->text('description');
+            $table->char('start_time', 10);
+            $table->char('end_time', 10);
             $table->string('latitude');
             $table->string('longitude');
             $table->char('lang', 4);

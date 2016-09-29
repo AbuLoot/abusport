@@ -13,12 +13,11 @@ class CreateMatchUserTable extends Migration
     public function up()
     {
         Schema::create('match_user', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('sort_id')->nullable();
-            $table->integer('user_id')->references('id')->on('users');
-            $table->integer('match_id')->references('id')->on('matches');
-            $table->integer('status')->default(1);
-            $table->timestamps();
+            $table->integer('user_id')->unsigned();
+            $table->integer('match_id')->unsigned();
+
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('match_id')->references('id')->on('matches')->onDelete('cascade');
         });
     }
 
