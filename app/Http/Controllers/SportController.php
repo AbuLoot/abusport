@@ -205,13 +205,7 @@ class SportController extends Controller
             ->where('id', $request->match_id)
             ->firstOrFail();
 
-        $auth_user_id = $request->user()->id;
-
-        $users_id = $match->users->filter(function ($user, $key) use ($auth_user_id) {
-            return $user->id != $auth_user_id;
-        });
-
-        $match->users()->sync($users_id);
+        $match->users()->detach($request->user()->id);
 
         return redirect()->back()->with('status', 'Вы вышли из игры!');
     }
