@@ -28,6 +28,8 @@ Route::get('/', 'SportController@getSports');
 Route::get('sport/{sport}', 'SportController@getAreas');
 Route::get('sport/map/{sport}', 'SportController@getAreasWithMap');
 Route::get('sport/calendar/{sport}/{area_id}/{setDays?}', 'SportController@getMatchesWithCalendar');
+//Chat
+Route::get('chat', 'ChatController@index');
 
 Route::group(['middleware' => 'auth'], function() {
 
