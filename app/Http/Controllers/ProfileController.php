@@ -34,11 +34,13 @@ class ProfileController extends Controller
 
     public function update(Request $request, $id)
     {
+        // dd($request->all());
         $this->validate($request, [
             'surname' => 'required|min:2|max:40',
             'name' => 'required|min:2|max:40',
             'phone' => 'required|min:11|max:11',
             'email' => 'required|email|max:255',
+            'city_id' => 'required|numeric',
             'sex' => 'required',
             'day' => 'required|numeric|between:1,31',
             'month' => 'required|numeric|between:1,12',

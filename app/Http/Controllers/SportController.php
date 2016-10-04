@@ -200,6 +200,7 @@ class SportController extends Controller
         $date = date('Y-m-d');
         $date_time = date('Y-m-d H:i:s');
 
+
         $match = Match::where('created_at', '<', $date_time)
             ->where('date', '>=', $date)
             ->where('id', $request->match_id)
