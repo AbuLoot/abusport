@@ -8,12 +8,7 @@
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title>@yield('title_description', 'AbuSport')</title>
     <meta name="description" content="@yield('meta_description', 'AbuSport')">
-    <!-- <link rel="stylesheet" type="text/css" href="http://bootswatch.com/cosmo/bootstrap.min.css"> -->
-    <!-- <link rel="stylesheet" type="text/css" href="http://bootswatch.com/flatly/bootstrap.min.css"> -->
-    <!-- <link rel="stylesheet" type="text/css" href="http://bootswatch.com/cyborg/bootstrap.min.css"> -->
-    <!-- <link rel="stylesheet" type="text/css" href="http://bootswatch.com/darkly/bootstrap.min.css"> -->
-    <!-- <link rel="stylesheet" type="text/css" href="http://bootswatch.com/sandstone/bootstrap.min.css"> -->
-    <!-- <link rel="stylesheet" type="text/css" href="http://bootswatch.com/superhero/bootstrap.min.css"> -->
+
     <link href="/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/bower_components/bootstrap-offcanvas/dist/css/bootstrap.offcanvas.css">
     <link rel="stylesheet" type="text/css" href="/css/style.css">
@@ -41,7 +36,9 @@
             </span>
           </button>
 
-          <button type="submit" class="btn btn-success navbar-btn navbar-xs-btn navbar-right hidden-lg hidden-md"><span class="glyphicon glyphicon-plus"></span></button>
+          @if (Auth::check())
+            <a href="{{ url('create-match') }}" class="btn btn-success navbar-btn navbar-xs-btn navbar-right hidden-lg hidden-md"><span class="glyphicon glyphicon-plus"></span></a>
+          @endif
 
           <a class="navbar-brand" href="/">AbuSport</a>
         </div>
@@ -49,17 +46,17 @@
         <!-- Account system -->
         <ul class="nav navbar-nav navbar-right hidden-sm hidden-xs">
           @if (Auth::guest())
-            <li><a href="{{ url('/login') }}"><span class="glyphicon glyphicon-log-in"></span> Войти</a></li>
+            <li><a href="{{ url('login') }}"><span class="glyphicon glyphicon-log-in"></span> Войти</a></li>
           @else
-            <li><a href="{{ url('/create-match') }}"><span class="glyphicon glyphicon-plus"></span> Создать матч</a></li>
+            <li><a href="{{ url('create-match') }}"><span class="glyphicon glyphicon-plus"></span> Создать матч</a></li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ Auth::user()->name }} <span class="caret"></span></a>
               <ul class="dropdown-menu">
-                <li><a href="#">My Profile</a></li>
-                <li><a href="#">Settings</a></li>
-                <li><a href="#">Help</a></li>
+                <li class=""><a href="/profile">Мой профиль</a></li>
                 <li role="separator" class="divider"></li>
-                <li><a href="{{ url('/logout') }}"><span class="glyphicon glyphicon-log-out"></span> Выход</a></li>
+                <li class=""><a href="{{ route('profile.edit', Auth::id()) }}">Изменить</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="{{ url('logout') }}"><span class="glyphicon glyphicon-log-out"></span> Выход</a></li>
               </ul>
             </li>
           @endif
@@ -96,14 +93,17 @@
           </form>
 
           <ul class="nav nav-pills nav-stacked">
-            <li role="presentation"><a href="#">Wallet <small class="text-left text-success">6000 тг</small></a></li>
-            <li role="presentation" class=""><a href="/profile">My Profile</a></li>
-            <li role="presentation"><a href="/friend">My Friends <span class="badge">42</span></a></li>
-            <li role="presentation"><a href="#">My Matches <span class="badge">5</span></a></li>
-            <li role="presentation"><a href="#">Notifications <span class="badge">2</span></a></li>
-            <li role="presentation"><a href="#">Settings</a></li>
-            <li role="presentation"><a href="#">Feedback</a></li>
-            <li role="presentation"><a href="#">Help</a></li>
+            @if (Auth::check())
+              <li><a href="#">Баланс <small class="text-left text-success">0 тг</small></a></li>
+              <li class=""><a href="/profile">Мой профиль</a></li>
+              <li><a href="/friends">Мои друзья <span class="badge">{{ Auth::user()->friends()->count() }}</span></a></li>
+              <li><a href="/my-matches">Мои матчи <span class="badge">{{ Auth::user()->matches()->count() }}</span></a></li>
+              <li><a href="#">Уведомления <span class="badge">0</span></a></li>
+              <li><a href="#">Настройки</a></li>
+            @endif
+
+            <li><a href="#">Обратная связь</a></li>
+            <li><a href="#">Помощь</a></li>
           </ul>
         </aside>
 
@@ -112,15 +112,14 @@
         </div>
 
       </div>
-    </main>
+    </main><br>
 
     <footer class="footer">
       <div class="container">
         <ul class="list-inline">
-          <li><a href="#">Main</a></li>
-          <li><a href="#">About</a></li>
-          <li><a href="#">Rules</a></li>
-          <li><a href="#">Contacts</a></li>
+          @foreach ($pages as $page)
+            <li><a href="{{ url('p/' . $page->slug) }}">{{ $page->title }}</a></li>
+          @endforeach
         </ul>
       </div>
     </footer>

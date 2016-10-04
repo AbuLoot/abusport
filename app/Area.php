@@ -22,4 +22,16 @@ class Area extends Model
     {
         return $this->hasMany('App\Field');
     }
+
+    public function getFieldsMatchesCountAttribute()
+    {
+        $matches = 0;
+
+        foreach ($this->fields as $field)
+        {
+            $matches += $field->matches->count();
+        }
+
+        return $matches;
+    }
 }

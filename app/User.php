@@ -34,6 +34,11 @@ class User extends Authenticatable
         return $this->hasOne('App\Profile');
     }
 
+    public function matches()
+    {
+        return $this->belongsToMany('App\Match', 'match_user', 'user_id', 'match_id');
+    }
+
     public function friendsOfMine(){
         return $this->belongsToMany('App\User', 'friends', 'user_id', 'friend_id');
     }

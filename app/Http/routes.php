@@ -27,25 +27,33 @@ Route::post('confirm-register', 'Auth\AuthCustomController@postConfirmRegister')
 Route::get('/', 'SportController@getSports');
 Route::get('sport/{sport}', 'SportController@getAreas');
 Route::get('sport/map/{sport}', 'SportController@getAreasWithMap');
-Route::get('sport/{sport}/{area_id}/{date?}', ['as' => 'matches', 'uses' => 'SportController@getMatches']);
-// Route::get('sport/{sport}/{area_id}/{date?}', ['as' => 'players', 'uses' => 'SportController@getMatches']);
+Route::get('sport/calendar/{sport}/{area_id}/{setDays?}', 'SportController@getMatchesWithCalendar');
+//Chat
+Route::get('chat', 'ChatController@index');
 
-Route::get('create-match/{setDays?}', 'SportController@createMatch');
-Route::post('store-match', 'SportController@storeMatch');
-// Route::get('create-match2', 'SportController@createMatch2');
+Route::group(['middleware' => 'auth'], function() {
 
-
-// Users
-Route::group(['middleware' => 'auth'], function () {
-
+    // Users
     Route::resource('profile', 'ProfileController');
-    Route::resource('friend', 'FriendController');
+    Route::resource('friends', 'FriendController');
+    Route::get('my-matches', 'MatchController@myMatches');
 
-    Route::get('all_users', 'FriendController@all_users');
-    Route::get('user/{id}', 'FriendController@user');
-    Route::get('add/{id}', 'FriendController@getAdd');
-    Route::get('accept/{id}', 'FriendController@getAccept');
+    Route::get('all-users', 'FriendController@allUsers');
+    Route::get('user-profile/{id}', 'FriendController@userProfile');
+    Route::get('add-to-frieds/{id}', 'FriendController@addToFriends');
+    Route::get('accept/{id}', 'FriendController@accept');
+
+    // Match
+    Route::get('create-match/{setDays?}', 'SportController@createMatch');
+    Route::post('store-match', 'SportController@storeMatch');
+    Route::post('join-match', 'SportController@joinMatch');
+    Route::post('left-match', 'SportController@leftMatch');
+
+    Route::get('sport/match/{sport}/{match_id}/', 'SportController@getMatch');
+
 });
+
+Route::get('sport/{sport}/{area_id}/{date?}', 'SportController@getMatches');
 
 
 // Administration
@@ -70,6 +78,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function () {
     Route::resource('options', 'Admin\OptionController');
     Route::resource('matches', 'Admin\MatchController');
 });
+
 
 // Api
 Route::post('api/requestprofile/','ApiController@requestprofile');
