@@ -34,13 +34,13 @@
           </thead>
           <tbody>
             @foreach(Auth::user()->matches->sortByDesc('date') as $match)
-              @if ($current_date >= $match->date AND $current_hour >= $match->start_time)
+              @if ($current_date >= $match->date)
                 <tr>
                   <td>
-                    <a class="match-link" href="{{ url('sport/match/'.$match->field->area->id.'/'.$match->id) }}">
+                    <span class="match-link">
                       Матч {{ $match->id }}
                       <span class="pull-right label label-default">Конец игры</span>
-                    </a>
+                    </span>
                     @if ($match->user_id == Auth::id()) <b>Вы Организатор</b> @endif
                   </td>
                   <td>{{ $match->users->count().'/'.$match->number_of_players }}</td>

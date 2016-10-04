@@ -45,7 +45,7 @@
               <input type="hidden" name="users_id[]" value="{{ $user->id }}">
             @endforeach
             <input type="hidden" name="match_id" value="{{ $match->id }}">
-            <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Выйти из игры</button>
+            <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-remove"></span> Выйти из игры</button>
           </form>
         @endif
       </div>
