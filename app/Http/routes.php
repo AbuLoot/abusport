@@ -22,7 +22,6 @@ Route::post('confirm-register', 'Auth\AuthCustomController@postConfirmRegister')
 // Route::get('password/reset/{token}', 'Auth\PasswordController@getReset');
 // Route::post('password/reset', 'Auth\PasswordController@postReset');
 
-
 // Board
 Route::get('/', 'SportController@getSports');
 Route::get('sport/{sport}', 'SportController@getAreas');
@@ -30,6 +29,12 @@ Route::get('sport/map/{sport}', 'SportController@getAreasWithMap');
 Route::get('sport/calendar/{sport}/{area_id}/{setDays?}', 'SportController@getMatchesWithCalendar');
 
 Route::group(['middleware' => 'auth'], function() {
+
+    Route::get('test', function() {
+        event(
+            new \App\Events\ChatEvent()
+        );
+    });
 
     // Users
     Route::resource('profile', 'ProfileController');
@@ -50,6 +55,7 @@ Route::group(['middleware' => 'auth'], function() {
 
     Route::get('sport/match/{sport_id}/{match_id}/', 'SportController@getMatch');
     Route::get('sport/match-chat/{sport_id}/{match_id}/', 'SportController@getChat');
+    Route::post('chat/message/{match_id}', 'SportController@postMessage');
 });
 
 Route::get('sport/{sport}/{area_id}/{date?}', 'SportController@getMatches');

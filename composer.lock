@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ca7ec1e3cc1482ad2361834238b393ab",
-    "content-hash": "629a7aa2f0e7f961ecfe0cda19482616",
+    "hash": "73b36887d7b7f6aaa15378e42bf89346",
+    "content-hash": "69a42f18c8cd30b53db72029bb92e627",
     "packages": [
         {
             "name": "classpreloader/classpreloader",
@@ -908,30 +908,54 @@
             "time": "2016-03-18 20:34:03"
         },
         {
-            "name": "payment/epay",
-            "version": "1.0.0",
+            "name": "predis/predis",
+            "version": "v1.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nrk/predis.git",
+                "reference": "f0210e38881631afeafb56ab43405a92cafd9fd1"
+            },
             "dist": {
-                "type": "path",
-                "url": "packages/payment/epay",
-                "reference": "dcdc6553192198a74548928c86eb54b6254a75e8",
-                "shasum": null
+                "type": "zip",
+                "url": "https://api.github.com/repos/nrk/predis/zipball/f0210e38881631afeafb56ab43405a92cafd9fd1",
+                "reference": "f0210e38881631afeafb56ab43405a92cafd9fd1",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.9"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.8"
+            },
+            "suggest": {
+                "ext-curl": "Allows access to Webdis when paired with phpiredis",
+                "ext-phpiredis": "Allows faster serialization and deserialization of the Redis protocol"
             },
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "Payment\\Epay\\": ""
+                    "Predis\\": "src/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
             "authors": [
                 {
-                    "name": "Erasyl",
-                    "email": "mr.erasil_92@mail.ru"
+                    "name": "Daniele Alessandri",
+                    "email": "suppakilla@gmail.com",
+                    "homepage": "http://clorophilla.net"
                 }
             ],
-            "description": "A package for users to pay online at home"
+            "description": "Flexible and feature-complete Redis client for PHP and HHVM",
+            "homepage": "http://github.com/nrk/predis",
+            "keywords": [
+                "nosql",
+                "predis",
+                "redis"
+            ],
+            "time": "2016-06-16 16:22:20"
         },
         {
             "name": "psr/http-message",

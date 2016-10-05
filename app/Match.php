@@ -20,6 +20,11 @@ class Match extends Model
     	return $this->belongsToMany('App\User');
     }
 
+    public function chat()
+    {
+        return $this->hasMany('App\Chat');
+    }
+
     public function getPriceForEachAttribute()
     {
     	return ($this->price / $this->number_of_players) . 'тг';
