@@ -7,52 +7,55 @@
 
           @include('partials.alerts')
 
-          <form action="{{ route('admin.fields.update', $field->id) }}" method="post">
+          <form action="{{ route('admin.schedules.update', $schedule->id) }}" method="post">
             <input type="hidden" name="_method" value="PUT">
             {!! csrf_field() !!}
 
             <div class="form-group">
-              <label for="title">Название</label>
-              <input type="text" class="form-control" id="title" name="title" minlength="5" maxlength="80" value="{{ (old('title')) ? old('title') : $field->title }}" required>
-            </div>
-            <div class="form-group">
               <label for="sort_id">Номер</label>
-              <input type="text" class="form-control" id="sort_id" name="sort_id" maxlength="5" value="{{ (old('sort_id')) ? old('sort_id') : $field->sort_id }}">
+              <input type="text" class="form-control" id="sort_id" name="sort_id" maxlength="5" value="{{ (old('sort_id')) ? old('sort_id') : $schedule->sort_id }}">
             </div>
             <div class="form-group">
-              <label for="area_id">Площадки</label>
-              <select id="area_id" name="area_id" class="form-control" required>
+              <label for="field_id">Поля Площадок</label>
+              <select id="field_id" name="field_id" class="form-control">
                 <option value=""></option>
                 @foreach($areas as $area)
-                  @if ($area->id == $field->area_id)
-                    <option value="{{ $area->id }}" selected>{{ $area->title }}</option>
+                  <optgroup label="{{ $area->title }}">
+                    @foreach($area->fields as $field)
+                      @if ($schedule->field_id == $field->id)
+                        <option value="{{ $field->id }}" selected>{{ $field->title }}</option>
+                      @else
+                        <option value="{{ $field->id }}">{{ $field->title }}</option>
+                      @endif
+                    @endforeach
+                  </optgroup>
+                @endforeach
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="date">Дата</label>
+              <input type="date" class="form-control" id="date" name="date" maxlength="5" value="{{ (old('date')) ? old('date') : $schedule->date }}">
+            </div>
+            <div class="form-group">
+              <label for="week">День недели</label>
+              <select id="week" name="week" class="form-control">
+                @foreach(trans('data.week') as $key => $day)
+                  @if ($schedule->week == $key)
+                    <option value="{{ $key }}" selected>{{ $day }}</option>
                   @else
-                    <option value="{{ $area->id }}">{{ $area->title }}</option>
+                    <option value="{{ $key }}">{{ $day }}</option>
                   @endif
                 @endforeach
               </select>
             </div>
             <div class="form-group">
-              <label for="options_id">Опции</label>
-              <select id="options_id" name="options_id[]" class="form-control" multiple>
-                <option value=""></option>
-                @foreach($options as $option)
-                  @if (in_array($option->id, $field->options->lists('id')->toArray()))
-                    <option value="{{ $option->id }}" selected>{{ $option->title }}</option>
-                  @else
-                    <option value="{{ $option->id }}">{{ $option->title }}</option>
-                  @endif
-                @endforeach
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="size">Размер</label>
-              <input type="text" class="form-control" id="size" name="size" maxlength="5" value="{{ (old('size')) ? old('size') : $field->size }}">
+              <label for="price">Цена</label>
+              <input type="text" class="form-control" id="price" name="price" maxlength="80" value="{{ (old('price')) ? old('price') : $schedule->price }}" required>
             </div>
             <div class="form-group">
               <label for="status">Статус:</label>
               <label>
-                <input type="checkbox" id="status" name="status" @if ($field->status == 1) checked @endif> Активен
+                <input type="checkbox" id="status" name="status" checked> Активен
               </label>
             </div>
             <div class="form-group">

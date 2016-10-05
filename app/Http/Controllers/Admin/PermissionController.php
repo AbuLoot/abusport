@@ -24,14 +24,10 @@ class PermissionController extends Controller
     }
 
     public function store(Request $request)
-    {    	
-        $validator = Validator::make($request->all(), [
+    {
+        $this->validate($request, [
             'title' => 'required|max:60|unique:permissions',
         ]);
-
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
 
         $permission = new Permission;
         $permission->title = $request->title;
@@ -49,14 +45,10 @@ class PermissionController extends Controller
     }
 
     public function update(Request $request, $id)
-    {    	
-        $validator = Validator::make($request->all(), [
+    {
+        $this->validate($request, [
             'title' => 'required|max:60',
         ]);
-
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
 
         $permission = Permission::findOrFail($id);
         $permission->title = $request->title;

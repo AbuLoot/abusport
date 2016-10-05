@@ -4,8 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 
-use Validator;
-
 use App\Country;
 use App\City;
 use App\Http\Requests;
@@ -29,14 +27,10 @@ class CityController extends Controller
     }
 
     public function store(Request $request)
-    {    	
-        $validator = Validator::make($request->all(), [
+    {
+        $this->validate($request, [
             'title' => 'required|min:5|max:60|unique:cities',
         ]);
-
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
 
         $city = new City;
 
@@ -59,14 +53,10 @@ class CityController extends Controller
     }
 
     public function update(Request $request, $id)
-    {    	
-        $validator = Validator::make($request->all(), [
+    {
+        $this->validate($request, [
             'title' => 'required|min:5|max:60',
         ]);
-
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
 
         $city = City::findOrFail($id);
         $city->sort_id = ($request->sort_id > 0) ? $request->sort_id : $city->count() + 1;

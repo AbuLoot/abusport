@@ -14,7 +14,7 @@
               <input type="text" class="form-control" id="title" name="title" minlength="5" maxlength="80" value="{{ (old('title')) ? old('title') : '' }}" required>
             </div>
             <div class="form-group">
-              <label for="slug">Slug</label>git
+              <label for="slug">Slug</label>
               <input type="text" class="form-control" id="slug" name="slug" minlength="5" maxlength="80" value="{{ (old('slug')) ? old('slug') : '' }}">
             </div>
             <div class="form-group">
@@ -85,8 +85,19 @@
             </div>
 
             <div class="form-group">
-              <label for="image">Картинка</label>
-              <input type="file" id="image" name="image" accept="image/*" required>
+              <label for="image">Картинка:</label><br>
+              <div class="fileinput fileinput-new" data-provides="fileinput">
+                <div class="fileinput-new thumbnail" style="width:300px;height:200px;"></div>
+                <div class="fileinput-preview fileinput-exists thumbnail" style="max-width:300px;max-height:200px;"></div>
+                <div>
+                  <span class="btn btn-default btn-sm btn-file">
+                    <span class="fileinput-new"><i class="glyphicon glyphicon-folder-open"></i>&nbsp; Выбрать</span>
+                    <span class="fileinput-exists"><i class="glyphicon glyphicon-folder-open"></i>&nbsp;</span>
+                    <input type="file" name="image" accept="image/*" required>
+                  </span>
+                  <a href="#" class="btn btn-default btn-sm fileinput-exists" data-dismiss="fileinput"><i class="glyphicon glyphicon-trash"></i> Удалить</a>
+                </div>
+              </div>
             </div>
             <div class="form-group">
               <label for="lang">Язык</label>
@@ -106,11 +117,15 @@
       </div>
 @endsection
 
+@section('styles')
+  <link href="/css/jasny-bootstrap.min.css" rel="stylesheet">
+@endsection
+
 @section('scripts')
+  <script src="/js/jasny-bootstrap.js"></script>
   <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
 
   <script>
-
     ymaps.ready(init);
     var myMap,
       myPlacemark;

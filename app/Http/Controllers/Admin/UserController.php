@@ -13,8 +13,6 @@ use App\City;
 use App\Profile;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\UserRequest;
-use App\Http\Requests\ProfileRequest;
 
 class UserController extends Controller
 {
@@ -43,15 +41,14 @@ class UserController extends Controller
 
 	public function update(Request $request, $id)
 	{
-		$user = User::findOrFail($id);
+        $this->validate($request, [
+            'name' => 'required|max:60',
+            'surname' => 'required|max:60',
+        	'phone' => 'required|unique:users',
+        	'email' => 'required|unique:users',
+        ]);
 
-		$user->sort_id = ($request->sort_id > 0) ? $request->sort_id : $user->count() + 1;
-		$user->name = $request->name;
-		$user->surname = $request->surname;
-		$user->phone = $request->phone;
-		$user->email = $request->email;
-		$user->status = ($request->status == 1) ? 1 : 0;
-		$user->save();
+		$user = User::findOrFail($id);
 
 		if ($request->hasFile('avatar')) {
 
@@ -69,6 +66,16 @@ class UserController extends Controller
 			$this->resizeImage($request->avatar, 200, 150, $imagePath, 100);
 			$user->profile->avatar = $imageName;
 		}
+
+		$user->sort_id = ($request->sort_id > 0) ? $request->sort_id : $user->count() + 1;
+		$user->name = $request->name;
+		$user->surname = $request->surname;
+		$user->phone = $request->phone;
+		$user->email = $request->email;
+		$user->status = ($request->status == 1) ? 1 : 0;
+		$user->save();
+
+		$user->roles()->sync($request->roles_id);
 
 		$user->profile->city_id = $request->city_id;
 		$user->profile->birthday = $request->birthday;

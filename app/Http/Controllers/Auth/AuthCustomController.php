@@ -23,6 +23,10 @@ class AuthCustomController extends Controller
 
         $request->merge(['phone' => $phone]);
 
+        $this->validate($request, [
+            'phone' => 'required|min:11|max:11'
+        ]);
+
         if ($request->phone[0] == 8) {
             $request->merge(['phone' => substr_replace($request->phone, '7', 0, 1)]);
         }
@@ -46,9 +50,6 @@ class AuthCustomController extends Controller
             'name' => 'required|min:2|max:40',
             'phone' => 'required|min:11|max:11|unique:users',
             'email' => 'required|email|max:255|unique:users',
-            // 'day' => 'required|numeric|between:1,31',
-            // 'month' => 'required|numeric|between:1,12',
-            // 'year' => 'required|numeric',
             'sex' => 'required',
             'password' => 'required|min:6|max:255',
             'rules' => 'accepted'
@@ -71,11 +72,11 @@ class AuthCustomController extends Controller
 
         $code = rand(10000, 99999);
 
-        // $responseApi = $this->sendSms($request->phone, $code);
+        $responseApi = $this->sendSms($request->phone, $code);
 
-        if (true) {
+        // if (true) {
 
-        // if ($responseApi == true) {
+        if ($responseApi == true) {
 
             $user = new User();
             $user->surname = $request->surname;
@@ -92,7 +93,6 @@ class AuthCustomController extends Controller
             $profile->sort_id = $user->id;
             $profile->user_id = $user->id;
             $profile->phone = $request->phone;
-            // $profile->birthday = $request['year'].'-'.$request['month'].'-'.$request['day'];
             $profile->sex = $request['sex'];
             $profile->save();
 
@@ -142,6 +142,8 @@ class AuthCustomController extends Controller
             $user = User::where('phone', $sms->phone)->first();
             $user->status = 1;
             $user->save();
+
+            $user->assignRole('user');
 
             return redirect('login')->withInput()->withStatus('Вы успешно подтвердили регистрацию, теперь войдите через свой номер и пароль');
         }
