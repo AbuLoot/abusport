@@ -158,6 +158,8 @@ return [
 
         Intervention\Image\ImageServiceProvider::class,
         AbuLoot\Sms\SmsServiceProvider::class,
+
+        //Payment\Epay\EpayProvider::class,
     ],
 
     /*

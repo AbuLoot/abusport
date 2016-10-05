@@ -34,6 +34,11 @@ Route::group(['middleware' => 'auth'], function() {
     // Users
     Route::resource('profile', 'ProfileController');
     Route::resource('friends', 'FriendController');
+    Route::resource('payment', 'Payment\EpayController');
+
+    Route::any('postlink', 'Payment\EpayController@postLink');
+    Route::any('postlinktest', 'Payment\EpayController@postLinkTest');
+
     Route::get('my-matches', 'MatchController@myMatches');
 
     Route::get('all-users', 'FriendController@allUsers');
@@ -76,18 +81,3 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'role:root', 'role:a
     Route::resource('options', 'Admin\OptionController');
     Route::resource('matches', 'Admin\MatchController');
 });
-
-
-// Api
-Route::get('api/requestlogin/{phone}/{password}','ApiController@requestlogin');
-Route::get('api/requestsms/{mobile}/{name}/{surname}/{email}/{password}/{sex}','ApiController@requestsms');
-
-Route::get('api/requestverifyotp/{otp}','ApiController@requestverifyotp');
-Route::get('api/requestsports','ApiController@requestsports');
-Route::get('api/requestplaygrounds/{sportid}','ApiController@requestplaygrounds');	
-Route::get('api/requestmatches/{areaid}','ApiController@requestmatches');
-Route::get('api/requestmatchplayers/{matchid}','ApiController@requestmatchplayers');
-Route::get('api/requestjoinmatch/{matchid}/{userid}','ApiController@requestjoinmatch');
-Route::get('api/requestexitmatch/{matchid}/{userid}','ApiController@requestexitmatch');
-Route::get('api/requestweekdays/{playgroundid}/{selecteddate}','ApiController@requestweekdays');
-Route::get('api/requestmatchcreate/{userid}/{fieldid}/{starttime}/{endtime}/{date}/{matchtype}/{gametype}/{numberofplayers}/{format}/{price}/{description}/{playgroundid}','ApiController@requestmatchcreate');
