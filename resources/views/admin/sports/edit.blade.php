@@ -17,18 +17,28 @@
             </div>
             <div class="form-group">
               <label for="slug">Slug</label>
-              <input type="text" class="form-control" id="slug" name="slug" minlength="5" maxlength="80" value="{{ (old('slug')) ? old('slug') : $sport->slug }}">
+              <input type="text" class="form-control" id="slug" name="slug" minlength="2" maxlength="80" value="{{ (old('slug')) ? old('slug') : $sport->slug }}">
             </div>
             <div class="form-group">
               <label for="sort_id">Номер</label>
               <input type="text" class="form-control" id="sort_id" name="sort_id" maxlength="5" value="{{ (old('sort_id')) ? old('sort_id') : $sport->sort_id }}">
             </div>
             <div class="form-group">
-              <label>Основная картинка</label>
-              <img src="/img/sport/{{ $sport->image }}" class="img-responsive">
-              <br>
-              <label for="image">Новая картинка</label>
-              <input type="file" id="image" name="image" accept="image/*">
+              <label for="image">Картинка:</label><br>
+              <div class="fileinput fileinput-new" data-provides="fileinput">
+                <div class="fileinput-new thumbnail" style="width:300px;height:200px;">
+                  <img src="/img/sport/{{ $sport->image }}">
+                </div>
+                <div class="fileinput-preview fileinput-exists thumbnail" style="width:300px;height:200px;"></div>
+                <div>
+                  <span class="btn btn-default btn-sm btn-file">
+                    <span class="fileinput-new"><i class="glyphicon glyphicon-folder-open"></i>&nbsp; Выбрать</span>
+                    <span class="fileinput-exists"><i class="glyphicon glyphicon-folder-open"></i>&nbsp;</span>
+                    <input type="file" name="image" accept="image/*">
+                  </span>
+                  <a href="#" class="btn btn-default btn-sm fileinput-exists" data-dismiss="fileinput"><i class="glyphicon glyphicon-trash"></i> Удалить</a>
+                </div>
+              </div>
             </div>
             <div class="form-group">
               <label for="title_description">Мета название</label>
@@ -58,4 +68,12 @@
           </form>
         </div>
       </div>
+@endsection
+
+@section('styles')
+  <link href="/css/jasny-bootstrap.min.css" rel="stylesheet">
+@endsection
+
+@section('scripts')
+  <script src="/js/jasny-bootstrap.js"></script>
 @endsection

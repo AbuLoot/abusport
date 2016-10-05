@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Page;
+
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -13,7 +15,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        $pages = Page::orderBy('sort_id')->get();
+
+        view()->share(['pages' => $pages]);
     }
 
     /**

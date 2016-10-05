@@ -97,6 +97,8 @@ class AreaController extends Controller
         $area->latitude = $request->latitude;
         $area->longitude = $request->longitude;
         $area->description = $request->description;
+        $area->start_time = $request->start_time;
+        $area->end_time = $request->end_time;
         $area->lang = $request->lang;
         $area->status = ($request->status == 'on') ? 1 : 0;
         $area->save();
@@ -192,6 +194,8 @@ class AreaController extends Controller
         $area->latitude = $request->latitude;
         $area->longitude = $request->longitude;
         $area->description = $request->description;
+        $area->start_time = $request->start_time;
+        $area->end_time = $request->end_time;
         $area->lang = $request->lang;
         $area->status = ($request->status == 'on') ? 1 : 0;
         $area->save();
@@ -214,7 +218,7 @@ class AreaController extends Controller
 
     public function resizeImage($image, $width, $height, $path, $quality, $color = '#ffffff')
     {
-        $frame = Image::canvas($width, $height, $color);
+        // $frame = Image::canvas($width, $height, $color);
         $newImage = Image::make($image);
 
         if ($newImage->width() <= $newImage->height()) {
@@ -228,8 +232,8 @@ class AreaController extends Controller
             });
         }
 
-        $frame->insert($newImage, 'center');
-        $frame->save($path, $quality);
+        // $frame->insert($newImage, 'center');
+        $newImage->save($path, $quality);
     }
 
     public function cropImage($image, $width, $height, $path, $quality)
