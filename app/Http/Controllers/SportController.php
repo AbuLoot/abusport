@@ -75,12 +75,20 @@ class SportController extends Controller
         return view('board.matches', compact('sport', 'area', 'days', 'date'));
     }
 
-    public function getMatch($sport, $match_id)
+    public function getMatch($sport_id, $match_id)
     {
-        $sport = Sport::where('slug', $sport)->first();
+        $sport = Sport::findOrFail($sport_id);
         $match = Match::find($match_id);
 
         return view('board.match', compact('sport', 'match'));
+    }
+
+    public function getChat($sport_id, $match_id)
+    {
+        $sport = Sport::findOrFail($sport_id);
+        $match = Match::find($match_id);
+
+        return view('board.match-chat', compact('sport', 'match'));
     }
 
     public function getMatchesWithCalendar($sport, $area_id, $setDays = 3)
@@ -103,7 +111,7 @@ class SportController extends Controller
         // Get days
         $days = $this->getDays($setDays);
 
-        return view('board.create_match', compact('sports', 'areas', 'days', 'active_area'));
+        return view('board.create-match', compact('sports', 'areas', 'days', 'active_area'));
     }
 
     public function storeMatch(Request $request)
@@ -191,7 +199,7 @@ class SportController extends Controller
         return redirect()->back()->with('status', 'Вы в игре!');
     }
 
-    public function leftMatch(Request $request)
+    public function leaveMatch(Request $request)
     {
         $this->validate($request, [
             'match_id' => 'required|numeric'
@@ -199,7 +207,6 @@ class SportController extends Controller
 
         $date = date('Y-m-d');
         $date_time = date('Y-m-d H:i:s');
-
 
         $match = Match::where('created_at', '<', $date_time)
             ->where('date', '>=', $date)

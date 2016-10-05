@@ -9,7 +9,7 @@
     <ul class="tabs-panel">
       <li class="active"><a href="#">Комната</a></li>
       <li><a href="#">Карта</a></li>
-      <li><a href="#">Чат</a></li>
+      <li><a href="{{ url('sport/match-chat/'.$sport->id.'/'.$match->id) }}">Чат</a></li>
     </ul>
 
 @endsection
@@ -38,7 +38,7 @@
             <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Вступить в игру</button>
           </form>
         @elseif(Auth::id() != $match->user_id)
-          <form action="{{ url('left-match') }}" method="post">
+          <form action="{{ url('leave-match') }}" method="post">
             {!! csrf_field() !!}
             @foreach($match->users as $user)
               @continue($user->id == Auth::id())

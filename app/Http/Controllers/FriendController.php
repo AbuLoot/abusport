@@ -30,7 +30,7 @@ class FriendController extends Controller
     {
         $users = User::where('id', '<>', Auth::id())->get();
 
-        return view('friend.all_users', compact('users'));
+        return view('friend.all-users', compact('users'));
     }
 
     public function addToFriends($id)
