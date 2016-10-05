@@ -36,13 +36,14 @@
           </select>
         </div>
         <div class="form-group">
-          <label for="role_id">Роли:</label>
-          <select class="form-control" name="role_id" id="city">
+          <label for="roles_id">Роли:</label>
+          <select class="form-control" name="roles_id[]" id="roles_id" multiple required>
+            <option value=""></option>
             @foreach($roles as $role)
-              @if ($role->id == $user->roles)
-                <option value="{{ $role->id }}" selected>{{ $role->title }}</option>
+              @if (in_array($role->id, $user->roles->lists('id')->toArray()))
+                <option value="{{ $role->id }}" selected>{{ $role->name }}</option>
               @else
-                <option value="{{ $role->id }}">{{ $role->title }}</option>
+                <option value="{{ $role->id }}">{{ $role->name }}</option>
               @endif
             @endforeach
           </select>
@@ -65,8 +66,8 @@
         </div>
         <div class="form-group">
           <label for="status">Пол:</label>
-          <label><input type="radio" name="sex" @if($user->profile->sex == 0) checked @endif value="woman"> Женщина</label>
-          <label><input type="radio" name="sex" @if($user->profile->sex == 1) checked @endif value="man"> Мужчина</label>
+          <label><input type="radio" name="sex" @if($user->profile->sex == 'woman') checked @endif value="woman"> Женщина</label>
+          <label><input type="radio" name="sex" @if($user->profile->sex == 'man') checked @endif value="man"> Мужчина</label>
         </div>
         <div class="form-group">
           <label for="website">Аватар:</label></br>

@@ -149,6 +149,34 @@
               @endfor
             </div>
             <div class="form-group">
+              <label for="description">Описание</label>
+              <textarea class="form-control" id="description" name="description" rows="5">{{ (old('description')) ? old('description') : $area->description }}</textarea>
+            </div>
+            <div class="form-group">
+              <label for="start_time">Начало времени</label>
+              <select id="start_time" name="start_time" class="form-control">
+                @foreach(trans('data.hours') as $hour)
+                  @if ($area->start_time == $hour)
+                    <option value="{{ $hour }}" selected>{{ $hour }}</option>
+                  @else
+                    <option value="{{ $hour }}">{{ $hour }}</option>
+                  @endif
+                @endforeach
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="end_time">Конец времени</label>
+              <select id="end_time" name="end_time" class="form-control">
+                @foreach(trans('data.hours') as $hour)
+                  @if ($area->end_time == $hour)
+                    <option value="{{ $hour }}" selected>{{ $hour }}</option>
+                  @else
+                    <option value="{{ $hour }}">{{ $hour }}</option>
+                  @endif
+                @endforeach
+              </select>
+            </div>
+            <div class="form-group">
               <label for="lang">Язык</label>
               <input type="text" class="form-control" id="lang" name="lang" value="{{ (old('lang')) ? old('lang') : $area->lang }}">
             </div>

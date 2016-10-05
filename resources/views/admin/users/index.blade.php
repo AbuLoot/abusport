@@ -7,18 +7,19 @@
         <thead>
           <tr class="active">
             <td>№</td>
+            <td>Номер</td>
             <td>Фамилия</td>
             <td>Имя</td>
             <td>Email</td>
             <td>Город</td>
-            <td>ip</td>
-            <td>Номер</td>
+            <td>Пол</td>
             <td>Статус</td>
             <td class="text-right">Функции</td>
           </tr>
           <form action="/admin/users">
             <tr>
-              <th style="width: 70px;"> </th>
+              <th> </th>
+              <th> </th>
               <th>
                 <input type="text" class="form-control input-sm" name="surname" placeholder="Фамилия">
               </th>
@@ -37,10 +38,11 @@
                 </select>
               </th>
               <th>
-                <input type="text" class="form-control input-sm" name="ip" placeholder="ip">
-              </th>
-              <th>
-                <input type="text" class="form-control input-sm" name="sort_id" placeholder="Номер">
+                <select class="form-control input-sm" name="sex">
+                  <option value="">Выберите</option>
+                  <option value="woman">Женщина</option>
+                  <option value="man">Мужчина</option>
+                </select>
               </th>
               <th>
                 <select class="form-control input-sm" name="status">
@@ -60,12 +62,12 @@
           @forelse ($users as $user)
             <tr>
               <td>{{ $i++ }}</td>
+              <td>{{ $user->sort_id }}</td>
               <td>{{ $user->surname }}</td>
               <td>{{ $user->name }}</td>
               <td>{{ $user->email }}</td>
               <td class="text-nowrap">{{ ($user->profile->city_id == 0) ? 'Не указан' : $user->profile->city->title }}</td>
-              <td>{{ $user->ip }}</td>
-              <td>{{ $user->sort_id }}</td>
+              <td>{{ $user->profile->sex }}</td>
               @if ( $user->status == 1)
                 <td class="text-success">Активен</td>
               @else

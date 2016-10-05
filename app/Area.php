@@ -13,8 +13,25 @@ class Area extends Model
         return $this->belongsTo('App\Organization', 'org_id');
     }
 
+    public function sport()
+    {
+    	return $this->belongsTo('App\Sport', 'sport_id');
+    }
+
     public function fields()
     {
         return $this->hasMany('App\Field');
+    }
+
+    public function getFieldsMatchesCountAttribute()
+    {
+        $matches = 0;
+
+        foreach ($this->fields as $field)
+        {
+            $matches += $field->matches->count();
+        }
+
+        return $matches;
     }
 }

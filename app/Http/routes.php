@@ -24,13 +24,45 @@ Route::post('confirm-register', 'Auth\AuthCustomController@postConfirmRegister')
 
 
 // Board
-Route::get('/', ['as' => 'index', 'uses' => 'SportController@getSports']);
-Route::get('areas', ['as' => 'areas', 'uses' => 'AreaController@getAreas']);
+Route::get('/', 'SportController@getSports');
+Route::get('sport/{sport}', 'SportController@getAreas');
+Route::get('sport/map/{sport}', 'SportController@getAreasWithMap');
+Route::get('sport/calendar/{sport}/{area_id}/{setDays?}', 'SportController@getMatchesWithCalendar');
+
+Route::group(['middleware' => 'auth'], function() {
+
+    // Users
+    Route::resource('profile', 'ProfileController');
+    Route::resource('friends', 'FriendController');
+    Route::resource('payment', 'Payment\EpayController');
+
+    Route::any('postlink', 'Payment\EpayController@postLink');
+    Route::any('postlinktest', 'Payment\EpayController@postLinkTest');
+
+    Route::get('my-matches', 'MatchController@myMatches');
+
+    Route::get('all-users', 'FriendController@allUsers');
+    Route::get('user-profile/{id}', 'FriendController@userProfile');
+    Route::get('add-to-frieds/{id}', 'FriendController@addToFriends');
+    Route::get('accept/{id}', 'FriendController@accept');
+
+    // Match
+    Route::get('create-match/{setDays?}', 'SportController@createMatch');
+    Route::post('store-match', 'SportController@storeMatch');
+    Route::post('join-match', 'SportController@joinMatch');
+    Route::post('leave-match', 'SportController@leaveMatch');
+
+    Route::get('sport/match/{sport_id}/{match_id}/', 'SportController@getMatch');
+    Route::get('sport/match-chat/{sport_id}/{match_id}/', 'SportController@getChat');
+});
+
+Route::get('sport/{sport}/{area_id}/{date?}', 'SportController@getMatches');
 
 
 // Administration
-Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
+Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'role:root', 'role:admin']], function () {
 
+    Route::get('/', 'Admin\AdminController@index');
     Route::resource('pages', 'Admin\PageController');
     Route::resource('users', 'Admin\UserController');
     Route::resource('organizations', 'Admin\OrganizationController');
@@ -45,30 +77,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::resource('sports', 'Admin\SportController');
     Route::resource('areas', 'Admin\AreaController');
     Route::resource('fields', 'Admin\FieldController');
+    Route::resource('schedules', 'Admin\ScheduleController');
     Route::resource('options', 'Admin\OptionController');
     Route::resource('matches', 'Admin\MatchController');
 });
-
-// Route::get('add-sports', function() {
-
-// 	$sport = new App\Sport;
-
-// 	$faker = Faker\Factory::create('ru_RU');
-
-// 	for ($i=0; $i < 30; $i++) { 
-// 		echo $faker->name . '<br>';
-// 		echo $faker->phoneNumber . '<br>';
-// 		echo $faker->address . '<hr>';
-// 	}
-// });
-Route::get('api/requestlogin/{phone}/{password}','ApiController@requestlogin');
-Route::get('api/requestsms/{mobile}/{name}/{surname}/{email}/{password}/{sex}','ApiController@requestsms');
-	Route::get('api/requestverifyotp/{otp}','ApiController@requestverifyotp');
-	Route::get('api/requestsports','ApiController@requestsports');
-	Route::get('api/requestplaygrounds/{sportid}','ApiController@requestplaygrounds');	
-	Route::get('api/requestmatches/{areaid}','ApiController@requestmatches');
-    Route::get('api/requestmatchplayers/{matchid}','ApiController@requestmatchplayers');
-	Route::get('api/requestjoinmatch/{matchid}/{userid}','ApiController@requestjoinmatch');
-	Route::get('api/requestexitmatch/{matchid}/{userid}','ApiController@requestexitmatch');
-	Route::get('api/requestweekdays/{playgroundid}/{selecteddate}','ApiController@requestweekdays');
-	Route::get('api/requestmatchcreate/{userid}/{fieldid}/{starttime}/{endtime}/{date}/{matchtype}/{gametype}/{numberofplayers}/{format}/{price}/{description}/{playgroundid}','ApiController@requestmatchcreate');

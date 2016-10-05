@@ -4,8 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 
-use Validator;
-
 use App\Option;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -25,14 +23,10 @@ class OptionController extends Controller
     }
 
     public function store(Request $request)
-    {    	
-        $validator = Validator::make($request->all(), [
+    {
+        $this->validate($request, [
             'title' => 'required|max:60|unique:options',
         ]);
-
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
 
         $option = new Option;
 
@@ -53,14 +47,10 @@ class OptionController extends Controller
     }
 
     public function update(Request $request, $id)
-    {    	
-        $validator = Validator::make($request->all(), [
+    {
+        $this->validate($request, [
             'title' => 'required|max:60',
         ]);
-
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
 
         $option = Option::findOrFail($id);
         $option->sort_id = ($request->sort_id > 0) ? $request->sort_id : $option->count() + 1;
