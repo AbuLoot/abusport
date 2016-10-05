@@ -11,6 +11,6 @@ class MatchController extends Controller
 {
     public function myMatches()
     {
-    	return view('board.my_matches');
+    	return view('board.my-matches');
     }
 }

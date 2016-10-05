@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "a31a810dcc6c77fae8057c36c5098052",
-    "content-hash": "dc9e2f875ab09ce35cfab8df4953e4fe",
+    "hash": "ca7ec1e3cc1482ad2361834238b393ab",
+    "content-hash": "629a7aa2f0e7f961ecfe0cda19482616",
     "packages": [
         {
             "name": "classpreloader/classpreloader",
@@ -906,6 +906,32 @@
                 "random"
             ],
             "time": "2016-03-18 20:34:03"
+        },
+        {
+            "name": "payment/epay",
+            "version": "1.0.0",
+            "dist": {
+                "type": "path",
+                "url": "packages/payment/epay",
+                "reference": "dcdc6553192198a74548928c86eb54b6254a75e8",
+                "shasum": null
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Payment\\Epay\\": ""
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Erasyl",
+                    "email": "mr.erasil_92@mail.ru"
+                }
+            ],
+            "description": "A package for users to pay online at home"
         },
         {
             "name": "psr/http-message",

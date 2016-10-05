@@ -118,14 +118,14 @@
       <div class="container">
         <ul class="list-inline">
           @foreach ($pages as $page)
-            <li><a href="{{ url('p/' . $page->slug) }}">{{ $page->title }}</a></li>
+            <li><a href="{{ url('p/' . $page->slug) }}">{ { $page->title }}</a></li>
           @endforeach
         </ul>
       </div>
     </footer>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="/bower_components/bootstrap-offcanvas/dist/js/bootstrap.offcanvas.js"></script>

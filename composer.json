@@ -4,10 +4,19 @@
     "keywords": ["framework", "laravel"],
     "license": "MIT",
     "type": "project",
+
+//    "repositories":[
+//        {
+//            "type":"path",
+//            "url":"packages/payment/epay"
+//        }
+//    ],
+
     "require": {
         "php": ">=5.5.9",
         "laravel/framework": "5.2.*",
         "intervention/image": "^2.3"
+        //"payment/epay":"*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
