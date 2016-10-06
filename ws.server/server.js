@@ -1,0 +1,51 @@
+
+var request = require('request'),
+	io = require('socket.io')(6001, {
+		origins: 'localhost:8000:*'
+	}),
+	Redis = require('ioredis'),
+	redis = new Redis;
+
+io.use(function(socket, next) {
+
+	request.get({
+		url : 'http://localhost:8000/ws/check-auth',
+		headers : {cookie : socket.request.headers.cookie},
+		json : true
+	}, function(error, response, json) {
+		console.log(json);
+		return json.auth ? next() : next(new Error('Auth error'));
+	});
+
+});
+
+io.on('connection', function(socket) {
+	socket.on('subscribe', function(channel) {
+		console.log('I want to subscribe on:', channel);
+
+		request.get({
+			url : 'http://localhost:8000/ws/check-sub/' + channel,
+			headers : {cookie : socket.request.headers.cookie},
+			json : true
+		}, function(error, response, json) {
+			if (json.can) {
+				socket.join(channel, function(error) {
+					socket.send('Join to ' + channel);
+				});
+				return;
+			}
+		});
+	});
+});
+
+redis.psubscribe('*', function(error, count) {
+	// 
+});
+
+redis.on('pmessage', function (pattern, channel, message) {
+
+	message = JSON.parse(message);
+	io.to(channel + ':' + message.event)
+	  .emit(channel + ':' + message.event, message.data.message);
+	// channel:message.event
+});

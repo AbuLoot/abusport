@@ -28,13 +28,22 @@ Route::get('sport/{sport}', 'SportController@getAreas');
 Route::get('sport/map/{sport}', 'SportController@getAreasWithMap');
 Route::get('sport/calendar/{sport}/{area_id}/{setDays?}', 'SportController@getMatchesWithCalendar');
 
-Route::group(['middleware' => 'auth'], function() {
+Route::group(['prefix' => 'ws'], function() {
 
-    Route::get('test', function() {
-        event(
-            new \App\Events\ChatEvent()
-        );
+    Route::get('check-auth', function () {
+        return response()->json([
+            'auth' => \Auth::check()
+        ]);
     });
+
+    Route::get('check-sub/{channel}', function ($channel) {
+        return response()->json([
+            'can' => \Auth::check()
+        ]);
+    });
+});
+
+Route::group(['middleware' => 'auth'], function() {
 
     // Users
     Route::resource('profile', 'ProfileController');
