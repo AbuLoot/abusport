@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use Auth;
 use App\Chat;
 use App\Events\Event;
 
@@ -31,11 +32,21 @@ class AddedNewMessage extends Event implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return ['chat'];
+        return ['chat-'.$this->message->match_id];
+    }
+
+    public function broadcastWith()
+    {
+        return [
+            'user_id' => $this->message->user_id,
+            'fullname' => Auth::user()->surname.' '.Auth::user()->name,
+            'message' => $this->message->message,
+            'created_at' => $this->message->created_at
+        ];
     }
 
     public function broadcastAs()
     {
-        return 'message';
+        return 'AddedNewMessage';
     }
 }

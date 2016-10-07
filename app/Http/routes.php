@@ -28,21 +28,6 @@ Route::get('sport/{sport}', 'SportController@getAreas');
 Route::get('sport/map/{sport}', 'SportController@getAreasWithMap');
 Route::get('sport/calendar/{sport}/{area_id}/{setDays?}', 'SportController@getMatchesWithCalendar');
 
-Route::group(['prefix' => 'ws'], function() {
-
-    Route::get('check-auth', function () {
-        return response()->json([
-            'auth' => \Auth::check()
-        ]);
-    });
-
-    Route::get('check-sub/{channel}', function ($channel) {
-        return response()->json([
-            'can' => \Auth::check()
-        ]);
-    });
-});
-
 Route::group(['middleware' => 'auth'], function() {
 
     // Users
@@ -64,7 +49,18 @@ Route::group(['middleware' => 'auth'], function() {
 
     Route::get('sport/match/{sport_id}/{match_id}/', 'SportController@getMatch');
     Route::get('sport/match-chat/{sport_id}/{match_id}/', 'SportController@getChat');
-    Route::post('chat/message/{match_id}', 'SportController@postMessage');
+
+    Route::post('chat/message/{match_id}', 'ChatController@postMessage');
+
+    // Real-time chat
+    Route::get('ws/check-auth', function () {
+        return response()->json(['auth' => true]);
+    });
+
+    // Route::get('ws/check-sub/{channel}', 'ChatController@checkChannel');
+    Route::get('ws/check-sub/{channel}', function ($channel) {
+        return response()->json(['can' => true]);
+    });
 });
 
 Route::get('sport/{sport}/{area_id}/{date?}', 'SportController@getMatches');

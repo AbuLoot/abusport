@@ -28,14 +28,14 @@
           @if($message->user_id == Auth::id())
             <div class="media text-right">
               <div class="media-body">
-                <h5 class="media-heading"><a href="/user-profile/{{ $message->user_id }}"><b>{{ $message->user_id }}</b></a></h5>
+                <h5 class="media-heading"><a href="/user-profile/{{ $message->user_id }}"><b>{{ Auth::user()->surname.' '.Auth::user()->name }}</b></a></h5>
                 <p>{{ $message->message }}</p>
               </div>
             </div>
           @else
             <div class="media">
               <div class="media-body">
-                <h5 class="media-heading"><a href="/user-profile/{{ $message->user_id }}"><b>{{ $message->user_id }}</b></a></h5>
+                <h5 class="media-heading"><a href="/user-profile/{{ $message->user_id }}"><b>{{ $match->users->where('id', $message->user_id)->lists('name', 'surname') }}</b></a></h5>
                 <p>{{ $message->message }}</p>
               </div>
             </div>
@@ -43,11 +43,10 @@
         @endforeach
       </div>
 
-      <script>
-      </script>
       <div class="panel-footer">
         <form action="/chat/message/{{ $match->id }}" method="post">
           {!! csrf_field() !!}
+          <input type="hidden" name="match_id" id="match_id" value="{{ $match->id }}">
           <div class="input-group">
             <input id="message" name="message" type="text" class="form-control" maxlength="255" placeholder="..." required>
             <span class="input-group-btn">
@@ -64,7 +63,8 @@
     <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
     <script>
       var socket = io(':6001'),
-          channel = 'chat:message';
+          id = $('#match_id').val(),
+          channel = 'chat-'+id;
 
       socket.on('connect', function() {
         socket.emit('subscribe', channel)
@@ -82,7 +82,7 @@
         $('.scroll-chat').append(
           $('<div class="media">').append(
             $('<div class="media-body">').append(
-              $('<h5 class="media-heading">').text(data.user_id),
+              $('<h5 class="media-heading">').html("<a href='/user-profile/'"+data.user_id+"'><b>"+data.fullname+"</b></a>"),
               $('<p>').text(data.message)
             )
           )
@@ -90,19 +90,22 @@
       }
 
       socket.on(channel, function(data) {
+        console.log(data);
         appendMessage(data);
       });
 
-      /*$('form').on('submit', function() {
-        var text = $('#message').val(),
-            msg = {message: text};
 
-        socket.send(msg);
-        appendMessage(msg);
+      // $('form').on('submit', function() {
+      //   var text = $('#message').val(),
+      //       msg = {message: text};
 
-        $('#message').val('');
-        return false;
-      });*/
+      //   socket.send(msg);
+      //   appendMessage(msg);
+
+      //   $('#message').val('');
+      //   return false;
+      // });
+
 
       // socket.on('message', function(data) {
       //   console.log('Message: ', data);

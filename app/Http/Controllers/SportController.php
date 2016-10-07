@@ -4,13 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\Chat;
 use App\Sport;
 use App\Area;
 use App\Match;
 use App\Schedule;
 use App\Http\Requests;
-use App\Events\AddedNewMessage;
 
 class SportController extends Controller
 {
@@ -89,26 +87,8 @@ class SportController extends Controller
     {
         $sport = Sport::findOrFail($sport_id);
         $match = Match::findOrFail($match_id);
-        // $messages = Chat::where('match_id', $match_id)->get();
 
         return view('board.match-chat', compact('sport', 'match'));
-    }
-
-    public function postMessage(Request $request, $match_id)
-    {
-        $match = Match::findOrFail($match_id);
-
-        $chat = new Chat;
-        $chat->match_id = ($request->user()->id == $match->user_id) ? $match->id : redirect()->back();
-        $chat->user_id = $request->user()->id;
-        $chat->message = $request->message;
-        $chat->save();
-
-        event(
-            new AddedNewMessage($chat)
-        );
-
-        return redirect()->back();
     }
 
     public function getMatchesWithCalendar($sport, $area_id, $setDays = 3)

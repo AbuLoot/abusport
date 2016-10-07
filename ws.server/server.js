@@ -6,6 +6,7 @@ var request = require('request'),
 	Redis = require('ioredis'),
 	redis = new Redis;
 
+// Middleware
 io.use(function(socket, next) {
 
 	request.get({
@@ -45,7 +46,10 @@ redis.psubscribe('*', function(error, count) {
 redis.on('pmessage', function (pattern, channel, message) {
 
 	message = JSON.parse(message);
-	io.to(channel + ':' + message.event)
-	  .emit(channel + ':' + message.event, message.data.message);
+    console.log(message);
+	io.to(channel)
+	  .emit(channel, message.data);
+	// io.to(channel + ':' + message.event)
+	  // .emit(channel + ':' + message.event, message.data.message);
 	// channel:message.event
 });

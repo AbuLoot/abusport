@@ -10,7 +10,7 @@ use Storage;
 
 use App;
 use App\User;
-use App\SMS;   
+use App\SMS;
 use App\Profile;
 use App\Sport;  
 use App\Area; 
