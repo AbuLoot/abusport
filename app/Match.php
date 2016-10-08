@@ -27,7 +27,7 @@ class Match extends Model
 
     public function getPriceForEachAttribute()
     {
-    	return ($this->price / $this->number_of_players) . 'тг';
+        return ($this->price / $this->number_of_players) . 'тг';
     }
 
     public function getMatchDateAttribute()

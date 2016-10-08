@@ -173,9 +173,10 @@ td.status-matches > div > label {
 
 /* Chat */
 .scroll-chat {
-  background-color: #fff;
+  /*background-color: #fff;*/
   height: 400px;
   overflow-y: auto;
+  bottom: 0;
 }
 
 /* Footer */

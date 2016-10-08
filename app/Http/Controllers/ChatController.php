@@ -25,7 +25,7 @@ class ChatController extends Controller
             new AddedNewMessage($chat)
         );
 
-        return redirect()->back();
+        return response()->json([]);
     }
 
     public function checkChannel()

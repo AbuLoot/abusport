@@ -49,7 +49,5 @@ redis.on('pmessage', function (pattern, channel, message) {
     console.log(message);
 	io.to(channel)
 	  .emit(channel, message.data);
-	// io.to(channel + ':' + message.event)
-	  // .emit(channel + ':' + message.event, message.data.message);
 	// channel:message.event
 });
