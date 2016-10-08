@@ -94,4 +94,4 @@ Route::get('api/requestmatchplayers/{matchid}','ApiController@requestmatchplayer
 Route::get('api/requestjoinmatch/{matchid}/{userid}','ApiController@requestjoinmatch');
 Route::get('api/requestexitmatch/{matchid}/{userid}','ApiController@requestexitmatch');
 Route::get('api/requestweekdays/{playgroundid}/{selecteddate}','ApiController@requestweekdays');
-Route::get('api/requestmatchcreate/{userid}/{fieldid}/{starttime}/{endtime}/{date}/{matchtype}/{gametype}/{numberofplayers}/{format}/{price}/{description}/{playgroundid}','ApiController@requestmatchcreate');
+Route::post('api/requestmatchcreate/','ApiController@requestmatchcreate');

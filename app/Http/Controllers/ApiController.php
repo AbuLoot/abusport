@@ -7,7 +7,6 @@ use Response;
 use DB;
 use Auth;
 use Storage;
-
 use App;
 use App\User;
 use App\SMS;   
@@ -211,8 +210,24 @@ class ApiController extends Controller
 	public function requestplaygrounds($sportid)
 	{
 	   try{   
-            $playgrounds = DB::table('areas')->where('sport_id', '=', $sportid)->get();	       
-            $response['areas']= $playgrounds;
+	        $ps=array();
+	        $sport = Sport::where('id', $sportid)->first();
+    	    $areas = $sport->areas()->get();
+            foreach($areas as $area){
+			    $ar['id']=$area->id;
+				$ar['title']=$area->title;
+				$ar['sport_id']=$area->sport_id;
+				$ar['image']=$area->image;
+				$ar['images']=$area->images;
+				$ar['status']=$area->status;
+				$ar['address']=$area->address;
+				$ar['description']=$area->description;
+			    $ar['matchcount']=$area->fieldsMatchesCount;
+				$ar['latitude']=$area->latitude;
+				$ar['longitude']=$area->longitude;
+                array_push($ps,$ar); 				
+			}			
+            $response['areas']= $ps;
             $response['error']=false;
         }catch (Exception $e){
             $response['error']=true;
@@ -223,18 +238,38 @@ class ApiController extends Controller
 	public function requestmatches($areaid)
 	{		
 	   try {   
-	     $matches = DB::table('fields')
+	    $ms=array();
+	    $date= date("Y-m-d");
+		$hour=date("H:i");
+	    $matches = DB::table('fields')
             ->join('matches', 'fields.id', '=', 'matches.field_id')
             ->select('matches.*')
+			->where('matches.date','>=',$date)
+			->where('matches.start_time','>=',$hour)
 			->whereIn('matches.field_id',DB::table('fields')->select('fields.id')->from('fields')->where('fields.area_id', '=', $areaid))					  
-            ->get();       
-            $response['matches']= $matches;
+            ->get();         			
+			foreach($matches as $match){
+			  $mt['id']=$match->id;
+			  $mt['field_id']=$match->field_id;
+			  $mt['price']=$match->price;
+			  $mt['date']=$match->date;
+			  $mt['match_type']=$match->match_type;
+			  $mt['game_type']=$match->game_type;
+			  $mt['game_format']=$match->game_format;
+			  $mt['start_time']=$match->start_time;
+			  $mt['end_time']=$match->end_time;
+			  $mt['number_of_players']=$match->number_of_players;
+			  $mplayers = DB::table('match_user')->select('match_user.user_id')->where('match_user.match_id', '=', $match->id)->get();
+			  $mt['joined_players']=count($mplayers)+1;
+			  array_push($ms,$mt);
+			}
+            $response['matches']= $ms;
             $response['error']=false;
         }catch (Exception $e){
             $response['error']=true;
         }finally{
             return Response::json($response);
-        }
+        }						
 	}
 	public function requestmatchplayers($matchid)
 	{	
@@ -251,7 +286,7 @@ class ApiController extends Controller
 				  ->where('users.id', '=', $d->user_id)
 				  ->first();
 		   array_push($res,$user);	  
-		}   
+		 }   
         $response['players']= $res;
         $response['error']=false;
         }catch (Exception $e){
@@ -262,12 +297,11 @@ class ApiController extends Controller
 	}
 	public function requestjoinmatch($matchid,$userid)
 	{	
-		        $match_user = new MatchUser;				
-				$match_user->sort_id = 1;
-				$match_user->user_id = intval($userid);	
-				$match_user->match_id = intval($matchid);
-				$match_user->status = 1;
-				if($match_user->save()){ 
+	$user = User::find(intval($userid));
+	$match = Match::find(intval($matchid));	
+	$match->users->push($user);
+  
+				if($match->users()->sync($match->users->lists('id')->toArray())){ 
 							$response['error']=false;
 							$response['message']="Player joined success";  
 						}
@@ -294,7 +328,7 @@ class ApiController extends Controller
 			
 	}
 	public function requestweekdays($playgroundid,$selecteddate){
-									//$schedules = DB::table('schedules')->select('schedules.field_id','schedules.start_time','schedules.end_time','schedules.price','schedules.status','schedules.date')->where('schedules.field_id', '=', 1)->where('schedules.week', '=', 1)->get();
+		//$schedules = DB::table('schedules')->select('schedules.field_id','schedules.start_time','schedules.end_time','schedules.price','schedules.status','schedules.date')->where('schedules.field_id', '=', 1)->where('schedules.week', '=', 1)->get();
 		try{   
 		     $days=array();
 			 $result=array();
@@ -333,66 +367,66 @@ class ApiController extends Controller
 							  $result["month"] = $month_r[$dt->format("m")];												  						  						  
 							  $result["day"]= $dt->format("d");     
 							  $result["weekday"]=$day_r[$dt->format("w")];
-							  array_push($days,$result);							  
-			}	
-		$hours=array(
-					'0' => '05:00',
-					'1' => '06:00',
-					'2' => '07:00',
-					'3' => '08:00',
-					'4' => '09:00',
-					'5' => '10:00',
-					'6' => '11:00',
-					'7' => '12:00',
-					'8' => '13:00',
-					'9' => '14:00',
-					'10' => '15:00',
-					'11' => '16:00',
-					'12' => '17:00',
-					'13' => '18:00',
-					'14' => '19:00',
-					'15' => '20:00',
-					'16' => '21:00',
-					'17' => '22:00',
-					'18' => '23:00',
-					'19' => '00:00',
-					'20' => '01:00',
-					'21' => '02:00',
-					'22' => '03:00',
-					'23' => '04:00');
+							  array_push($days,$result);}	
+				$hours=array(
+							'0' => '05:00',
+							'1' => '06:00',
+							'2' => '07:00',
+							'3' => '08:00',
+							'4' => '09:00',
+							'5' => '10:00',
+							'6' => '11:00',
+							'7' => '12:00',
+							'8' => '13:00',
+							'9' => '14:00',
+							'10' => '15:00',
+							'11' => '16:00',
+							'12' => '17:00',
+							'13' => '18:00',
+							'14' => '19:00',
+							'15' => '20:00',
+							'16' => '21:00',
+							'17' => '22:00',
+							'18' => '23:00',
+							'19' => '00:00',
+							'20' => '01:00',
+							'21' => '02:00',
+							'22' => '03:00',
+							'23' => '04:00');
             $response['days'] =$days;
 			$week = new \DateTime($selecteddate);			
 			$fields = DB::table('fields')->select('fields.id','fields.title')->where('fields.area_id','=',$playgroundid)->where('fields.status','=',1)->get();			
 			foreach($fields as $field){
 				$schedules = DB::table('schedules')->select('schedules.field_id','schedules.start_time','schedules.end_time','schedules.price','schedules.status','schedules.date')->where('schedules.field_id', '=', $field->id)->where('schedules.week', '=', $week->format("w"))->get();
 				$times = DB::table('matches')->select('matches.field_id','matches.start_time','matches.end_time')->where('matches.field_id','=',$field->id)->where('matches.date','=',$selecteddate)->get();							
+				 //print_r($times);
+				 
 				foreach($hours as $hour){
+				    $selectedtime=$selecteddate." ".$hour;
+				    if($selectedtime>=date("Y-m-d H:i")) {
 						$schresult['start_time']=$hour;
-						//$endTime = strtotime("+1 hour", strtotime($hour));
-						//$schresult['end_time'] = date('h:i', $endTime);
-						$schresult['end_time'] = $hour;
+						$endTime = strtotime("+60 minutes", strtotime($hour));
+						$schresult['end_time'] =date("H:i",$endTime);
 						$schresult['field_id']= $field->id;
 						$schresult['title'] = $field->title;
 						$schresult['status']=0;
-					foreach($schedules as $schedule){
-					    if($schedule->start_time <= $hour AND $schedule->end_time >= $hour){
-						  $schresult['price']=$schedule->price;							  		
-						  $schresult['date']=$schedule->date;							
-						}						
-					}
-					foreach($times as $match){
-					    if($match->start_time <= $hour AND $match->end_time > $hour){
-						    $schresult['status']=1;
-						}else{
-							$schresult['status']=0;
+						foreach($schedules as $schedule){
+							if($schedule->start_time <= $hour AND $schedule->end_time >= $hour){
+							  $schresult['price']=$schedule->price;							  		
+							  $schresult['date']=$selecteddate;	
+							  break;
+							}						
 						}
+						foreach($times as $match){
+							if($match->start_time <= $hour AND $match->end_time > $hour){
+								$schresult['status']=1;
+							}
+						}
+						array_push($fullschedule,$schresult);
 					}
-					array_push($fullschedule,$schresult);
 				}			
-			}
-	
-			$response['schedules']= $fullschedule;	
-					
+			}	
+			$response['schedules']= $fullschedule;					
 			$response['error']=false;
 		} catch (Exception $e) {
 			$response['error'] = true;
@@ -401,23 +435,22 @@ class ApiController extends Controller
 		}
 	}
 
-	public function requestmatchcreate($userid,$fieldid,$starttime,$endtime,$date,$matchtype,$gametype,$numberofplayers,$format,$price,$description,$playgroundid)
+	public function requestmatchcreate(Request $request)
 	{	
 		        $match = new Match;				
 				$match->sort_id = 1;
-				$match->user_id = intval($userid);	
-				$match->field_id = intval($fieldid);
-				$match->start_time = $starttime;
-				$match->end_time = $endtime;
-				$match->date = $date;
-				$match->match_type = $matchtype;
-				$match->game_type = $gametype;	
-				$match->number_of_players = intval($numberofplayers);
-				$match->game_format = $format;
-				$match->price = intval($price);
-				$match->description = $description;
-				$match->playground_id = intval($playgroundid);		
-				$match->status =0;
+				$match->user_id = intval($request->userid);	
+				$match->field_id = intval($request->fieldid);
+				$match->start_time = $request->starttime;
+				$match->end_time = $request->endtime;
+				$match->date = $request->date;
+				$match->match_type = $request->matchtype;
+				$match->game_type = $request->gametype;	
+				$match->number_of_players = intval($request->numberofplayers);
+				$match->game_format = $request->format;
+				$match->price = intval($request->price);
+				$match->description = $request->description;
+				$match->status =1;
 				if($match->save()){ 
 							$response['error']=false;
 							$response['message']="Match created success";  
@@ -430,7 +463,7 @@ class ApiController extends Controller
 				return Response::json($response);
 			
 	}
-	    public function sendSms($phone,$code)
+	public function sendSms($phone,$code)
     {
         $apiKey = config('sms.key');
         $mobizonApi = new Mobizon($apiKey);
