@@ -10,6 +10,7 @@
     <meta name="description" content="@yield('meta_description', 'AbuSport')">
 
     <link href="/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- <link rel="stylesheet" type="text/css" href="http://bootswatch.com/cerulean/bootstrap.min.css"> -->
     <link rel="stylesheet" href="/bower_components/bootstrap-offcanvas/dist/css/bootstrap.offcanvas.css">
     <link rel="stylesheet" type="text/css" href="/css/style.css">
     @yield('styles')
@@ -68,7 +69,7 @@
         <!-- Search form -->
         <form class="navbar-form navbar-right hidden-sm hidden-xs">
           <div class="input-group">
-            <input type="text" class="form-control" placeholder="Search for...">
+            <input type="text" class="form-control" placeholder="Поиск...">
             <span class="input-group-btn">
               <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span></button>
             </span>
@@ -94,7 +95,7 @@
 
           <ul class="nav nav-pills nav-stacked">
             @if (Auth::check())
-              <li><a href="#">Баланс <small class="text-left text-success">0 тг</small></a></li>
+              <li><a href="#">Баланс <small class="text-left text-success">{{ Auth::user()->balance }} тг</small></a></li>
               <li class=""><a href="/profile">Мой профиль</a></li>
               <li><a href="/friends">Мои друзья <span class="badge">{{ Auth::user()->friends()->count() }}</span></a></li>
               <li><a href="/my-matches">Мои матчи <span class="badge">{{ Auth::user()->matches()->count() }}</span></a></li>

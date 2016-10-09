@@ -25,7 +25,7 @@
         <p>
           <b>Время игры:</b> {{ $match->start_time.' - '.$match->end_time }}<br>
           <b>Адрес:</b> {{ $match->field->area->address }}<br>
-          <b>Игроков:</b> {{ $match->users->count().'/'.$match->number_of_players }}<br>
+          <b>Игроков:</b> {{ 1 + $match->users->count().'/'.$match->number_of_players }}<br>
           <b>Цена:</b> {{ $match->price.'тг' }}
         </p>
       </div>

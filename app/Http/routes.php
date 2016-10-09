@@ -89,6 +89,17 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'role:root', 'role:a
     Route::resource('matches', 'Admin\MatchController');
 });
 
+// Client Area Administration
+Route::group(['prefix' => 'sport-admin', 'middleware' => ['auth', 'role:area-admin']], function () {
+
+    Route::get('/', 'AreaAdmin\AdminController@index');
+    Route::resource('areas', 'AreaAdmin\AreaController');
+    Route::resource('fields', 'AreaAdmin\FieldController');
+    Route::resource('schedules', 'AreaAdmin\ScheduleController');
+    Route::resource('options', 'AreaAdmin\OptionController');
+    Route::resource('matches', 'AreaAdmin\MatchController');
+});
+
 // Api
 Route::post('api/requestprofile/','ApiController@requestprofile');
 Route::get('api/requestcallbacklist/{userid}','ApiController@requestcallbacklist');
