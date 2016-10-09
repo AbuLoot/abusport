@@ -41,7 +41,7 @@
                       Матч {{ $match->id }}
                       <span class="pull-right label label-default">Конец игры</span>
                     </span>
-                    @if ($match->user_id == Auth::id()) <b>Вы Организатор</b> @endif
+                    @if ($match->user_id == Auth::id()) <b>Вы организатор</b> @endif
                   </td>
                   <td>{{ $match->users->count().'/'.$match->number_of_players }}</td>
                   <td>{{ $match->price }}</td>
@@ -59,7 +59,7 @@
                         <span class="pull-right label label-default">Закрытая игра</span>
                       @endif
                     </a>
-                    @if ($match->user_id == Auth::id()) <b>Вы Организатор</b> @endif
+                    @if ($match->user_id == Auth::id()) <b>Вы организатор</b> @endif
                   </td>
                   <td>{{ $match->users->count().'/'.$match->number_of_players }}</td>
                   <td>{{ $match->price }}</td>

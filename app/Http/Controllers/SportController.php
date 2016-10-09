@@ -173,18 +173,11 @@ class SportController extends Controller
         $match->price = $price;
         $match->save();
 
-        $match->users()->attach($request->user()->id);
-
         return redirect()->back()->with('status', 'Запись добавлена!');
     }
 
-    public function joinMatch(Request $request)
+    public function joinMatch(Request $request, $match_id)
     {
-        $this->validate($request, [
-            'user_id' => 'required|numeric',
-            'match_id' => 'required|numeric'
-        ]);
-
         $date = date('Y-m-d');
         $date_time = date('Y-m-d H:i:s');
 
@@ -193,18 +186,13 @@ class SportController extends Controller
             ->where('id', $request->match_id)
             ->firstOrFail();
 
-        $match->users->push($request->user());
-        $match->users()->sync($match->users->lists('id')->toArray());
+        $match->users()->attach($request->user()->id);
 
         return redirect()->back()->with('status', 'Вы в игре!');
     }
 
-    public function leaveMatch(Request $request)
+    public function leaveMatch(Request $request, $match_id)
     {
-        $this->validate($request, [
-            'match_id' => 'required|numeric'
-        ]);
-
         $date = date('Y-m-d');
         $date_time = date('Y-m-d H:i:s');
 

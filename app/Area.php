@@ -26,7 +26,7 @@ class Area extends Model
     public function getFieldsMatchesCountAttribute()
     {
         $matches = 0;
-
+        // ->where('date', '>=', date('Y-m-d'))
         foreach ($this->fields as $field)
         {
             $matches += $field->matches->count();

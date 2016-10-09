@@ -47,7 +47,7 @@
         <form action="/chat/message/{{ $match->id }}" method="post">
           {!! csrf_field() !!}
           <div class="input-group">
-            <input id="message" name="message" type="text" class="form-control" maxlength="255" placeholder="..." required>
+            <input id="message" name="message" type="text" class="form-control" maxlength="255" placeholder="..." autocomplete="off" required>
             <span class="input-group-btn">
               <button class="btn btn-default" id="send" type="submit"><span class="glyphicon glyphicon-send"></span></button>
             </span>
@@ -65,8 +65,8 @@
       block.scrollTop = block.scrollHeight;
 
       var socket = io(':6001'),
-          channel = 'chat-{{ $match->id }}',
-          user_id = '{{ Auth::id() }}';
+          user_id = '{{ Auth::id() }}',
+          channel = 'chat-{{ $match->id }}';
 
       socket.on('connect', function() {
         socket.emit('subscribe', channel)
@@ -109,13 +109,13 @@
         if (msg != '') {
           $.ajax({
             type: "POST",
-            url: '/chat/message/{{ $match->id }}',
+            url: '{!! URL::to("chat/message/".$match->id) !!}',
             dataType: "json",
             data: {'_token':token, 'message':msg},
             success: function(data) {
               console.log(data);
               $('#message').val('');
-            }
+            } 
           });
         } else {
           alert("Please Add Message.");

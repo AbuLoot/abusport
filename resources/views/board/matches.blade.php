@@ -39,10 +39,10 @@
           <table class="table table-hover table-bordered">
             <thead>
               <tr>
+                <th>Время старта</th>
                 <th>Номер</th>
                 <th>Игроки</th>
                 <th>Цена</th>
-                <th>Время старта</th>
               </tr>
             </thead>
             <tbody>
@@ -55,6 +55,7 @@
                   @foreach ($field->matches->where('date', $date) as $num => $match)
                     <tr>
                       @if ($match->start_time <= $hour AND $match->end_time >= $hour)
+                        <td>{{ $hour }}</td>
                         <td>
                           Матч {{ $match->id }}
                           <span class="pull-right label label-default">Конец игры</span>
@@ -67,7 +68,6 @@
                             @endif
                           @endforeach
                         </td>
-                        <td>{{ $hour }}</td>
                         <?php $game = true; ?>
                       @endif
                     </tr>
@@ -75,6 +75,7 @@
 
                   @if ($game == false)
                     <tr>
+                      <td>{{ $hour }}</td>
                       <td>
                         <span>Время прошло</span>
                       </td>
@@ -86,7 +87,6 @@
                           @endif
                         @endforeach
                       </td>
-                      <td>{{ $hour }}</td>
                     </tr>
                   @endif
                 @else
@@ -95,6 +95,7 @@
                     @if ($match->start_time <= $hour AND $match->end_time >= $hour)
                       <?php $game = true; ?>
                       <tr>
+                        <td>{{ $hour }}</td>
                         <td>
                           <a class="match-link" href="{{ url('sport/match/'.$area->id.'/'.$match->id) }}">
                             Матч {{ $match->id }}
@@ -113,13 +114,13 @@
                             @endif
                           @endforeach
                         </td>
-                        <td>{{ $hour }}</td>
                       </tr>
                     @endif
                   @endforeach
 
                   @if ($game == false)
                     <tr class="bg-info">
+                      <td>{{ $hour }}</td>
                       <td>
                         <span>Поле свободно</span>
                       </td>
@@ -131,7 +132,6 @@
                           @endif
                         @endforeach
                       </td>
-                      <td>{{ $hour }}</td>
                     </tr>
                   @endif
                 @endif

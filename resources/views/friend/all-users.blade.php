@@ -31,7 +31,7 @@
           </div>
           <div class="col-lg-6 col-md-6">
             <p><a href="/user-profile/{{ $user->id }}">{{ $user->surname }} {{  $user->name }}</a></p>
-            <p>{{ $user->profile->city->title }}</p>
+
             <p>{{ $user->profile->birthday }}</p>
           </div>
           <div class="col-lg-3 col-md-3">

@@ -30,22 +30,15 @@
         </p>
       </div>
       <div class="col-md-6 text-right">
-        @if (!in_array(Auth::id(), $match->users->lists('id')->toArray()) AND Auth::id() != $match->user_id)
-          <form action="{{ url('join-match') }}" method="post">
+        @if (in_array(Auth::id(), $match->users->lists('id')->toArray()) AND Auth::id() != $match->user_id)
+          <form action="/leave-match/{{ $match->id }}" method="post">
             {!! csrf_field() !!}
-            <input type="hidden" name="user_id" value="{{ Auth::id() }}">
-            <input type="hidden" name="match_id" value="{{ $match->id }}">
-            <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Вступить в игру</button>
+            <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-remove"></span> Выйти из игры</button>
           </form>
         @elseif(Auth::id() != $match->user_id)
-          <form action="{{ url('leave-match') }}" method="post">
+          <form action="/join-match/{{ $match->id }}" method="post">
             {!! csrf_field() !!}
-            @foreach($match->users as $user)
-              @continue($user->id == Auth::id())
-              <input type="hidden" name="users_id[]" value="{{ $user->id }}">
-            @endforeach
-            <input type="hidden" name="match_id" value="{{ $match->id }}">
-            <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-remove"></span> Выйти из игры</button>
+            <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Вступить в игру</button>
           </form>
         @endif
       </div>
@@ -60,26 +53,20 @@
               </tr>
             </thead>
             <tbody>
-              @foreach($match->users as $number => $user)
-                @if ($user->id == $match->user_id)
-                  <tr>
-                    <th>
-                      {{ ++$number.'. '.$user->surname.' '.$user->name }}
-                      {{ ($match->user_id == Auth::id()) ? '(Вы Организатор)' : '(Организатор)' }}
-                    </th>
-                    <td>{{ $match->price_for_each }}</td>
-                  </tr>
-                @else
-                  <tr>
-                    <td>{{ ++$number.'. '.$user->surname.' '.$user->name }}</td>
-                    <td>{{ $match->price_for_each }}</td>
-                  </tr>
-                @endif
+              <?php $i = 1; ?>
+              <tr>
+                <th>{{ $i++.'. '.$match->user->surname.' '.$match->user->name }} [Вы организатор]</th>
+                <td>{{ $match->price_for_each }}</td>
+              </tr>
+              @foreach($match->users as $user)
+                <tr>
+                  <td>{{ $i++.'. '.$user->surname.' '.$user->name }}</td>
+                  <td>{{ $match->price_for_each }}</td>
+                </tr>
               @endforeach
             </tbody>
           </table>
         </div>
-
       </div>
     </div>
 
