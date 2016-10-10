@@ -30,15 +30,19 @@ Route::get('sport/calendar/{sport}/{area_id}/{setDays?}', 'SportController@getMa
 
 Route::group(['middleware' => 'auth'], function() {
 
-    // Users
-    Route::resource('profile', 'ProfileController');
-    Route::resource('friends', 'FriendController');
-
+    // Profile
+    Route::get('my-balance', 'ProfileController@balance');
+    Route::post('top-up-balance', 'ProfileController@topUpBalance');
+    Route::get('my-profile', 'ProfileController@profile');
+    Route::post('my-profile', 'ProfileController@updateProfile');
+    Route::get('my-profile/edit', 'ProfileController@editProfile');
     Route::get('my-matches', 'MatchController@myMatches');
 
+    // Users
+    Route::get('friends', 'FriendController@myFriends');
     Route::get('all-users', 'FriendController@allUsers');
     Route::get('user-profile/{id}', 'FriendController@userProfile');
-    Route::get('add-to-frieds/{id}', 'FriendController@addToFriends');
+    Route::get('add-to-friends/{id}', 'FriendController@addToFriends');
     Route::get('accept/{id}', 'FriendController@accept');
 
     // Match
@@ -94,7 +98,7 @@ Route::group(['prefix' => 'sport-admin', 'middleware' => ['auth', 'role:area-adm
 
     Route::get('/', 'AreaAdmin\AdminController@index');
     Route::resource('areas', 'AreaAdmin\AreaController');
-    Route::resource('fields', 'AreaAdmin\FieldController');
+    // Route::resource('fields', 'AreaAdmin\FieldController');
     Route::resource('schedules', 'AreaAdmin\ScheduleController');
     Route::resource('options', 'AreaAdmin\OptionController');
     Route::resource('matches', 'AreaAdmin\MatchController');

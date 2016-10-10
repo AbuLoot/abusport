@@ -16,7 +16,7 @@
 
     @include('partials.alerts')
 
-    <form action="{{ url('store-match') }}" method="post">
+    <form action="/store-match" method="post">
       {!! csrf_field() !!}
       <div class="form-group">
         <label for="sport_id">Спорт</label>
@@ -114,7 +114,7 @@
                       @if ($current_date >= $day['year'] AND $current_hour >= $hour)
                         <td class="bg-warning">
                           <?php $game = false; ?>
-                          @foreach($field->matches->where('date', $day['year']) as $match)
+                          @foreach($field->matches->where('date', $day['year'])->where('status', 1) as $match)
                             @if ($match->start_time <= $hour AND $match->end_time >= $hour)
                               <span>Игра состоялось</span>
                               <?php $game = true; ?>
@@ -128,7 +128,7 @@
                       @else
                         <td>
                           <?php $game = false; ?>
-                          @foreach($field->matches->where('date', $day['year']) as $match)
+                          @foreach($field->matches->where('date', $day['year'])->where('status', 1) as $match)
                             @if ($match->start_time <= $hour AND $match->end_time >= $hour)
                               <a href="{{ url('sport/match/'.$area->id.'/'.$match->id) }}">Игра {{ $match->id }}</a>
                               <?php $game = true; ?>

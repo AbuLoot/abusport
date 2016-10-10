@@ -16,8 +16,7 @@
 
       @include('partials.alerts')
 
-      <form action="{{ route('profile.update', $user->id) }}" method="post" enctype="multipart/form-data">
-        <input name="_method" type="hidden" value="PUT">
+      <form action="/my-profile" method="post" enctype="multipart/form-data">
         {!! csrf_field() !!}
         <div class="form-group">
           <label for="name">Имя:</label>

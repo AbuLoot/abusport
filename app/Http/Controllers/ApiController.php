@@ -298,9 +298,9 @@ class ApiController extends Controller
 	public function requestjoinmatch($matchid,$userid)
 	{	
 	$user = User::find(intval($userid));
-	$match = Match::find(intval($matchid));	
+	$match = Match::find(intval($matchid));
 	$match->users->push($user);
-  
+
 				if($match->users()->sync($match->users->lists('id')->toArray())){ 
 							$response['error']=false;
 							$response['message']="Player joined success";  
@@ -309,12 +309,13 @@ class ApiController extends Controller
 						     $response['error']=true;
 						     $response['message']="Player failed";
 				}
-						 
+
 				return Response::json($response);
 			
 	}
+
 	public function requestexitmatch($matchid,$userid)
-	{	
+	{
 		$deletedRows=DB::table('match_user')->where('user_id', '=', $userid)->where('match_id', '=', $matchid)->delete();
 				if($deletedRows>0){ 
 					$response['error']=false;

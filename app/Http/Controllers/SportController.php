@@ -134,15 +134,15 @@ class SportController extends Controller
                 $num_hour = ($num_hour < 9) ? '0'.($num_hour + 1) : $num_hour + 1;
 
                 if ($fields[$i] != $fields[$key]) {
-                    return redirect()->back()->withInput()->withInfo('Матч должен состоятся в одном поле');
+                    return redirect()->back()->withInput()->withWarning('Матч должен состоятся в одном поле');
                 }
 
                 if ($date[$i] != $date[$key]) {
-                    return redirect()->back()->withInput()->withInfo('Матч должен состоятся в один день');
+                    return redirect()->back()->withInput()->withWarning('Матч должен состоятся в один день');
                 }
 
                 if ($num_hour.':'.$zeros != $hours[$key]) {
-                    return redirect()->back()->withInput()->withInfo('Выберите время последовательно');
+                    return redirect()->back()->withInput()->withWarning('Выберите время последовательно');
                 }
             }
         }
@@ -162,6 +162,17 @@ class SportController extends Controller
             }
         }
 
+        // Check balance for create match
+        $priceForEach = $price / $request->number_of_players;
+
+        if ($priceForEach > $request->user()->balance) {
+            return redirect()->back()->withInput()->withWarning('У вас недостаточно денег для создания матча');
+        }
+
+        // $request->user()->balance = $request->user()->balance - $priceForEach;
+        // $request->user()->save();
+
+        // Create match
         $match = new Match();
         $match->user_id = $request->user()->id;
         $match->field_id = $fields[0];
@@ -171,6 +182,7 @@ class SportController extends Controller
         $match->match_type = $request->match_type;
         $match->number_of_players = $request->number_of_players;
         $match->price = $price;
+        $match->status = 0;
         $match->save();
 
         return redirect()->back()->with('status', 'Запись добавлена!');
@@ -203,7 +215,7 @@ class SportController extends Controller
 
         $match->users()->detach($request->user()->id);
 
-        return redirect()->back()->with('status', 'Вы вышли из игры!');
+        return redirect()->back()->with('info', 'Вы вышли из игры!');
     }
 
     public function getDays($setDays, $date = '')

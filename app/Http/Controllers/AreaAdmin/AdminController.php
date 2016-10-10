@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\AreaAdmin;
 
 use Illuminate\Http\Request;
 
@@ -11,6 +11,6 @@ class AdminController extends Controller
 {
     public function index()
     {
-    	return view('admin.index');
+    	return view('area-admin.index');
     }
 }

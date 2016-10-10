@@ -13,14 +13,36 @@ use App\Http\Requests;
 
 class ProfileController extends Controller
 {
-    public function index()
+    public function balance()
     {
         $user = Auth::user();
-        
-        return view('profile.index', compact('user'));
+
+        return view('profile.balance', compact('user'));
     }
 
-    public function edit($id)
+    public function topUpBalance(Request $request)
+    {
+        $this->validate($request, [
+            'balance' => 'required|numeric|min:3'
+        ]);
+
+        $user = Auth::user();
+
+        $balance = $user->balance + $request->balance;
+        $user->balance = $balance;
+        $user->save();
+
+        return redirect('/my-balance')->with('status', 'Баланс пополнен!');
+    }
+
+    public function profile()
+    {
+        $user = Auth::user();
+
+        return view('profile.my-page', compact('user'));
+    }
+
+    public function editProfile()
     {
         $user = Auth::user();
         $cities = City::orderBy('sort_id')->get();
@@ -32,9 +54,8 @@ class ProfileController extends Controller
         return view('profile.edit', compact('user', 'cities', 'date'));
     }
 
-    public function update(Request $request, $id)
+    public function updateProfile(Request $request)
     {
-        // dd($request->all());
         $this->validate($request, [
             'surname' => 'required|min:2|max:40',
             'name' => 'required|min:2|max:40',
@@ -79,7 +100,7 @@ class ProfileController extends Controller
         $user->profile->sex = $request->sex;
         $user->profile->save();
 
-        return redirect('/profile')->with('status', 'Запись обновлена!');
+        return redirect('/my-profile')->with('status', 'Запись обновлена!');
     }
 
     public function resizeImage($image, $width, $height, $path, $quality, $color = '#ffffff')

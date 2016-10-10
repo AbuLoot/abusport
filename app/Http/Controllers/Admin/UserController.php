@@ -10,7 +10,6 @@ use Storage;
 use App\User;
 use App\Role;
 use App\City;
-use App\Profile;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 

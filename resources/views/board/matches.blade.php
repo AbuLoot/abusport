@@ -52,7 +52,7 @@
 
                 @if ($current_date >= $date AND $current_hour >= $hour)
                   <?php $game = false;?>
-                  @foreach ($field->matches->where('date', $date) as $num => $match)
+                  @foreach ($field->matches->where('date', $date)->where('status', 1) as $num => $match)
                     <tr>
                       @if ($match->start_time <= $hour AND $match->end_time >= $hour)
                         <td>{{ $hour }}</td>
@@ -91,7 +91,7 @@
                   @endif
                 @else
                   <?php $game = false; ?>
-                  @foreach ($field->matches->where('date', $date) as $match)
+                  @foreach ($field->matches->where('date', $date)->where('status', 1) as $match)
                     @if ($match->start_time <= $hour AND $match->end_time >= $hour)
                       <?php $game = true; ?>
                       <tr>

@@ -12,25 +12,25 @@ use App\Http\Requests;
 
 class FriendController extends Controller
 {
-    public function index()
+    public function myFriends()
     {
         $user = Auth::user();
-        
-        return view('friend.index', compact('user'));
+
+        return view('users.my-friends', compact('user'));
     }
-    
+
     public function userProfile($id)
     {
         $user = User::findOrFail($id);
 
-        return view('user.index', compact('user'));
+        return view('users.profile', compact('user'));
     }
-    
+
     public function allUsers()
     {
         $users = User::where('id', '<>', Auth::id())->get();
 
-        return view('friend.all-users', compact('users'));
+        return view('users.all-users', compact('users'));
     }
 
     public function addToFriends($id)

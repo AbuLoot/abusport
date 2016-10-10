@@ -53,9 +53,9 @@
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ Auth::user()->name }} <span class="caret"></span></a>
               <ul class="dropdown-menu">
-                <li class=""><a href="/profile">Мой профиль</a></li>
+                <li><a href="/my-profile">Мой профиль</a></li>
                 <li role="separator" class="divider"></li>
-                <li class=""><a href="{{ route('profile.edit', Auth::id()) }}">Изменить</a></li>
+                <li><a href="/my-profile/edit">Изменить</a></li>
                 <li role="separator" class="divider"></li>
                 <li><a href="{{ url('logout') }}"><span class="glyphicon glyphicon-log-out"></span> Выход</a></li>
               </ul>
@@ -84,9 +84,9 @@
       <div class="row">
 
         <aside class="col-lg-2 col-md-3 navbar-offcanvas navbar-offcanvas-touch" id="js-bootstrap-offcanvas">
-          <form class="navbar-offcanvas-form hidden-lg hidden-md">
+          <form action="/" class="navbar-offcanvas-form hidden-lg hidden-md">
             <div class="input-group">
-              <input type="text" class="form-control" placeholder="Search for...">
+              <input type="text" class="form-control" placeholder="Поиск...">
               <span class="input-group-btn">
                 <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span></button>
               </span>
@@ -95,10 +95,10 @@
 
           <ul class="nav nav-pills nav-stacked">
             @if (Auth::check())
-              <li><a href="#">Баланс <small class="text-left text-success">{{ Auth::user()->balance }} тг</small></a></li>
-              <li class=""><a href="/profile">Мой профиль</a></li>
-              <li><a href="/friends">Мои друзья <span class="badge">{{ Auth::user()->friends()->count() }}</span></a></li>
+              <li><a href="/my-balance">Баланс <small class="text-left text-success">{{ Auth::user()->balance }}тг</small></a></li>
+              <li><a href="/my-profile">Мой профиль</a></li>
               <li><a href="/my-matches">Мои матчи <span class="badge">{{ Auth::user()->matches()->count() }}</span></a></li>
+              <li><a href="/friends">Мои друзья <span class="badge">{{ Auth::user()->friends()->count() }}</span></a></li>
               <li><a href="#">Уведомления <span class="badge">0</span></a></li>
               <li><a href="#">Настройки</a></li>
             @endif
