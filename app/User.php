@@ -39,6 +39,17 @@ class User extends Authenticatable
         return $this->belongsToMany('App\Match', 'match_user', 'user_id', 'match_id');
     }
 
+    public function chat()
+    {
+        return $this->belongsToMany('App\Chat');
+    }
+
+    public function getFullnameAttribute()
+    {
+        $user = $this->where('id', $message->user_id)->first();
+        return $this->surname.' '.$this->name;
+    }
+
     public function friendsOfMine(){
         return $this->belongsToMany('App\User', 'friends', 'user_id', 'friend_id');
     }

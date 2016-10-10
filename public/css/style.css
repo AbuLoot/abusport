@@ -171,6 +171,14 @@ td.status-matches > div > label {
   border-bottom: 2px solid #ddd;
 }
 
+/* Chat */
+.scroll-chat {
+  /*background-color: #fff;*/
+  height: 400px;
+  overflow-y: auto;
+  bottom: 0;
+}
+
 /* Footer */
 .footer {
   padding: 50px 0;

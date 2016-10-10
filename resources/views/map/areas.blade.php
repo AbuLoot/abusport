@@ -49,7 +49,7 @@
 @section('scripts')
   @parent
   <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
-  <script type="text/javascript">
+  <script>
     ymaps.ready(init);
     var myMap,
       myPlacemark;
