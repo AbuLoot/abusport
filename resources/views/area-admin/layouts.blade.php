@@ -10,6 +10,7 @@
     <meta name="description" content="@yield('meta_description', 'AbuSport')">
 
     <link href="/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- <link rel="stylesheet" type="text/css" href="/assets/css/material-kit.css"> -->
     <link href="/css/admin.css" rel="stylesheet">
 
     @yield('styles')
@@ -36,26 +37,21 @@
             </span>
           </button>
 
-          <a class="navbar-brand" href="/admin">AbuSport</a>
+          <a class="navbar-brand" href="/panel">AbuSport</a>
         </div>
 
         <!-- Account system -->
         <ul class="nav navbar-nav navbar-right hidden-sm hidden-xs">
-          @if (Auth::guest())
-            <li><a href="{{ url('/login') }}"><span class="glyphicon glyphicon-log-in"></span> Войти</a></li>
-          @else
-            <li><a href="#"><span class="glyphicon glyphicon-plus"></span> Создать матч</a></li>
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ Auth::user()->name }} <span class="caret"></span></a>
-              <ul class="dropdown-menu">
-                <li><a href="#">My Profile</a></li>
-                <li><a href="#">Settings</a></li>
-                <li><a href="#">Help</a></li>
-                <li role="separator" class="divider"></li>
-                <li><a href="{{ url('/logout') }}"><span class="glyphicon glyphicon-log-out"></span> Выход</a></li>
-              </ul>
-            </li>
-          @endif
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ Auth::user()->name }} <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a href="/my-profile">Мой профиль</a></li>
+              <li role="separator" class="divider"></li>
+              <li><a href="/my-profile/edit">Изменить</a></li>
+              <li role="separator" class="divider"></li>
+              <li><a href="{{ url('/logout') }}"><span class="glyphicon glyphicon-log-out"></span> Выход</a></li>
+            </ul>
+          </li>
         </ul>
 
         <!-- Search form -->
@@ -72,34 +68,16 @@
 
     <main class="container">
       <ul class="nav nav-pills nav-justified">
-        <li @if (Request::is('admin/pages', 'admin/pages/*')) class="active" @endif><a href="/admin/pages">Страницы</a></li>
-        <li class="dropdown @if (Request::is('admin/users', 'admin/users/*', 'admin/organizations', 'admin/organizations/*', 'admin/org_types', 'admin/org_types/*', 'admin/roles', 'admin/roles/*', 'admin/permissions', 'admin/permissions/*')) active @endif">
-          <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">База<span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li @if (Request::is('admin/users', 'admin/users/*')) class="active" @endif><a href="/admin/users">Пользователи</a></li>
-            <li @if (Request::is('admin/organizations', 'admin/organizations/*')) class="active" @endif><a href="/admin/organizations">Организации</a></li>
-            <li @if (Request::is('admin/org_types', 'admin/org_types/*')) class="active" @endif><a href="/admin/org_types">Типы организации</a></li>
-            <li @if (Request::is('admin/roles', 'admin/roles/*')) class="active" @endif><a href="/admin/roles">Роли</a></li>
-            <li @if (Request::is('admin/permissions', 'admin/permissions/*')) class="active" @endif><a href="/admin/permissions">Права доступа</a></li>
-          </ul>
-        </li>
-        <li class="dropdown @if (Request::is('admin/countries', 'admin/countries/*', 'admin/cities', 'admin/cities/*', 'admin/districts', 'admin/districts/*')) active @endif">
-          <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Регионы<span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li @if (Request::is('admin/countries', 'admin/countries/*')) class="active" @endif><a href="/admin/countries">Страны</a></li>
-            <li @if (Request::is('admin/cities', 'admin/cities/*')) class="active" @endif><a href="/admin/cities">Города</a></li>
-            <li @if (Request::is('admin/districts', 'admin/districts/*')) class="active" @endif><a href="/admin/districts">Районы</a></li>
-          </ul>
-        </li>
-        <li @if (Request::is('admin/sports', 'admin/sports/*')) class="active" @endif><a href="/admin/sports">Спорт</a></li>
-        <li @if (Request::is('admin/areas', 'admin/areas/*')) class="active" @endif><a href="/admin/areas">Площадки</a></li>
-        <li @if (Request::is('admin/schedules', 'admin/schedules/*')) class="active" @endif><a href="/admin/schedules">Расписания</a></li>
-        <li @if (Request::is('admin/fields', 'admin/fields/*')) class="active" @endif><a href="/admin/fields">Поля</a></li>
-        <li @if (Request::is('admin/options', 'admin/options/*')) class="active" @endif><a href="/admin/options">Опции</a></li>
-        <li @if (Request::is('admin/matches', 'admin/matches/*')) class="active" @endif><a href="/admin/matches">Матчи</a></li>
-        <li @if (Request::is('admin/lang', 'admin/lang/*')) class="active" @endif><a href="#/admin/lang">Языки</a></li>
-        <li @if (Request::is('admin/settings', 'admin/settings/*')) class="active" @endif><a href="#/admin/settings">Настройки</a></li>
+        <li @if (Request::is('panel/admin-organization', 'panel/admin-organization/*')) class="active" @endif><a href="/panel/admin-organization">Организации</a></li>
+        <li @if (Request::is('panel/admin-areas', 'panel/admin-areas/*')) class="active" @endif><a href="/panel/admin-areas">Площадки</a></li>
+        <li @if (Request::is('panel/admin-schedules', 'panel/admin-schedules/*')) class="active" @endif><a href="/panel/admin-schedules">Расписания</a></li>
+        <li @if (Request::is('panel/admin-fields', 'panel/admin-fields/*')) class="active" @endif><a href="/panel/admin-fields">Поля</a></li>
+        <li @if (Request::is('panel/admin-options', 'panel/admin-options/*')) class="active" @endif><a href="/panel/admin-options">Опции</a></li>
+        <li @if (Request::is('panel/admin-matches', 'panel/admin-matches/*')) class="active" @endif><a href="/panel/admin-matches">Матчи</a></li>
+        <li @if (Request::is('panel/admin-lang', 'panel/admin-lang/*')) class="active" @endif><a href="#/panel/admin-lang">Языки</a></li>
+        <li @if (Request::is('panel/admin-settings', 'panel/admin-settings/*')) class="active" @endif><a href="#/panel/admin-settings">Настройки</a></li>
       </ul>
+      <hr>
 
       <div class="col-md-12">
         @yield('content')

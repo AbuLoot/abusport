@@ -4,6 +4,9 @@
   <div class="panel panel-default">
     <div class="panel-body">
       <h3>Редактирование</h3>
+
+      @include('partials.alerts')
+
       <form action="{{ route('admin.users.update', $user->id) }}" method="post" enctype="multipart/form-data">
         <input name="_method" type="hidden" value="PUT">
         {!! csrf_field() !!}
@@ -22,6 +25,19 @@
         <div class="form-group">
           <label for="surname">Фамилия:</label>
           <input type="text" class="form-control" name="surname" id="surname" minlength="3" maxlength="60" value="{{ $user->surname }}" required>
+        </div>
+        <div class="form-group">
+          <label for="org_id">Организации:</label>
+          <select class="form-control" name="org_id" id="city" required>
+            <option value=""></option>
+            @foreach($organizations as $organization)
+              @if (in_array($organization->id, $user->organization->lists('id')->toArray()))
+                <option value="{{ $organization->id }}" selected>{{ $organization->title }}</option>
+              @else
+                <option value="{{ $organization->id }}">{{ $organization->title }}</option>
+              @endif
+            @endforeach
+          </select>
         </div>
         <div class="form-group">
           <label for="city_id">Город:</label>

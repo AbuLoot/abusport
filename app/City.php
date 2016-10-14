@@ -18,6 +18,16 @@ class City extends Model
         return $this->hasMany('App\District');
     }
 
+    public function organizations()
+    {
+        return $this->hasMany('App\Organization');
+    }
+
+    public function areas()
+    {
+        return $this->hasMany('App\Area');
+    }
+
     public function profiles()
     {
         return $this->hasMany('App\Profile');

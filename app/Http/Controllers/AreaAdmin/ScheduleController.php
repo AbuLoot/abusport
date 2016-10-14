@@ -4,6 +4,8 @@ namespace App\Http\Controllers\AreaAdmin;
 
 use Illuminate\Http\Request;
 
+use Auth;
+
 use App\Area;
 use App\Schedule;
 use App\Http\Requests;
@@ -13,15 +15,15 @@ class ScheduleController extends Controller
 {
     public function index()
     {
-    	$schedules = Schedule::all();
-        return view('admin.schedules.index', compact('schedules'));
+        $organization = Auth::user()->organization()->first();
+        return view('area-admin.schedules.index', compact('schedules'));
     }
 
     public function create()
     {
     	$areas = Area::all();
 
-        return view('admin.schedules.create', compact('areas'));
+        return view('area-admin.schedules.create', compact('areas'));
     }
 
     public function store(Request $request)
@@ -43,7 +45,7 @@ class ScheduleController extends Controller
         $schedule->status = ($request->status == 'on') ? 1 : 0;
         $schedule->save();
 
-        return redirect('/admin/schedules')->with('status', 'Запись добавлена!');
+        return redirect('panel/admin-schedules')->with('status', 'Запись добавлена!');
     }
 
     public function edit($id)
@@ -51,7 +53,7 @@ class ScheduleController extends Controller
     	$areas = Area::all();
         $schedule = Schedule::findOrFail($id);
 
-        return view('admin.schedules.edit', compact('schedule', 'areas'));
+        return view('area-admin.schedules.edit', compact('schedule', 'areas'));
     }
 
     public function update(Request $request, $id)
@@ -73,7 +75,7 @@ class ScheduleController extends Controller
         $schedule->status = ($request->status == 'on') ? 1 : 0;
         $schedule->save();
 
-        return redirect('/admin/schedules')->with('status', 'Запись обновлена!');
+        return redirect('panel/admin-schedules')->with('status', 'Запись обновлена!');
     }
 
     public function destroy($id)
@@ -81,6 +83,6 @@ class ScheduleController extends Controller
         $schedule = Schedule::find($id);
         $schedule->delete();
 
-        return redirect('/admin/schedules')->with('status', 'Запись удалена!');
+        return redirect('panel/admin-schedules')->with('status', 'Запись удалена!');
     }
 }

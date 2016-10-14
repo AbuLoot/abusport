@@ -105,7 +105,7 @@ class ProfileController extends Controller
 
     public function resizeImage($image, $width, $height, $path, $quality, $color = '#ffffff')
     {
-        $frame = Image::canvas($width, $height, $color);
+        // $frame = Image::canvas($width, $height, $color);
         $newImage = Image::make($image);
 
         if ($newImage->width() <= $newImage->height()) {
@@ -119,8 +119,8 @@ class ProfileController extends Controller
             });
         }
 
-        $frame->insert($newImage, 'center');
-        $frame->save($path, $quality);
+        // $frame->insert($newImage, 'center');
+        $newImage->save($path, $quality);
     }
 
     public function cropImage($image, $width, $height, $path, $quality)

@@ -28,10 +28,15 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
-    
+
     public function profile()
     {
         return $this->hasOne('App\Profile');
+    }
+
+    public function organization()
+    {
+        return $this->belongsToMany('App\Organization', 'org_user', 'org_id', 'user_id');
     }
 
     public function match()

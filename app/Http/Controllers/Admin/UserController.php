@@ -10,6 +10,7 @@ use Storage;
 use App\User;
 use App\Role;
 use App\City;
+use App\Organization;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
@@ -34,8 +35,9 @@ class UserController extends Controller
 		$user = User::findOrFail($id);
 		$roles = Role::all();
 		$cities = City::orderBy('sort_id')->get();
+		$organizations = Organization::all();
 
-		return view('admin.users.edit', compact('user', 'roles', 'cities'));
+		return view('admin.users.edit', compact('user', 'roles', 'cities', 'organizations'));
 	}
 
 	public function update(Request $request, $id)
@@ -43,8 +45,8 @@ class UserController extends Controller
         $this->validate($request, [
             'name' => 'required|max:60',
             'surname' => 'required|max:60',
-        	'phone' => 'required|unique:users',
-        	'email' => 'required|unique:users',
+        	'phone' => 'required',
+        	'email' => 'required',
         ]);
 
 		$user = User::findOrFail($id);
@@ -74,6 +76,7 @@ class UserController extends Controller
 		$user->status = ($request->status == 1) ? 1 : 0;
 		$user->save();
 
+		$user->organization()->sync([$request->org_id]);
 		$user->roles()->sync($request->roles_id);
 
 		$user->profile->city_id = $request->city_id;
@@ -115,25 +118,25 @@ class UserController extends Controller
 		return $users->get();
 	}
 
-	public function resizeImage($image, $width, $height, $path, $quality, $color = '#ffffff')
-	{
-		$frame = Image::canvas($width, $height, $color);
-		$newImage = Image::make($image);
+    public function resizeImage($image, $width, $height, $path, $quality, $color = '#ffffff')
+    {
+        // $frame = Image::canvas($width, $height, $color);
+        $newImage = Image::make($image);
 
-		if ($newImage->width() <= $newImage->height()) {
-			$newImage->resize(null, $height, function ($constraint) {
-				$constraint->aspectRatio();
-			});
-		}
-		else {
-			$newImage->resize($width, null, function ($constraint) {
-				$constraint->aspectRatio();
-			});
-		}
+        if ($newImage->width() <= $newImage->height()) {
+            $newImage->resize(null, $height, function ($constraint) {
+                $constraint->aspectRatio();
+            });
+        }
+        else {
+            $newImage->resize($width, null, function ($constraint) {
+                $constraint->aspectRatio();
+            });
+        }
 
-		$frame->insert($newImage, 'center');
-		$frame->save($path, $quality);
-	}
+        // $frame->insert($newImage, 'center');
+        $newImage->save($path, $quality);
+    }
 
 	public function cropImage($image, $width, $height, $path, $quality)
 	{

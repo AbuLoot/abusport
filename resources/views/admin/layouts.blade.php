@@ -41,21 +41,17 @@
 
         <!-- Account system -->
         <ul class="nav navbar-nav navbar-right hidden-sm hidden-xs">
-          @if (Auth::guest())
-            <li><a href="{{ url('/login') }}"><span class="glyphicon glyphicon-log-in"></span> Войти</a></li>
-          @else
-            <li><a href="#"><span class="glyphicon glyphicon-plus"></span> Создать матч</a></li>
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ Auth::user()->name }} <span class="caret"></span></a>
-              <ul class="dropdown-menu">
-                <li><a href="#">My Profile</a></li>
-                <li><a href="#">Settings</a></li>
-                <li><a href="#">Help</a></li>
-                <li role="separator" class="divider"></li>
-                <li><a href="{{ url('/logout') }}"><span class="glyphicon glyphicon-log-out"></span> Выход</a></li>
-              </ul>
-            </li>
-          @endif
+          <li><a href="#"><span class="glyphicon glyphicon-plus"></span> Создать матч</a></li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ Auth::user()->name }} <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a href="/my-profile">Мой профиль</a></li>
+              <li role="separator" class="divider"></li>
+              <li><a href="/my-profile/edit">Изменить</a></li>
+              <li role="separator" class="divider"></li>
+              <li><a href="{{ url('/logout') }}"><span class="glyphicon glyphicon-log-out"></span> Выход</a></li>
+            </ul>
+          </li>
         </ul>
 
         <!-- Search form -->

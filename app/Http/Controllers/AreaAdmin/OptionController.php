@@ -14,12 +14,12 @@ class OptionController extends Controller
     {
         $options = Option::orderBy('sort_id')->get();
 
-        return view('admin.options.index', compact('options'));
+        return view('area-admin.options.index', compact('options'));
     }
 
     public function create()
     {
-        return view('admin.options.create');
+        return view('area-admin.options.create');
     }
 
     public function store(Request $request)
@@ -36,14 +36,14 @@ class OptionController extends Controller
         $option->lang = $request->lang;
         $option->save();
 
-        return redirect('/admin/options')->with('status', 'Запись добавлена!');
+        return redirect('panel/admin-options')->with('status', 'Запись добавлена!');
     }
 
     public function edit($id)
     {
         $option = Option::findOrFail($id);
 
-        return view('admin.options.edit', compact('option'));
+        return view('area-admin.options.edit', compact('option'));
     }
 
     public function update(Request $request, $id)
@@ -59,7 +59,7 @@ class OptionController extends Controller
         $option->lang = $request->lang;
         $option->save();
 
-        return redirect('/admin/options')->with('status', 'Запись обновлена!');
+        return redirect('panel/admin-options')->with('status', 'Запись обновлена!');
     }
 
     public function destroy($id)
@@ -67,6 +67,6 @@ class OptionController extends Controller
         $option = Option::find($id);
         $option->delete();
 
-        return redirect('/admin/options')->with('status', 'Запись удалена!');
+        return redirect('panel/admin-options')->with('status', 'Запись удалена!');
     }
 }

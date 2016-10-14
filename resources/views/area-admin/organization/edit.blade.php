@@ -7,55 +7,68 @@
 
           @include('partials.alerts')
 
-          <form action="{{ route('panel.admin-areas.update', $area->id) }}" method="post" enctype="multipart/form-data">
+          <form action="{{ route('panel.admin-organization.update', $organization->id) }}" method="post" enctype="multipart/form-data">
             <input type="hidden" name="_method" value="PUT">
             {!! csrf_field() !!}
 
             <div class="form-group">
               <label for="title">Название</label>
-              <input type="text" class="form-control" id="title" name="title" minlength="5" maxlength="80" value="{{ (old('title')) ? old('title') : $area->title }}" required>
+              <input type="text" class="form-control" id="title" name="title" minlength="5" maxlength="80" value="{{ (old('title')) ? old('title') : $organization->title }}" required>
             </div>
             <div class="form-group">
               <label for="slug">Slug</label>
-              <input type="text" class="form-control" id="slug" name="slug" minlength="5" maxlength="80" value="{{ (old('slug')) ? old('slug') : $area->slug }}">
+              <input type="text" class="form-control" id="slug" name="slug" minlength="5" maxlength="80" value="{{ (old('slug')) ? old('slug') : $organization->slug }}">
             </div>
             <div class="form-group">
               <label for="sort_id">Номер</label>
-              <input type="text" class="form-control" id="sort_id" name="sort_id" maxlength="5" value="{{ (old('sort_id')) ? old('sort_id') : $area->sort_id }}">
+              <input type="text" class="form-control" id="sort_id" name="sort_id" maxlength="5" value="{{ (old('sort_id')) ? old('sort_id') : $organization->sort_id }}">
             </div>
             <div class="form-group">
-              <label for="sport_id">Спорт</label>
-              <select id="sport_id" name="sport_id" class="form-control" required>
+              <label for="org_type_id">Тип организации</label>
+              <select id="org_type_id" name="org_type_id" class="form-control" required>
                 <option value=""></option>
-                @foreach($sports as $sport)
-                  @if ($sport->id == $area->sport_id)
-                    <option value="{{ $sport->id }}" selected>{{ $sport->title }}</option>
+                @foreach($org_types as $org_type)
+                  @if ($org_type->id == $organization->org_type_id)
+                    <option value="{{ $org_type->id }}" selected>{{ $org_type->title.' - '.$org_type->short_title }}</option>
                   @else
-                    <option value="{{ $sport->id }}">{{ $sport->title }}</option>
+                    <option value="{{ $org_type->id }}">{{ $org_type->title.' - '.$org_type->short_title }}</option>
                   @endif
                 @endforeach
               </select>
             </div>
             <div class="form-group">
-              <label for="org_id">Организация</label>
-              <input type="text" class="form-control" id="org_id" value="{{ $area->organization->title }}" disabled>
+              <label for="phones">Номера телефонов</label>
+              <input type="text" class="form-control" id="phones" name="phones" value="{{ (old('phones')) ? old('phones') : $organization->phones }}">
             </div>
             <div class="form-group">
-              <label for="phones">Номера телефонов</label>
-              <input type="text" class="form-control" id="phones" name="phones" value="{{ (old('phones')) ? old('phones') : $area->phones }}">
+              <label for="website">Website</label>
+              <input type="text" class="form-control" id="website" name="website" value="{{ (old('website')) ? old('website') : $organization->website }}">
             </div>
             <div class="form-group">
               <label for="emails">Emails</label>
-              <input type="text" class="form-control" id="emails" name="emails" value="{{ (old('emails')) ? old('emails') : $area->emails }}">
+              <input type="text" class="form-control" id="emails" name="emails" value="{{ (old('emails')) ? old('emails') : $organization->emails }}">
             </div>
             <div class="row">
               <div class="col-md-6 col-xs-12">
+                <div class="form-group">
+                  <label for="country_id">Страны</label>
+                  <select id="country_id" name="country_id" class="form-control" required>
+                    <option value=""></option>
+                    @foreach($countries as $country)
+                      @if ($country->id == $organization->country_id)
+                        <option value="{{ $country->id }}" selected>{{ $country->title }}</option>
+                      @else
+                        <option value="{{ $country->id }}">{{ $country->title }}</option>
+                      @endif
+                    @endforeach
+                  </select>
+                </div>
                 <div class="form-group">
                   <label for="city_id">Города</label>
                   <select id="city_id" name="city_id" class="form-control" required>
                     <option value=""></option>
                     @foreach($cities as $city)
-                      @if ($city->id == $area->city_id)
+                      @if ($city->id == $organization->city_id)
                         <option value="{{ $city->id }}" selected>{{ $city->title }}</option>
                       @else
                         <option value="{{ $city->id }}">{{ $city->title }}</option>
@@ -65,10 +78,10 @@
                 </div>
                 <div class="form-group">
                   <label for="district_id">Районы</label>
-                  <select id="district_id" name="district_id" class="form-control">
+                  <select id="district_id" name="district_id" class="form-control" required>
                     <option value=""></option>
                     @foreach($districts as $district)
-                      @if ($district->id == $area->district_id)
+                      @if ($district->id == $organization->district_id)
                         <option value="{{ $district->id }}" selected>{{ $district->title }}</option>
                       @else
                         <option value="{{ $district->id }}">{{ $district->title }}</option>
@@ -80,21 +93,21 @@
                   <label for="address">Адрес</label>
                   <input type="hidden" name="latitude" id="latitude">
                   <input type="hidden" name="longitude" id="longitude">
-                  <textarea class="form-control" rows="5" name="address" id="address">{{ $area->address }}</textarea>
+                  <textarea class="form-control" rows="5" name="address" id="address">{{$organization->address}}</textarea>
                   <span class="help-block">Например: Абая 32</span>
                 </div>
               </div>
               <div class="col-md-6 col-xs-12">
-                <div id="yaMap" style="width: 100%; height: 350px;"></div>
+                <div id="yaMap" style="width:100%;height:350px;"></div>
               </div>
             </div>
             <div class="form-group">
               <label for="image">Картинка:</label><br>
               <div class="fileinput fileinput-new" data-provides="fileinput">
                 <div class="fileinput-new thumbnail" style="width:300px;height:200px;">
-                  <img src="/img/organizations/{{ $area->org_id . '/' . $area->image }}">
+                  <img src="/img/organizations/{{ $organization->logo }}">
                 </div>
-                <div class="fileinput-preview fileinput-exists thumbnail" style="max-width:300px;max-height:200px;"></div>
+                <div class="fileinput-preview fileinput-exists thumbnail" style="width:300px;height:200px;"></div>
                 <div>
                   <span class="btn btn-default btn-sm btn-file">
                     <span class="fileinput-new"><i class="glyphicon glyphicon-folder-open"></i>&nbsp; Выбрать</span>
@@ -106,75 +119,13 @@
               </div>
             </div>
             <div class="form-group">
-              <label for="images">Галерея</label><br>
-              <?php $images = unserialize($area->images); ?>
-              @for ($i = 0; $i < 6; $i++)
-                @if (isset($images[$i]))
-                  <div class="fileinput fileinput-new" data-provides="fileinput">
-                    <div class="fileinput-new thumbnail" style="width:300px;height:200px;">
-                      <img src="/img/organizations/{{ $area->org_id.'/'.$images[$i]['mini_image'] }}">
-                    </div>
-                    <div class="fileinput-preview fileinput-exists thumbnail" style="width:300px;height:200px;" data-trigger="fileinput"></div>
-                    <div>
-                      <span class="btn btn-default btn-sm btn-file">
-                        <span class="fileinput-new"><i class="glyphicon glyphicon-folder-open"></i>&nbsp; Изменить</span>
-                        <span class="fileinput-exists"><i class="glyphicon glyphicon-folder-open"></i>&nbsp;</span>
-                        <input type="file" name="images[]" accept="image/*">
-                      </span>
-                      <a href="#" class="btn btn-default btn-sm fileinput-exists" data-dismiss="fileinput"><i class="glyphicon glyphicon-trash"></i> Удалить</a>
-                    </div>
-                  </div>
-                @else
-                  <div class="fileinput fileinput-new" style="width:300px;height:200px;" data-provides="fileinput">
-                    <div class="fileinput-preview thumbnail" style="width:300px;height:200px;" data-trigger="fileinput"></div>
-                    <div>
-                      <span class="btn btn-default btn-sm btn-file">
-                        <span class="fileinput-new"><i class="glyphicon glyphicon-folder-open"></i>&nbsp; Выбрать</span>
-                        <span class="fileinput-exists"><i class="glyphicon glyphicon-folder-open"></i>&nbsp;</span>
-                        <input type="file" name="images[]" accept="image/*">
-                      </span>
-                      <a href="#" class="btn btn-default btn-sm fileinput-exists" data-dismiss="fileinput"><i class="glyphicon glyphicon-trash"></i> Удалить</a>
-                    </div>
-                  </div>
-                @endif
-              @endfor
-            </div>
-            <div class="form-group">
-              <label for="description">Описание</label>
-              <textarea class="form-control" id="description" name="description" rows="5">{{ (old('description')) ? old('description') : $area->description }}</textarea>
-            </div>
-            <div class="form-group">
-              <label for="start_time">Начало времени</label>
-              <select id="start_time" name="start_time" class="form-control">
-                @foreach(trans('data.hours') as $hour)
-                  @if ($area->start_time == $hour)
-                    <option value="{{ $hour }}" selected>{{ $hour }}</option>
-                  @else
-                    <option value="{{ $hour }}">{{ $hour }}</option>
-                  @endif
-                @endforeach
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="end_time">Конец времени</label>
-              <select id="end_time" name="end_time" class="form-control">
-                @foreach(trans('data.hours') as $hour)
-                  @if ($area->end_time == $hour)
-                    <option value="{{ $hour }}" selected>{{ $hour }}</option>
-                  @else
-                    <option value="{{ $hour }}">{{ $hour }}</option>
-                  @endif
-                @endforeach
-              </select>
-            </div>
-            <div class="form-group">
               <label for="lang">Язык</label>
-              <input type="text" class="form-control" id="lang" name="lang" value="{{ (old('lang')) ? old('lang') : $area->lang }}">
+              <input type="text" class="form-control" id="lang" name="lang" value="{{ (old('lang')) ? old('lang') : $organization->lang }}">
             </div>
             <div class="form-group">
               <label for="status">Статус:</label>
               <label>
-                <input type="checkbox" id="status" name="status" @if ($area->status == 1) checked @endif> Активен
+                <input type="checkbox" id="status" name="status" @if ($organization->status == 1) checked @endif> Активен
               </label>
             </div>
             <div class="form-group">
@@ -194,7 +145,6 @@
   <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
 
   <script>
-
     ymaps.ready(init);
     var myMap,
       myPlacemark;
@@ -311,4 +261,12 @@
 
   </script>
 
+@endsection
+
+@section('styles')
+  <link href="/css/jasny-bootstrap.min.css" rel="stylesheet">
+@endsection
+
+@section('scripts')
+  <script src="/js/jasny-bootstrap.js"></script>
 @endsection

@@ -1,4 +1,4 @@
-@extends('admin.layouts')
+@extends('area-admin.layouts')
 
 @section('content')
       <div class="panel panel-default">
@@ -7,7 +7,7 @@
 
           @include('partials.alerts')
 
-          <form action="{{ route('admin.fields.store') }}" method="post">
+          <form action="{{ route('panel.admin-fields.store') }}" method="post">
             {!! csrf_field() !!}
             <div class="form-group">
               <label for="title">Название</label>
@@ -20,7 +20,7 @@
             <div class="form-group">
               <label for="area_id">Площадки</label>
               <select id="area_id" name="area_id" class="form-control" required>
-                <option value=""></option>
+                <option value="">Выберите площадку</option>
                 @foreach($areas as $area)
                   <option value="{{ $area->id }}">{{ $area->title }}</option>
                 @endforeach

@@ -11,6 +11,7 @@
 
     <link href="/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- <link rel="stylesheet" type="text/css" href="http://bootswatch.com/cerulean/bootstrap.min.css"> -->
+    <!-- <link rel="stylesheet" type="text/css" href="/assets/css/material-kit.css"> -->
     <link rel="stylesheet" href="/bower_components/bootstrap-offcanvas/dist/css/bootstrap.offcanvas.css">
     <link rel="stylesheet" type="text/css" href="/css/style.css">
     @yield('styles')

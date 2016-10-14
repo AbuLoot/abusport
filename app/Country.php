@@ -12,4 +12,9 @@ class Country extends Model
     {
         return $this->hasMany('App\City');
     }
+
+    public function organizations()
+    {
+        return $this->hasMany('App\Organization');
+    }
 }
