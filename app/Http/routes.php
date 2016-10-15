@@ -102,7 +102,6 @@ Route::group(['prefix' => 'panel', 'middleware' => ['auth', 'role:area-admin']],
     Route::resource('admin-areas', 'AreaAdmin\AreaController');
     Route::resource('admin-fields', 'AreaAdmin\FieldController');
     Route::resource('admin-schedules', 'AreaAdmin\ScheduleController');
-    Route::resource('admin-options', 'AreaAdmin\OptionController');
     Route::resource('admin-matches', 'AreaAdmin\MatchController');
 });
 

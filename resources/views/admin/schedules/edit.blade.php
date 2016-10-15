@@ -33,6 +33,30 @@
               </select>
             </div>
             <div class="form-group">
+              <label for="start_time">Начало времени</label>
+              <select id="start_time" name="start_time" class="form-control">
+                @foreach(trans('data.hours') as $hour)
+                  @if ($schedule->start_time === $hour)
+                    <option value="{{ $hour }}" selected>{{ $hour }}</option>
+                  @else
+                    <option value="{{ $hour }}">{{ $hour }}</option>
+                  @endif
+                @endforeach
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="end_time">Конец времени</label>
+              <select id="end_time" name="end_time" class="form-control">
+                @foreach(trans('data.hours') as $hour)
+                  @if ($schedule->end_time === $hour)
+                    <option value="{{ $hour }}" selected>{{ $hour }}</option>
+                  @else
+                    <option value="{{ $hour }}">{{ $hour }}</option>
+                  @endif
+                @endforeach
+              </select>
+            </div>
+            <div class="form-group">
               <label for="date">Дата</label>
               <input type="date" class="form-control" id="date" name="date" maxlength="5" value="{{ (old('date')) ? old('date') : $schedule->date }}">
             </div>

@@ -13,15 +13,24 @@ use App\Http\Controllers\Controller;
 
 class ScheduleController extends Controller
 {
+    protected $organization;
+
+    public function __construct()
+    {
+        $this->organization = Auth::user()->organization()->first();
+    }
+
     public function index()
     {
-        $organization = Auth::user()->organization()->first();
-        return view('area-admin.schedules.index', compact('schedules'));
+        $area = Area::where('org_id', $this->organization->id)->first();
+        $fields = $area->fields;
+
+        return view('area-admin.schedules.index', compact('area', 'fields'));
     }
 
     public function create()
     {
-    	$areas = Area::all();
+        $areas = Area::where('org_id', $this->organization->id)->get();
 
         return view('area-admin.schedules.create', compact('areas'));
     }
@@ -50,7 +59,7 @@ class ScheduleController extends Controller
 
     public function edit($id)
     {
-    	$areas = Area::all();
+        $areas = Area::where('org_id', $this->organization->id)->get();
         $schedule = Schedule::findOrFail($id);
 
         return view('area-admin.schedules.edit', compact('schedule', 'areas'));

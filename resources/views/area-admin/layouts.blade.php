@@ -68,16 +68,12 @@
 
     <main class="container">
       <ul class="nav nav-pills nav-justified">
+        <li @if (Request::is('panel/admin-matches', 'panel/admin-matches/*')) class="active" @endif><a href="/panel/admin-matches">Матчи</a></li>
         <li @if (Request::is('panel/admin-organization', 'panel/admin-organization/*')) class="active" @endif><a href="/panel/admin-organization">Организации</a></li>
         <li @if (Request::is('panel/admin-areas', 'panel/admin-areas/*')) class="active" @endif><a href="/panel/admin-areas">Площадки</a></li>
-        <li @if (Request::is('panel/admin-schedules', 'panel/admin-schedules/*')) class="active" @endif><a href="/panel/admin-schedules">Расписания</a></li>
         <li @if (Request::is('panel/admin-fields', 'panel/admin-fields/*')) class="active" @endif><a href="/panel/admin-fields">Поля</a></li>
-        <li @if (Request::is('panel/admin-options', 'panel/admin-options/*')) class="active" @endif><a href="/panel/admin-options">Опции</a></li>
-        <li @if (Request::is('panel/admin-matches', 'panel/admin-matches/*')) class="active" @endif><a href="/panel/admin-matches">Матчи</a></li>
-        <li @if (Request::is('panel/admin-lang', 'panel/admin-lang/*')) class="active" @endif><a href="#/panel/admin-lang">Языки</a></li>
-        <li @if (Request::is('panel/admin-settings', 'panel/admin-settings/*')) class="active" @endif><a href="#/panel/admin-settings">Настройки</a></li>
-      </ul>
-      <hr>
+        <li @if (Request::is('panel/admin-schedules', 'panel/admin-schedules/*')) class="active" @endif><a href="/panel/admin-schedules">Расписания</a></li>
+      </ul><hr>
 
       <div class="col-md-12">
         @yield('content')

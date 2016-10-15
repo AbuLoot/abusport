@@ -7,7 +7,7 @@
 
           @include('partials.alerts')
 
-          <form action="{{ route('admin.schedules.store') }}" method="post">
+          <form action="{{ route('panel.admin-schedules.store') }}" method="post">
             {!! csrf_field() !!}
             <div class="form-group">
               <label for="sort_id">Номер</label>
