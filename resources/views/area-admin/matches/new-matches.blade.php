@@ -54,7 +54,7 @@
                 @endif
                 <td class="text-right">
                   <a class="btn btn-primary btn-xs" href="{{ url('panel/admin-matches/'.$match->id.'/edit') }}" title="Запустить"><span class="glyphicon glyphicon-play"></span></a>
-                  <form method="POST" action="{{ url('panel/admin-matches/'.$match->id.'/destroy') }}" accept-charset="UTF-8" class="btn-delete">
+                  <form method="POST" action="{{ url('panel/admin-matches/'.$match->id) }}" accept-charset="UTF-8" class="btn-delete">
                     <input name="_method" type="hidden" value="DELETE">
                     <input name="_token" type="hidden" value="{{ csrf_token() }}">
                     <button type="submit" class="btn btn-danger btn-xs" onclick="return confirm('Удалить запись ({{ $match->id }})?')"><span class="glyphicon glyphicon-trash"></span></button>

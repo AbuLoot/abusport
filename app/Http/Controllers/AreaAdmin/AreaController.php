@@ -18,10 +18,16 @@ use App\Http\Controllers\Controller;
 
 class AreaController extends Controller
 {
+    protected $organization;
+
+    public function __construct()
+    {
+        $this->organization = Auth::user()->organization()->first();
+    }
+
     public function index()
     {
-        $organization = Auth::user()->organization()->first();
-        $areas = Area::where('org_id', $organization->id)->get();
+        $areas = Area::where('org_id', $this->organization->id)->get();
 
         return view('area-admin.areas.show', compact('organization', 'areas'));
     }
@@ -31,9 +37,7 @@ class AreaController extends Controller
         $sports = Sport::all();
         $cities = City::orderBy('sort_id')->get();
         $districts = District::orderBy('sort_id')->get();
-
-        $organization = Auth::user()->organization()->first();
-        $area = Area::where('id', $id)->where('org_id', $organization->id)->first();
+        $area = Area::where('id', $id)->where('org_id', $this->organization->id)->first();
 
         return view('area-admin.areas.edit', compact('sports', 'organization', 'cities', 'districts', 'area'));
     }

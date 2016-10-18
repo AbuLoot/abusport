@@ -170,63 +170,65 @@
 @section('scripts')
     <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
     <script>
-      var block = document.getElementById("chat");
-      block.scrollTop = block.scrollHeight;
+      // var socket = io(':6001'),
+          // user_id = '{{ Auth::id() }}';
 
-      var socket = io(':6001'),
-          user_id = '{{ Auth::id() }}',
-          channel = 'match-{{ $match->id }}';
+      // socket.on('connect', function() {
+      //   socket.emit('subscribe', channel)
+      // });
 
-      socket.on('connect', function() {
-        socket.emit('subscribe', channel)
-      });
+      // socket.on('error', function() {
+      //   console.warn('Error', error);
+      // });
 
-      socket.on('error', function() {
-        console.warn('Error', error);
-      });
+      // socket.on('message', function(message) {
+      //   console.log(message);
+      // });
 
-      socket.on('message', function(message) {
-        console.log(message);
-      });
+      // function appendMessage(data, mediaClass) {
+      //   $('.scroll-chat').append(
+      //     $('<div class="media">').append(
+      //       $('<div class="media-body">').append(
+      //         $('<h5 class="media-heading">').html("<a href='/user-profile/"+data.user_id+"'><b>"+data.fullname+"</b></a>"),
+      //         $('<p>').text(data.message)
+      //       )
+      //     ).addClass(mediaClass)
+      //   );
+      // }
 
-      function appendMessage(data, mediaClass) {
-        $('.scroll-chat').append(
-          $('<div class="media">').append(
-            $('<div class="media-body">').append(
-              $('<h5 class="media-heading">').html("<a href='/user-profile/"+data.user_id+"'><b>"+data.fullname+"</b></a>"),
-              $('<p>').text(data.message)
-            )
-          ).addClass(mediaClass)
-        );
-      }
-
-      socket.on(channel, function(data) {
-          appendMessage(data, 'text-right');
-      });
+      // socket.on(channel, function(data) {
+      //     appendMessage(data, 'text-right');
+      // });
 
       $('#store').click(function(e){
         e.preventDefault();
 
         var token = $('input[name="_token"]').val(),
-            number_of_players = $('#number_of_players').val();
+            sport_id = $('#sport_id').val(),
             area_id = $('#area_id').val(),
-            hours = $('name="hours[]"').val();
-
-        alert(number_of_players+'-'+area_id+'-'+hours);
+            number_of_players = $('#number_of_players').val(),
+            match_type = $('input[name="match_type"]').val(),
+            hours = $('input[name="hours[]"]').val();
 
         if (hours != '') {
           $.ajax({
             type: "POST",
             url: '{!! URL::to("store-match") !!}',
             dataType: "json",
-            data: {'_token':token, 'hours':hours},
+            data: {
+              '_token':token,
+              'sport_id':sport_id,
+              'area_id':area_id,
+              'number_of_players':number_of_players,
+              'match_type':match_type,
+              'hours':hours
+            },
             success: function(data) {
               console.log(data);
-              // $('#message').val('');
             } 
           });
         } else {
-          alert("Please Add Message.");
+          alert("Пожалуйста выберите время для игры!");
         }
       });
 

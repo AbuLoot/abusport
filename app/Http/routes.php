@@ -106,6 +106,7 @@ Route::group(['prefix' => 'panel', 'middleware' => ['auth', 'role:area-admin']],
 
     Route::get('admin-matches/{time?}', 'AreaAdmin\MatchController@index');
     Route::get('admin-matches/{id}/edit', 'AreaAdmin\MatchController@edit');
+    Route::delete('admin-matches/{id}', 'AreaAdmin\MatchController@destroy');
 });
 
 
