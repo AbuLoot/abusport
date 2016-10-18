@@ -128,10 +128,16 @@
                       @else
                         <td>
                           <?php $game = false; ?>
-                          @foreach($field->matches->where('date', $day['year'])->where('status', 1) as $match)
+                          @foreach($field->matches->where('date', $day['year']) as $match)
                             @if ($match->start_time <= $hour AND $match->end_time >= $hour)
-                              <a href="{{ url('sport/match/'.$area->id.'/'.$match->id) }}">Игра {{ $match->id }}</a>
                               <?php $game = true; ?>
+                              @if ($match->status == 0)
+                                <span class="glyphicon glyphicon-refresh"></span>
+                                <span>В обработке</span>
+                              @else
+                                <span class="glyphicon glyphicon-ok"></span>
+                                <a href="{{ url('sport/match/'.$area->id.'/'.$match->id) }}">Игра {{ $match->id }}</a>
+                              @endif
                             @endif
                           @endforeach
 
@@ -155,8 +161,92 @@
         @endforeach
       </div>
       <div class="form-group text-center">
-        <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-time"></span> Забронировать время</button>
+        <button type="submit" id="store" class="btn btn-primary"><span class="glyphicon glyphicon-time"></span> Забронировать время</button>
       </div>
     </form>
 
+@endsection
+
+@section('scripts')
+    <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+    <script>
+      var block = document.getElementById("chat");
+      block.scrollTop = block.scrollHeight;
+
+      var socket = io(':6001'),
+          user_id = '{{ Auth::id() }}',
+          channel = 'match-{{ $match->id }}';
+
+      socket.on('connect', function() {
+        socket.emit('subscribe', channel)
+      });
+
+      socket.on('error', function() {
+        console.warn('Error', error);
+      });
+
+      socket.on('message', function(message) {
+        console.log(message);
+      });
+
+      function appendMessage(data, mediaClass) {
+        $('.scroll-chat').append(
+          $('<div class="media">').append(
+            $('<div class="media-body">').append(
+              $('<h5 class="media-heading">').html("<a href='/user-profile/"+data.user_id+"'><b>"+data.fullname+"</b></a>"),
+              $('<p>').text(data.message)
+            )
+          ).addClass(mediaClass)
+        );
+      }
+
+      socket.on(channel, function(data) {
+          appendMessage(data, 'text-right');
+      });
+
+      $('#store').click(function(e){
+        e.preventDefault();
+
+        var token = $('input[name="_token"]').val(),
+            number_of_players = $('#number_of_players').val();
+            area_id = $('#area_id').val(),
+            hours = $('name="hours[]"').val();
+
+        alert(number_of_players+'-'+area_id+'-'+hours);
+
+        if (hours != '') {
+          $.ajax({
+            type: "POST",
+            url: '{!! URL::to("store-match") !!}',
+            dataType: "json",
+            data: {'_token':token, 'hours':hours},
+            success: function(data) {
+              console.log(data);
+              // $('#message').val('');
+            } 
+          });
+        } else {
+          alert("Please Add Message.");
+        }
+      });
+
+      // $('form').on('submit', function() {
+      //   var text = $('#message').val(),
+      //       msg = {message: text};
+
+      //   socket.join(channel, function(error) {
+      //     socket.send(msg);
+      //     appendMessage(msg);
+      //   });
+
+      //   $('#message').val('');
+      //   return false;
+      // });
+
+      // socket.on('message', function(data) {
+      //   console.log('Message: ', data);
+      // }).on('server-info', function(data) {
+      //   console.log(data);
+      // });
+    </script>
 @endsection

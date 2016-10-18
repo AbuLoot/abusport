@@ -140,6 +140,5 @@
       // }).on('server-info', function(data) {
       //   console.log(data);
       // });
-
     </script>
 @endsection

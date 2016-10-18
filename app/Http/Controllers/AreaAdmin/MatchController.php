@@ -20,70 +20,66 @@ class MatchController extends Controller
         $this->organization = Auth::user()->organization()->first();
     }
 
-    public function index()
+    public function index($time = 'new-matches')
     {
         $area = Area::where('org_id', $this->organization->id)->first();
 
-        return view('area-admin.matches.index', compact('area'));
-    }
+        if ($time == 'new-matches') {
 
-    public function create()
-    {
-        $area = Area::where('org_id', $this->organization->id)->first();
+	        foreach ($area->fields as $field)
+	        {
+	        	$data = Match::where('field_id', $field->id)->where('date', '>=', date('Y-m-d'))->where('status', 0)->get();
+	        	$matches[$field->id] = $data;
+	        }
 
-        return view('area-admin.matches.create', compact('area'));
-    }
+	        return view('area-admin.matches.new-matches', compact('area', 'matches'));
+        }
+        elseif ($time == 'today') {
 
-    public function store(Request $request)
-    {
-        $this->validate($request, [
-            'field_id' => 'required|numeric',
-            'start_time' => 'required',
-            'end_time' => 'required',
-        ]);
+	        foreach ($area->fields as $field)
+	        {
+	        	$data = Match::where('field_id', $field->id)->where('date', '=', date('Y-m-d'))->where('status', 1)->get();
+	        	$matches[$field->id] = $data;
+	        }
+        }
+        elseif ($time == 'comming') {
 
-        $match = new Match;
-        $match->sort_id = ($request->sort_id > 0) ? $request->sort_id : $match->count() + 1;
-        $match->field_id = $request->field_id;
-        $match->start_time = $request->start_time;
-        $match->end_time = $request->end_time;
-        $match->date = $request->date;
-        $match->week = $request->week;
-        $match->price = $request->price;
-        $match->status = ($request->status == 'on') ? 1 : 0;
-        $match->save();
+	        foreach ($area->fields as $field)
+	        {
+	        	$data = Match::where('field_id', $field->id)->where('date', '>', date('Y-m-d'))->get();
+	        	$matches[$field->id] = $data;
+	        }
+        }
+        elseif ($time == 'past') {
 
-        return redirect('/admin/matches')->with('status', 'Запись добавлена!');
+	        foreach ($area->fields as $field)
+	        {
+	        	$data = Match::where('field_id', $field->id)->where('date', '<', date('Y-m-d'))->where('status', 1)->get();
+	        	$matches[$field->id] = $data;
+	        }
+        }
+        else {
+
+	        foreach ($area->fields as $field)
+	        {
+	        	$data = Match::where('field_id', $field->id)->get();
+	        	$matches[$field->id] = $data;
+	        }
+        }
+
+        return view('area-admin.matches.index', compact('area', 'matches'));
     }
 
     public function edit($id)
     {
-    	$areas = Area::all();
-        $match = Match::findOrFail($id);
-
-        return view('area-admin.matches.edit', compact('match', 'areas'));
-    }
-
-    public function update(Request $request, $id)
-    {
-        $this->validate($request, [
-            'field_id' => 'required|numeric',
-            'start_time' => 'required',
-            'end_time' => 'required',
-        ]);
+        $area = Area::where('org_id', $this->organization->id)->first();
 
         $match = Match::findOrFail($id);
-        $match->sort_id = ($request->sort_id > 0) ? $request->sort_id : $match->count() + 1;
-        $match->field_id = $request->field_id;
-        $match->start_time = $request->start_time;
-        $match->end_time = $request->end_time;
-        $match->date = $request->date;
-        $match->week = $request->week;
-        $match->price = $request->price;
-        $match->status = ($request->status == 'on') ? 1 : 0;
+        $match->status = 1;
         $match->save();
 
-        return redirect('/admin/matches')->with('status', 'Запись обновлена!');
+        return redirect()->back()->with('status', 'Матч Запущен!');
+        // return view('area-admin.matches.edit', compact('match', 'area'));
     }
 
     public function destroy($id)
@@ -91,6 +87,6 @@ class MatchController extends Controller
         $match = Match::find($id);
         $match->delete();
 
-        return redirect('/admin/matches')->with('status', 'Запись удалена!');
+        return redirect('panel/admin-matches')->with('status', 'Запись удалена!');
     }
 }

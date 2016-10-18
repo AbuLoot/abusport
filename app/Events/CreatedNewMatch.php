@@ -21,7 +21,7 @@ class CreatedNewMatch extends Event implements ShouldBroadcast
      */
     public function __construct(Match $match)
     {
-        $
+        
     }
 
     /**

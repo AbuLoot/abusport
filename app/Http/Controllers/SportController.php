@@ -9,6 +9,7 @@ use App\Area;
 use App\Match;
 use App\Schedule;
 use App\Http\Requests;
+use App\Event\CreatedNewMatch;
 
 class SportController extends Controller
 {
@@ -169,9 +170,6 @@ class SportController extends Controller
             return redirect()->back()->withInput()->withWarning('У вас недостаточно денег для создания матча');
         }
 
-        // $request->user()->balance = $request->user()->balance - $priceForEach;
-        // $request->user()->save();
-
         // Create match
         $match = new Match();
         $match->user_id = $request->user()->id;
@@ -184,6 +182,11 @@ class SportController extends Controller
         $match->price = $price;
         $match->status = 0;
         $match->save();
+
+        // event(new CreatedNewMatch);
+
+        $request->user()->balance = $request->user()->balance - $priceForEach;
+        $request->user()->save();
 
         return redirect()->back()->with('status', 'Запись добавлена!');
     }

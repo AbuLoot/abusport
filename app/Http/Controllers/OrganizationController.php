@@ -10,3 +10,4 @@ class OrganizationController extends Controller
 {
     //
 }
+

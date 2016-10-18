@@ -67,6 +67,7 @@ Route::group(['middleware' => 'auth'], function() {
     });
 });
 
+
 Route::get('sport/{sport}/{area_id}/{date?}', 'SportController@getMatches');
 
 
@@ -102,7 +103,9 @@ Route::group(['prefix' => 'panel', 'middleware' => ['auth', 'role:area-admin']],
     Route::resource('admin-areas', 'AreaAdmin\AreaController');
     Route::resource('admin-fields', 'AreaAdmin\FieldController');
     Route::resource('admin-schedules', 'AreaAdmin\ScheduleController');
-    Route::resource('admin-matches', 'AreaAdmin\MatchController');
+
+    Route::get('admin-matches/{time?}', 'AreaAdmin\MatchController@index');
+    Route::get('admin-matches/{id}/edit', 'AreaAdmin\MatchController@edit');
 });
 
 
