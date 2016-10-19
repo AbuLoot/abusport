@@ -232,54 +232,59 @@
 
         // Validation create match
         for (var i = 0; i < hours.length; i++) {
-          var data = hours[i].split(' ');
-          console.log(price[i]);
+          var time = hours[i].split(' ');
+          // console.log(price[i]);
 
           if (i >= 1) {
             var n = i - 1;
-            var pastData = hours[n].split(' ');
+            var pastTime = hours[n].split(' ');
 
-            if (data[0] != pastData[0]) {
+            if (time[0] != pastTime[0]) {
               alert('Матч должен состоятся в одном поле'.toUpperCase());
               $('input[name="hours[]"]:checked').prop('checked', false);
             }
 
-            if (data[1] != pastData[1]) {
+            if (time[1] != pastTime[1]) {
               alert('Матч должен состоятся в один день'.toUpperCase());
               $('input[name="hours[]"]:checked').prop('checked', false);
             }
 
-            var hour = data[2].split(':'),
-                pastHour = pastData[2].split(':');
+            var hour = time[2].split(':'),
+                pastHour = pastTime[2].split(':');
 
             pastHour[0] = +pastHour[0] + 1;
 
-            if (+hour[0] != +pastHour[0]) {
-              alert('Выберите время последовательно'.toUpperCase());
-              $('input[name="hours[]"]:checked').prop('checked', false);
-            }
+            // if (+hour[0] != +pastHour[0]) {
+            //   alert('Выберите время последовательно'.toUpperCase());
+            //   $('input[name="hours[]"]:checked').prop('checked', false);
+            // }
           }
         }
 
-        if (hours != '') {
-          // $.ajax({
-          //   type: "POST",
-          //   url: '{!! URL::to("store-match") !!}',
-          //   dataType: "json",
-          //   data: {
-          //     '_token':token,
-          //     'sport_id':sport_id,
-          //     'area_id':area_id,
-          //     'number_of_players':number_of_players,
-          //     'match_type':match_type,
-          //     'hours':hours
-          //   },
-          //   success: function(data) {
-          //     console.log(data);
-          //   } 
-          // });
+        // if (hours != '') {
+        if (hours) {
+          $.ajax({
+            type: "POST",
+            url: '/store-match-ajax',
+            dataType: "json",
+            data: {
+              '_token':token,
+              'sport_id':sport_id,
+              'area_id':area_id,
+              'number_of_players':number_of_players,
+              'match_type':match_type,
+              'hours':hours
+            },
+            success: function(data) {
+              if (data['hours'] != '') {
+                alert(data['hours'][0]);
+              } else {
+                console.log(data);
+              }
+            }
+          });
         } else {
-          alert("Пожалуйста выберите время для игры!");
+          alert("Выберите время для игры!");
         }
       });
 

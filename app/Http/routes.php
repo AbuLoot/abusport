@@ -48,6 +48,7 @@ Route::group(['middleware' => 'auth'], function() {
     // Match
     Route::get('create-match/{setDays?}', 'SportController@createMatch');
     Route::post('store-match', 'SportController@storeMatch');
+    Route::post('store-match-ajax', 'SportController@storeMatchAjax');
     Route::post('join-match/{match_id}', 'SportController@joinMatch');
     Route::post('leave-match/{match_id}', 'SportController@leaveMatch');
 

@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use Response;
+use Validator;
+
 use App\Sport;
 use App\Area;
 use App\Match;
@@ -113,6 +116,87 @@ class SportController extends Controller
         $days = $this->getDays($setDays);
 
         return view('board.create-match', compact('sports', 'areas', 'days', 'active_area'));
+    }
+
+    public function storeMatchAjax(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'sport_id' => 'required|numeric',
+            'area_id' => 'required|numeric',
+            'number_of_players' => 'required|numeric',
+            'hours' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors());
+        }
+
+        foreach ($request->hours as $key => $date_hour)
+        {
+            list($fields[], $date[], $hours[]) = explode(' ', $date_hour);
+
+            if ($key >= 1) {
+
+                $i = $key - 1;
+
+                if ($fields[$i] != $fields[$key]) {
+                    return response()->json(['Матч должен состоятся в одном поле']);
+                }
+
+                if ($date[$i] != $date[$key]) {
+                    return response()->json(['Матч должен состоятся в один день']);
+                }
+
+                list($num_hour, $zeros) = explode(':', $hours[$i]);
+                $num_hour = ($num_hour < 9) ? '0'.($num_hour + 1) : $num_hour + 1;
+
+                if ($num_hour.':'.$zeros != $hours[$key]) {
+                    return response()->json(['Выберите время последовательно']);
+                }
+            }
+        }
+
+        $day = $this->getDays(1, $date[0]);
+        $schedules = Schedule::where('field_id', $fields[0])->where('week', (int) $day[0]['index_weekday'])->get();
+
+        $price = 0;
+
+        foreach ($schedules as $schedule)
+        {
+            foreach ($hours as $hour)
+            {
+                if ($schedule->start_time <= $hour AND $schedule->end_time >= $hour) {
+                    $price += $schedule->price;
+                }
+            }
+        }
+
+        // Check balance for create match
+        $price_for_each = $price / $request->number_of_players;
+
+        if ($price_for_each > $request->user()->balance) {
+            return redirect()->back()->withInput()->withWarning('У вас недостаточно денег для создания матча');
+        }
+
+        // Create match
+        $match = new Match();
+        $match->user_id = $request->user()->id;
+        $match->field_id = $fields[0];
+        $match->start_time = $hours[0];
+        $match->end_time = last($hours);
+        $match->date = $date[0];
+        $match->match_type = $request->match_type;
+        $match->number_of_players = $request->number_of_players;
+        $match->price = $price;
+        $match->status = 0;
+        $match->save();
+
+        // event(new CreatedNewMatch);
+
+        $request->user()->balance = $request->user()->balance - $price_for_each;
+        $request->user()->save();
+
+        return redirect()->back()->with('status', 'Запись добавлена!');
     }
 
     public function storeMatch(Request $request)
