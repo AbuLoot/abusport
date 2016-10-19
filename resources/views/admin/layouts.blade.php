@@ -57,7 +57,7 @@
         <!-- Search form -->
         <form class="navbar-form navbar-right hidden-sm hidden-xs">
           <div class="input-group">
-            <input type="text" class="form-control" placeholder="Search for...">
+            <input type="search" class="form-control" placeholder="Search for...">
             <span class="input-group-btn">
               <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span></button>
             </span>

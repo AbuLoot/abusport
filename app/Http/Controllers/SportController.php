@@ -164,9 +164,9 @@ class SportController extends Controller
         }
 
         // Check balance for create match
-        $priceForEach = $price / $request->number_of_players;
+        $price_for_each = $price / $request->number_of_players;
 
-        if ($priceForEach > $request->user()->balance) {
+        if ($price_for_each > $request->user()->balance) {
             return redirect()->back()->withInput()->withWarning('У вас недостаточно денег для создания матча');
         }
 
@@ -185,7 +185,7 @@ class SportController extends Controller
 
         // event(new CreatedNewMatch);
 
-        $request->user()->balance = $request->user()->balance - $priceForEach;
+        $request->user()->balance = $request->user()->balance - $price_for_each;
         $request->user()->save();
 
         return redirect()->back()->with('status', 'Запись добавлена!');

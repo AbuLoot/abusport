@@ -135,7 +135,7 @@
                                 <span class="glyphicon glyphicon-refresh"></span>
                                 <span>В обработке</span>
                               @else
-                                <span class="glyphicon glyphicon-ok"></span>
+                                <span class="glyphicon glyphicon-time"></span>
                                 <a href="{{ url('sport/match/'.$area->id.'/'.$match->id) }}">Игра {{ $match->id }}</a>
                               @endif
                             @endif
@@ -164,7 +164,6 @@
         <button type="submit" id="store" class="btn btn-primary"><span class="glyphicon glyphicon-time"></span> Забронировать время</button>
       </div>
     </form>
-
 @endsection
 
 @section('scripts')
@@ -208,25 +207,77 @@
             area_id = $('#area_id').val(),
             number_of_players = $('#number_of_players').val(),
             match_type = $('input[name="match_type"]').val(),
-            hours = $('input[name="hours[]"]').val();
+            hours = new Array(),
+            price = new Array(),
+            sum = 0;
+            priceForEach = 0,
+            balance = $('#balance').data('balance'),
+
+        $('input[name="hours[]"]:checked').each(function() {
+          hours.push($(this).val());
+          price.push($(this).data('price'));
+        });
+
+        // Check balance for payment
+        for (var i = price.length; i--;) {
+          sum += price[i];
+        }
+
+        priceForEach = sum / number_of_players;
+
+        if (priceForEach > balance) {
+          alert('У вас недостаточно денег для создания матча'.toUpperCase());
+          $('input[name="hours[]"]:checked').prop('checked', false);
+        }
+
+        // Validation create match
+        for (var i = 0; i < hours.length; i++) {
+          var data = hours[i].split(' ');
+          console.log(price[i]);
+
+          if (i >= 1) {
+            var n = i - 1;
+            var pastData = hours[n].split(' ');
+
+            if (data[0] != pastData[0]) {
+              alert('Матч должен состоятся в одном поле'.toUpperCase());
+              $('input[name="hours[]"]:checked').prop('checked', false);
+            }
+
+            if (data[1] != pastData[1]) {
+              alert('Матч должен состоятся в один день'.toUpperCase());
+              $('input[name="hours[]"]:checked').prop('checked', false);
+            }
+
+            var hour = data[2].split(':'),
+                pastHour = pastData[2].split(':');
+
+            pastHour[0] = +pastHour[0] + 1;
+
+            if (+hour[0] != +pastHour[0]) {
+              alert('Выберите время последовательно'.toUpperCase());
+              $('input[name="hours[]"]:checked').prop('checked', false);
+            }
+          }
+        }
 
         if (hours != '') {
-          $.ajax({
-            type: "POST",
-            url: '{!! URL::to("store-match") !!}',
-            dataType: "json",
-            data: {
-              '_token':token,
-              'sport_id':sport_id,
-              'area_id':area_id,
-              'number_of_players':number_of_players,
-              'match_type':match_type,
-              'hours':hours
-            },
-            success: function(data) {
-              console.log(data);
-            } 
-          });
+          // $.ajax({
+          //   type: "POST",
+          //   url: '{!! URL::to("store-match") !!}',
+          //   dataType: "json",
+          //   data: {
+          //     '_token':token,
+          //     'sport_id':sport_id,
+          //     'area_id':area_id,
+          //     'number_of_players':number_of_players,
+          //     'match_type':match_type,
+          //     'hours':hours
+          //   },
+          //   success: function(data) {
+          //     console.log(data);
+          //   } 
+          // });
         } else {
           alert("Пожалуйста выберите время для игры!");
         }

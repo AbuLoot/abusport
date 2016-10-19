@@ -69,7 +69,7 @@
         <!-- Search form -->
         <form class="navbar-form navbar-right hidden-sm hidden-xs">
           <div class="input-group">
-            <input type="text" class="form-control" placeholder="Поиск...">
+            <input type="search" class="form-control" placeholder="Поиск...">
             <span class="input-group-btn">
               <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-search"></span></button>
             </span>
@@ -95,7 +95,7 @@
 
           <ul class="nav nav-pills nav-stacked">
             @if (Auth::check())
-              <li><a href="/my-balance">Баланс <small class="text-left text-success">{{ Auth::user()->balance }}тг</small></a></li>
+              <li><a href="/my-balance">Баланс <small data-balance="{{ Auth::user()->balance }}" id="balance" class="text-left text-success">{{ Auth::user()->balance }}тг</small></a></li>
               <li><a href="/my-profile">Мой профиль</a></li>
               <li><a href="/my-matches">Мои матчи <span class="badge">{{ Auth::user()->matches()->count() }}</span></a></li>
               <li><a href="/friends">Мои друзья <span class="badge">{{ Auth::user()->friends()->count() }}</span></a></li>
