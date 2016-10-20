@@ -7,18 +7,18 @@ var request = require('request'),
 	redis = new Redis;
 
 // Middleware
-io.use(function(socket, next) {
+// io.use(function(socket, next) {
 
-	request.get({
-		url : 'http://localhost:8000/ws/check-auth',
-		headers : {cookie : socket.request.headers.cookie},
-		json : true
-	}, function(error, response, json) {
-		console.log(json);
-		return json.auth ? next() : next(new Error('Auth error'));
-	});
+// 	request.get({
+// 		url : 'http://localhost:8000/ws/check-auth',
+// 		headers : {cookie : socket.request.headers.cookie},
+// 		json : true
+// 	}, function(error, response, json) {
+// 		console.log(json);
+// 		return json.auth ? next() : next(new Error('Auth error'));
+// 	});
 
-});
+// });
 
 io.on('connection', function(socket) {
 	socket.on('subscribe', function(channel) {

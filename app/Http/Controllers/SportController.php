@@ -127,8 +127,20 @@ class SportController extends Controller
             'hours' => 'required',
         ]);
 
+        $messages = [];
+        $index = 0;
+
         if ($validator->fails()) {
-            return response()->json($validator->errors());
+
+            foreach ($validator->errors()->messages() as $message)
+            {
+                foreach ($message as $value)
+                {
+                    $messages['errors'][$index++] = $value;
+                }
+            }
+
+            return response()->json($messages);
         }
 
         foreach ($request->hours as $key => $date_hour)
@@ -138,20 +150,22 @@ class SportController extends Controller
             if ($key >= 1) {
 
                 $i = $key - 1;
-
-                if ($fields[$i] != $fields[$key]) {
-                    return response()->json(['Матч должен состоятся в одном поле']);
-                }
-
-                if ($date[$i] != $date[$key]) {
-                    return response()->json(['Матч должен состоятся в один день']);
-                }
-
                 list($num_hour, $zeros) = explode(':', $hours[$i]);
                 $num_hour = ($num_hour < 9) ? '0'.($num_hour + 1) : $num_hour + 1;
 
+                if ($fields[$i] != $fields[$key]) {
+                    $messages['errors'][$index++] = 'Матч должен состоятся в одном поле';
+                    return response()->json($messages);
+                }
+
+                if ($date[$i] != $date[$key]) {
+                    $messages['errors'][$index++] = 'Матч должен состоятся в один день';
+                    return response()->json($messages);
+                }
+
                 if ($num_hour.':'.$zeros != $hours[$key]) {
-                    return response()->json(['Выберите время последовательно']);
+                    $messages['errors'][$index++] = 'Выберите время последовательно';
+                    return response()->json($messages);
                 }
             }
         }
@@ -175,13 +189,28 @@ class SportController extends Controller
         $price_for_each = $price / $request->number_of_players;
 
         if ($price_for_each > $request->user()->balance) {
-            return redirect()->back()->withInput()->withWarning('У вас недостаточно денег для создания матча');
+            $messages['errors'][$index++] = 'У вас недостаточно денег для создания матча';
+            return response()->json($messages);
+        }
+
+        $area = Area::find($area_id);
+
+        if (is_null($area)) {
+            $messages['errors'][$index++] = 'Не существующие данные';
+            return response()->json($messages);
+        }
+
+        $field = $area->fields()->where('id', $fields[0])->get();
+
+        if ($field->isEmpty()) {
+            $messages['errors'][$index++] = 'Не существующие данные';
+            return response()->json($messages);
         }
 
         // Create match
         $match = new Match();
         $match->user_id = $request->user()->id;
-        $match->field_id = $fields[0];
+        $match->field_id = $field->id;
         $match->start_time = $hours[0];
         $match->end_time = last($hours);
         $match->date = $date[0];
@@ -191,12 +220,10 @@ class SportController extends Controller
         $match->status = 0;
         $match->save();
 
-        // event(new CreatedNewMatch);
+        event(new CreatedNewMatch($match, $area->id));
 
-        $request->user()->balance = $request->user()->balance - $price_for_each;
-        $request->user()->save();
-
-        return redirect()->back()->with('status', 'Запись добавлена!');
+        $messages['success'][$index++] = 'Ваша заявка принята для обработки';
+        return response()->json($messages);
     }
 
     public function storeMatch(Request $request)
@@ -232,6 +259,8 @@ class SportController extends Controller
             }
         }
 
+        dd($validator->errors());
+
         $day = $this->getDays(1, $date[0]);
         $schedules = Schedule::where('field_id', $fields[0])->where('week', (int) $day[0]['index_weekday'])->get();
 
@@ -267,10 +296,7 @@ class SportController extends Controller
         $match->status = 0;
         $match->save();
 
-        // event(new CreatedNewMatch);
-
-        $request->user()->balance = $request->user()->balance - $price_for_each;
-        $request->user()->save();
+        event(new CreatedNewMatch);
 
         return redirect()->back()->with('status', 'Запись добавлена!');
     }
@@ -284,6 +310,9 @@ class SportController extends Controller
             ->where('date', '>=', $date)
             ->where('id', $request->match_id)
             ->firstOrFail();
+
+        // $request->user()->balance = $request->user()->balance - $price_for_each;
+        // $request->user()->save();
 
         $match->users()->attach($request->user()->id);
 

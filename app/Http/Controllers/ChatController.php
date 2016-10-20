@@ -27,9 +27,7 @@ class ChatController extends Controller
         $chat->message = $request->message;
         $chat->save();
 
-        event(
-            new AddedNewMessage($chat)
-        );
+        event(new AddedNewMessage($chat));
 
         return response()->json([]);
     }

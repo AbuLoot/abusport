@@ -125,7 +125,8 @@ return [
     |
     */
 
-    'attributes'           => [
+    'attributes'    => [
+        'number_of_players' => 'для выбора "КОЛИЧЕСТВО ИГРОКОВ"',
         'hours'   => 'для выбора "ВРЕМЕНИ"',
         'surname'   => '"Фамилия"',
         'name'      => '"Имя"',

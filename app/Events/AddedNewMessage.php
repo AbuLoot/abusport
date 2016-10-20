@@ -20,7 +20,7 @@ class AddedNewMessage extends Event implements ShouldBroadcast
      *
      * @return void
      */
-    public function __construct(Chat $message)
+    public function __construct(Chat $message, $area_id)
     {
         $this->message = $message;
     }

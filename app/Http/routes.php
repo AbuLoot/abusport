@@ -28,6 +28,25 @@ Route::get('sport/{sport}', 'SportController@getAreas');
 Route::get('sport/map/{sport}', 'SportController@getAreasWithMap');
 Route::get('sport/calendar/{sport}/{area_id}/{setDays?}', 'SportController@getMatchesWithCalendar');
 
+Route::get('test', function() {
+
+    $index = 0;
+    $area = \App\Area::find(1);
+
+    if (is_null($area)) {
+        $messages['errors'][$index++] = 'Не существующие данные';
+        dd($messages);
+    }
+
+        $field = $area->fields()->where('id', 3)->get();
+
+
+    if ($field->isEmpty()) {
+        $messages['errors'][$index++] = 'Не существующие данные';
+        dd($messages);
+    }
+});
+
 Route::group(['middleware' => 'auth'], function() {
 
     // Profile
@@ -55,14 +74,13 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('sport/match/{sport_id}/{match_id}/', 'SportController@getMatch');
     Route::get('sport/match-chat/{sport_id}/{match_id}/', 'SportController@getChat');
 
+    // Real-time request
     Route::post('chat/message/{match_id}', 'ChatController@postMessage');
 
-    // Real-time chat
     Route::get('ws/check-auth', function () {
         return response()->json(['auth' => true]);
     });
 
-    // Route::get('ws/check-sub/{channel}', 'ChatController@checkChannel');
     Route::get('ws/check-sub/{channel}', function ($channel) {
         return response()->json(['can' => true]);
     });

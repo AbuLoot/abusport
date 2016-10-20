@@ -169,36 +169,27 @@
 @section('scripts')
     <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
     <script>
-      // var socket = io(':6001'),
-          // user_id = '{{ Auth::id() }}';
+      var socket = io(':6001'),
+          user_id = '{{ Auth::id() }}',
+          channel = '{{ $active_area->sport->id.$active_area->id }}';
 
-      // socket.on('connect', function() {
-      //   socket.emit('subscribe', channel)
-      // });
+      socket.on('connect', function() {
+        socket.emit('subscribe', channel)
+      });
 
-      // socket.on('error', function() {
-      //   console.warn('Error', error);
-      // });
+      socket.on('error', function() {
+        console.warn('Error', error);
+      });
 
-      // socket.on('message', function(message) {
-      //   console.log(message);
-      // });
+      socket.on('message', function(message) {
+        console.log(message);
+      });
 
-      // function appendMessage(data, mediaClass) {
-      //   $('.scroll-chat').append(
-      //     $('<div class="media">').append(
-      //       $('<div class="media-body">').append(
-      //         $('<h5 class="media-heading">').html("<a href='/user-profile/"+data.user_id+"'><b>"+data.fullname+"</b></a>"),
-      //         $('<p>').text(data.message)
-      //       )
-      //     ).addClass(mediaClass)
-      //   );
-      // }
+      socket.on(channel, function(data) {
+          console.log('yes '+data);
+      });
 
-      // socket.on(channel, function(data) {
-      //     appendMessage(data, 'text-right');
-      // });
-
+      // Create match
       $('#store').click(function(e){
         e.preventDefault();
 
@@ -211,7 +202,7 @@
             price = new Array(),
             sum = 0;
             priceForEach = 0,
-            balance = $('#balance').data('balance'),
+            balance = $('#balance').data('balance');
 
         $('input[name="hours[]"]:checked').each(function() {
           hours.push($(this).val());
@@ -233,7 +224,6 @@
         // Validation create match
         for (var i = 0; i < hours.length; i++) {
           var time = hours[i].split(' ');
-          // console.log(price[i]);
 
           if (i >= 1) {
             var n = i - 1;
@@ -254,15 +244,14 @@
 
             pastHour[0] = +pastHour[0] + 1;
 
-            // if (+hour[0] != +pastHour[0]) {
-            //   alert('Выберите время последовательно'.toUpperCase());
-            //   $('input[name="hours[]"]:checked').prop('checked', false);
-            // }
+            if (+hour[0] != +pastHour[0]) {
+              alert('Выберите время последовательно'.toUpperCase());
+              $('input[name="hours[]"]:checked').prop('checked', false);
+            }
           }
         }
 
-        // if (hours != '') {
-        if (hours) {
+        if (hours != '') {
           $.ajax({
             type: "POST",
             url: '/store-match-ajax',
@@ -276,10 +265,13 @@
               'hours':hours
             },
             success: function(data) {
-              if (data['hours'] != '') {
-                alert(data['hours'][0]);
+              if (data['errors'] != undefined) {
+                for (var e = 0; e < data['errors'].length; e++) {
+                  alert(data['errors'][e]);
+                  console.log(data['errors']);
+                }
               } else {
-                console.log(data);
+                alert(data['success']);
               }
             }
           });
@@ -288,23 +280,5 @@
         }
       });
 
-      // $('form').on('submit', function() {
-      //   var text = $('#message').val(),
-      //       msg = {message: text};
-
-      //   socket.join(channel, function(error) {
-      //     socket.send(msg);
-      //     appendMessage(msg);
-      //   });
-
-      //   $('#message').val('');
-      //   return false;
-      // });
-
-      // socket.on('message', function(data) {
-      //   console.log('Message: ', data);
-      // }).on('server-info', function(data) {
-      //   console.log(data);
-      // });
     </script>
 @endsection
