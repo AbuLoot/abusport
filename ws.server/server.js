@@ -22,20 +22,24 @@ var request = require('request'),
 
 io.on('connection', function(socket) {
 	socket.on('subscribe', function(channel) {
-		console.log('I want to subscribe on:', channel);
+		console.log('Subscribe on:', channel);
 
-		request.get({
-			url : 'http://localhost:8000/ws/check-sub/' + channel,
-			headers : {cookie : socket.request.headers.cookie},
-			json : true
-		}, function(error, response, json) {
-			if (json.can) {
-				socket.join(channel, function(error) {
-					socket.send('Join to ' + channel);
-				});
-				return;
-			}
+		socket.join(channel, function(error) {
+			socket.send('Join to ' + channel);
 		});
+
+		// request.get({
+		// 	url : 'http://localhost:8000/ws/check-sub/' + channel,
+		// 	headers : {cookie : socket.request.headers.cookie},
+		// 	json : true
+		// }, function(error, response, json) {
+		// 	if (json.can) {
+		// 		socket.join(channel, function(error) {
+		// 			socket.send('Join to ' + channel);
+		// 		});
+		// 		return;
+		// 	}
+		// });
 	});
 });
 
@@ -43,11 +47,11 @@ redis.psubscribe('*', function(error, count) {
 	// 
 });
 
-redis.on('pmessage', function (pattern, channel, message) {
+redis.on('pmessage', function (subscribed, channel, message) {
 
 	message = JSON.parse(message);
     console.log(message);
+
 	io.to(channel)
-	  .emit(channel, message.data);
-	// channel:message.event
+		.emit(channel, message.data);
 });

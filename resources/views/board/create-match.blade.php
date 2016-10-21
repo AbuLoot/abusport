@@ -171,7 +171,7 @@
     <script>
       var socket = io(':6001'),
           user_id = '{{ Auth::id() }}',
-          channel = '{{ $active_area->sport->id.$active_area->id }}';
+          channel = 'area-{{ $active_area->id }}';
 
       socket.on('connect', function() {
         socket.emit('subscribe', channel)
@@ -186,7 +186,7 @@
       });
 
       socket.on(channel, function(data) {
-          console.log('yes '+data);
+          console.log(data.match);
       });
 
       // Create match
@@ -267,11 +267,11 @@
             success: function(data) {
               if (data['errors'] != undefined) {
                 for (var e = 0; e < data['errors'].length; e++) {
-                  alert(data['errors'][e]);
+                  alert(data['errors'][e].toUpperCase());
                   console.log(data['errors']);
                 }
               } else {
-                alert(data['success']);
+                console.log(data['success']);
               }
             }
           });

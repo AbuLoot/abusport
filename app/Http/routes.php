@@ -28,25 +28,6 @@ Route::get('sport/{sport}', 'SportController@getAreas');
 Route::get('sport/map/{sport}', 'SportController@getAreasWithMap');
 Route::get('sport/calendar/{sport}/{area_id}/{setDays?}', 'SportController@getMatchesWithCalendar');
 
-Route::get('test', function() {
-
-    $index = 0;
-    $area = \App\Area::find(1);
-
-    if (is_null($area)) {
-        $messages['errors'][$index++] = 'Не существующие данные';
-        dd($messages);
-    }
-
-        $field = $area->fields()->where('id', 3)->get();
-
-
-    if ($field->isEmpty()) {
-        $messages['errors'][$index++] = 'Не существующие данные';
-        dd($messages);
-    }
-});
-
 Route::group(['middleware' => 'auth'], function() {
 
     // Profile

@@ -12,7 +12,7 @@ use App\Area;
 use App\Match;
 use App\Schedule;
 use App\Http\Requests;
-use App\Event\CreatedNewMatch;
+use App\Events\CreatedNewMatch;
 
 class SportController extends Controller
 {
@@ -193,14 +193,14 @@ class SportController extends Controller
             return response()->json($messages);
         }
 
-        $area = Area::find($area_id);
+        $area = Area::find($request->area_id);
 
         if (is_null($area)) {
             $messages['errors'][$index++] = 'Не существующие данные';
             return response()->json($messages);
         }
 
-        $field = $area->fields()->where('id', $fields[0])->get();
+        $field = $area->fields()->where('id', (int) $fields[0])->get();
 
         if ($field->isEmpty()) {
             $messages['errors'][$index++] = 'Не существующие данные';
@@ -210,7 +210,7 @@ class SportController extends Controller
         // Create match
         $match = new Match();
         $match->user_id = $request->user()->id;
-        $match->field_id = $field->id;
+        $match->field_id = $fields[0];
         $match->start_time = $hours[0];
         $match->end_time = last($hours);
         $match->date = $date[0];
@@ -220,7 +220,7 @@ class SportController extends Controller
         $match->status = 0;
         $match->save();
 
-        event(new CreatedNewMatch($match, $area->id));
+        event(new CreatedNewMatch($match));
 
         $messages['success'][$index++] = 'Ваша заявка принята для обработки';
         return response()->json($messages);
