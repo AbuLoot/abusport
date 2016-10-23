@@ -89,9 +89,9 @@
                   </th>
                   @foreach($days as $day)
                     @if ($current_date == $day['year'])
-                      <th class="text-center bg-info">{{ $day['day'] }}<br>{{$day['weekday'] }}</th>
+                      <th class="text-center bg-info" @if (Request::is('create-match/1', 'create-match', 'create-match/3')) colspan="2" @endif>{{ $day['day'] }}<br>{{$day['weekday'] }}<br></th>
                     @else
-                      <th class="text-center">{{ $day['day'] }}<br>{{$day['weekday'] }}</th>
+                      <th class="text-center" @if (Request::is('create-match/1', 'create-match', 'create-match/3')) colspan="2" @endif>{{ $day['day'] }}<br>{{$day['weekday'] }}<br></th>
                     @endif
                   @endforeach
                 </tr>
@@ -103,6 +103,15 @@
                     <td class="hours"><span>{{ $hour }}</span></td>
 
                     @foreach($days as $day)
+                      @if (Request::is('create-match/1', 'create-match', 'create-match/3'))
+                        <td>
+                          @foreach($field->schedules->where('week', (int) $day['index_weekday']) as $schedule)
+                            @if ($schedule->start_time <= $hour AND $schedule->end_time >= $hour)
+                              {{ $schedule->price }} тг
+                            @endif
+                          @endforeach
+                        </td>
+                      @endif
 
                       @if ($current_date >= $day['year'] AND $current_hour >= $hour)
                         <?php $game = false; ?>
@@ -127,7 +136,7 @@
                             <?php $game = true; ?>
                             @if ($match->status == 0)
                               <td>
-                                <span class="glyphicon glyphicon-refresh spin"></span>
+                                <span class="glyphicon glyphicon-refresh"></span>
                                 <span>В обработке</span>
                               </td>
                             @else

@@ -196,14 +196,14 @@ class SportController extends Controller
         $area = Area::find($request->area_id);
 
         if (is_null($area)) {
-            $messages['errors'][$index++] = 'Не существующие данные';
+            $messages['errors'][$index++] = 'Нет данных';
             return response()->json($messages);
         }
 
         $field = $area->fields()->where('id', (int) $fields[0])->get();
 
         if ($field->isEmpty()) {
-            $messages['errors'][$index++] = 'Не существующие данные';
+            $messages['errors'][$index++] = 'Нет данных';
             return response()->json($messages);
         }
 
@@ -258,8 +258,6 @@ class SportController extends Controller
                 }
             }
         }
-
-        dd($validator->errors());
 
         $day = $this->getDays(1, $date[0]);
         $schedules = Schedule::where('field_id', $fields[0])->where('week', (int) $day[0]['index_weekday'])->get();

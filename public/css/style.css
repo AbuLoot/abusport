@@ -170,6 +170,23 @@ td.status-matches > div > label {
   vertical-align: bottom;
   border-bottom: 2px solid #ddd;
 }
+.table-bordered>thead>tr>th.empty-th {
+  border: 0;
+}
+.table>tbody>tr>td.hours {
+  position: relative;
+  border: 0;
+  padding: 0;
+}
+.table>tbody>tr>td.hours>span {
+  position: absolute;
+  right: 8px;
+  margin-top: -9px;
+}
+.spin {
+  -webkit-animation: spin 2s infinite linear;
+  animation: spin 2s infinite linear;
+}
 
 /* Chat */
 .scroll-chat {
