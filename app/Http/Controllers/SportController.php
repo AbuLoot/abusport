@@ -281,6 +281,25 @@ class SportController extends Controller
             return redirect()->back()->withInput()->withWarning('У вас недостаточно денег для создания матча');
         }
 
+        // Check area
+        $area = Area::find($request->area_id);
+
+        if (is_null($area)) {
+            $messages['errors'][$index++] = 'Нет данных';
+            return response()->json($messages);
+        }
+
+        // Check field
+        $field = $area->fields()->where('id', (int) $fields[0])->get();
+
+        if ($field->isEmpty()) {
+            $messages['errors'][$index++] = 'Нет данных';
+            return response()->json($messages);
+        }
+
+        // Check match
+        
+
         // Create match
         $match = new Match();
         $match->user_id = $request->user()->id;

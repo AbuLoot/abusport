@@ -34,6 +34,17 @@ class CreatedNewMatch extends Event implements ShouldBroadcast
         return ['area-'.$this->match->field->area->id];
     }
 
+    public function broadcastWith()
+    {
+        return [
+            'field_id' => $this->match->field_id,
+            'start_time' => $this->match->start_time,
+            'end_time' => $this->match->end_time,
+            'date' => $this->match->date,
+            'match_type' => $this->match->match_type,
+        ];
+    }
+
     public function broadcastAs()
     {
         return 'CreatedNewMatch';

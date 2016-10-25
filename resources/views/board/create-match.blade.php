@@ -69,6 +69,7 @@
         <?php $current_hour = date('H').':00'; ?>
         <?php $current_week = (int) date('w'); ?>
         <?php $current_date = date('Y-m-d'); ?>
+        <?php $id = null; ?>
 
         @foreach($active_area->fields as $field)
           <h3>{{ $field->title }}</h3>
@@ -85,7 +86,7 @@
               <thead>
                 <tr>
                   <th class="empty-th text-center h3">
-                    <span class="glyphicon glyphicon-time"></span><br>&nbsp;
+                    <span class="glyphicon glyphicon-time"></span>
                   </th>
                   @foreach($days as $day)
                     @if ($current_date == $day['year'])
@@ -97,7 +98,7 @@
                 </tr>
               </thead>
               <tbody>
-                @foreach(trans('data.hours') as $hour)
+                @foreach(trans('data.hours') as $hour_key => $hour)
                   @continue($hour < $active_area->start_time)
                   <tr>
                     <td class="hours"><span>{{ $hour }}</span></td>
@@ -141,10 +142,11 @@
 
                         @if ($game == false)
                           @foreach($field->schedules->where('week', (int) $day['index_weekday']) as $schedule)
+                            <?php $id = $field->id.'-'.$day['year'].'-'.$hour_key; ?>
                             @if ($schedule->start_time <= $hour AND $schedule->end_time >= $hour)
-                              <td>
+                              <td id="td-{{ $id }}">
                                 <label class="checkbox-inline text-info">
-                                  <input type="checkbox" name="hours[]" data-price="{{ $schedule->price }}" value="{{ $field->id.' '.$day['year'].' '.$hour }}"> Купить
+                                  <input type="checkbox" name="hours[]" data-price="{{ $schedule->price }}"  data-id="{{ $id }}" value="{{ $field->id.' '.$day['year'].' '.$hour }}"> Купить
                                 </label>
                               </td>
                             @endif
@@ -160,7 +162,7 @@
         @endforeach
       </div>
       <div class="form-group text-center">
-        <button type="submit" id="store" class="btn btn-primary"><span class="glyphicon glyphicon-time"></span> Забронировать время</button>
+        <button type="submit" id="store" data-loading-text="Идет Бронирование..." class="btn btn-primary"><span class="glyphicon glyphicon-time"></span> Забронировать время</button>
       </div>
     </form>
 @endsection
@@ -169,7 +171,6 @@
     <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
     <script>
       var socket = io(':6001'),
-          user_id = '{{ Auth::id() }}',
           channel = 'area-{{ $active_area->id }}';
 
       socket.on('connect', function() {
@@ -185,7 +186,9 @@
       });
 
       socket.on(channel, function(data) {
-          console.log(data.match);
+        var start_time = data.start_time.split(':');
+        $('#td-'+data.field_id+'-'+data.date+'-'+start_time[0]).empty().append('<span class="glyphicon glyphicon-refresh spin"></span> <span>В обработке</span>');
+        console.log(data);
       });
 
       // Create match
@@ -193,12 +196,13 @@
         e.preventDefault();
 
         var token = $('input[name="_token"]').val(),
-            sport_id = $('#sport_id').val(),
-            area_id = $('#area_id').val(),
-            number_of_players = $('#number_of_players').val(),
-            match_type = $('input[name="match_type"]').val(),
+            sportId = $('#sport_id').val(),
+            areaId = $('#area_id').val(),
+            numberOfPlayers = $('#number_of_players').val(),
+            matchType = $('input[name="match_type"]').val(),
             hours = new Array(),
             price = new Array(),
+            dataId = new Array(),
             sum = 0;
             priceForEach = 0,
             balance = $('#balance').data('balance');
@@ -206,6 +210,7 @@
         $('input[name="hours[]"]:checked').each(function() {
           hours.push($(this).val());
           price.push($(this).data('price'));
+          dataId.push($(this).data('id'));
         });
 
         // Check balance for payment
@@ -217,7 +222,7 @@
 
         if (priceForEach > balance) {
           alert('У вас недостаточно денег для создания матча'.toUpperCase());
-          $('input[name="hours[]"]:checked').prop('checked', false);
+          return null;
         }
 
         // Validation create match
@@ -231,11 +236,13 @@
             if (time[0] != pastTime[0]) {
               alert('Матч должен состоятся в одном поле'.toUpperCase());
               $('input[name="hours[]"]:checked').prop('checked', false);
+              return null;
             }
 
             if (time[1] != pastTime[1]) {
               alert('Матч должен состоятся в один день'.toUpperCase());
               $('input[name="hours[]"]:checked').prop('checked', false);
+              return null;
             }
 
             var hour = time[2].split(':'),
@@ -246,21 +253,24 @@
             if (+hour[0] != +pastHour[0]) {
               alert('Выберите время последовательно'.toUpperCase());
               $('input[name="hours[]"]:checked').prop('checked', false);
+              return null;
             }
           }
         }
 
         if (hours != '') {
+          var $btn = $(this).button('loading');
+
           $.ajax({
             type: "POST",
             url: '/store-match-ajax',
             dataType: "json",
             data: {
               '_token':token,
-              'sport_id':sport_id,
-              'area_id':area_id,
-              'number_of_players':number_of_players,
-              'match_type':match_type,
+              'sport_id':sportId,
+              'area_id':areaId,
+              'number_of_players':numberOfPlayers,
+              'match_type':matchType,
               'hours':hours
             },
             success: function(data) {
@@ -268,14 +278,22 @@
                 for (var e = 0; e < data['errors'].length; e++) {
                   alert(data['errors'][e].toUpperCase());
                   console.log(data['errors']);
+                  $btn.button('reset');
                 }
               } else {
+                // for (var i = 0; i < dataId.length; i++) {
+                //   console.log('#td-'+dataId[i]);
+                //   $('#td-'+dataId[i]).empty().append('<span class="glyphicon glyphicon-refresh spin"></span> <span>В обработке</span>');
+                // }
+
                 console.log(data['success']);
+                $btn.button('reset');
               }
             }
           });
         } else {
           alert("Выберите время для игры!");
+          $btn.button('reset');
         }
       });
 
