@@ -10,7 +10,7 @@ class Match extends Model
 {
     protected $table = 'matches';
 
-    public function Field()
+    public function field()
     {
     	return $this->belongsTo('App\Field', 'field_id');
     }

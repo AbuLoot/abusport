@@ -200,10 +200,24 @@ class SportController extends Controller
             return response()->json($messages);
         }
 
-        $field = $area->fields()->where('id', (int) $fields[0])->get();
+        $field = $area->fields()->where('id', $fields[0])->first();
 
-        if ($field->isEmpty()) {
+        if (is_null($field)) {
             $messages['errors'][$index++] = 'Нет данных';
+            return response()->json($messages);
+        }
+
+        // Check match
+        $result = $field->matches()
+            ->where('date', $date[0])
+            ->where(function ($query) {
+                $query->whereBetween('start_time', [$hours[0], last($hours)])
+                    ->orWhereBetween('end_time', [$hours[0], last($hours)]);
+            })
+            ->first();
+
+        if ($result) {
+            $messages['errors'][$index++] = 'Поле занято '.$result->date;
             return response()->json($messages);
         }
 
@@ -297,9 +311,6 @@ class SportController extends Controller
             return response()->json($messages);
         }
 
-        // Check match
-        
-
         // Create match
         $match = new Match();
         $match->user_id = $request->user()->id;
@@ -313,7 +324,7 @@ class SportController extends Controller
         $match->status = 0;
         $match->save();
 
-        event(new CreatedNewMatch);
+        event(new CreatedNewMatch($match));
 
         return redirect()->back()->with('status', 'Запись добавлена!');
     }

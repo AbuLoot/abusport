@@ -88,7 +88,7 @@
                       @endforeach
 
                       @if ($game == false)
-                        <span class="text-info">Свободно</span>
+                        <span>Свободно</span>
                       @endif
                     </td>
                   @endif

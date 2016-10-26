@@ -28,6 +28,46 @@ Route::get('sport/{sport}', 'SportController@getAreas');
 Route::get('sport/map/{sport}', 'SportController@getAreasWithMap');
 Route::get('sport/calendar/{sport}/{area_id}/{setDays?}', 'SportController@getMatchesWithCalendar');
 
+Route::get('test', function() {
+
+    $area = \App\Area::find(1);
+
+    $field = $area->fields()->where('id', (int) 2)->first();
+
+    if (is_null($field)) {
+        $messages['errors'][$index++] = 'Нет данных';
+        return response()->json($messages);
+    }
+
+    // 21:00
+    // 22:00
+
+    // Check match
+    $matches = $field->matches()
+        ->where('date', '2016-10-28')
+        ->where(function ($query) {
+            $query->whereBetween('start_time', ['23:00', '23:00'])
+                ->orWhereBetween('end_time', ['23:00', '23:00']);
+        })->first();
+
+    dd($matches);
+
+    if ($matches) {
+        echo '1';
+    } else {
+        echo 2;
+    }
+
+    // "select * from `matches`
+    // where `matches`.`field_id` = ? and `matches`.`field_id` is not null
+        // and `date` = ?
+        // and `field_id` = ?
+        // and `start_time` between ?
+        // and ? or `end_time` between ? and ?"
+
+    dd($result);
+});
+
 Route::group(['middleware' => 'auth'], function() {
 
     // Profile
@@ -104,6 +144,7 @@ Route::group(['prefix' => 'panel', 'middleware' => ['auth', 'role:area-admin']],
     Route::resource('admin-fields', 'AreaAdmin\FieldController');
     Route::resource('admin-schedules', 'AreaAdmin\ScheduleController');
 
+    // Matches control
     Route::get('admin-matches/{time?}', 'AreaAdmin\MatchController@index');
     Route::get('admin-matches/{id}/edit', 'AreaAdmin\MatchController@edit');
     Route::delete('admin-matches/{id}', 'AreaAdmin\MatchController@destroy');

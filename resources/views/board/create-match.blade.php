@@ -124,15 +124,16 @@
                       @else
                         <?php $game = false; ?>
                         @foreach($field->matches->where('date', $day['year']) as $match)
+                          <?php $id = $field->id.'-'.$day['year'].'-'.$hour_key; ?>
                           @if ($match->start_time <= $hour AND $match->end_time >= $hour)
                             <?php $game = true; ?>
                             @if ($match->status == 0)
-                              <td>
+                              <td id="td-{{ $id }}">
                                 <span class="glyphicon glyphicon-refresh spin"></span>
                                 <span>В обработке</span>
                               </td>
                             @else
-                              <td>
+                              <td id="td-{{ $id }}">
                                 <span class="glyphicon glyphicon-time"></span>
                                 <a href="{{ url('sport/match/'.$area->id.'/'.$match->id) }}">Игра {{ $match->id }}</a>
                               </td>
@@ -186,8 +187,18 @@
       });
 
       socket.on(channel, function(data) {
-        var start_time = data.start_time.split(':');
-        $('#td-'+data.field_id+'-'+data.date+'-'+start_time[0]).empty().append('<span class="glyphicon glyphicon-refresh spin"></span> <span>В обработке</span>');
+        if (data.status == 0) {
+          var start_time = data.start_time.split(':'),
+              end_time = data.end_time.split(':'),
+              cycle = +end_time[0] - +start_time[0];
+
+          for (var i = 0; i <= cycle; i++) {
+            $('#td-' + data.field_id + '-' + data.date + '-' + start_time[0]++).empty().append('<span class="glyphicon glyphicon-refresh spin"></span> <span>В обработке</span>');
+          }
+        } else {
+
+        }
+
         console.log(data);
       });
 
@@ -258,9 +269,9 @@
           }
         }
 
-        if (hours != '') {
-          var $btn = $(this).button('loading');
+        var $btn = $(this).button('loading');
 
+        if (hours != '') {
           $.ajax({
             type: "POST",
             url: '/store-match-ajax',
@@ -281,11 +292,6 @@
                   $btn.button('reset');
                 }
               } else {
-                // for (var i = 0; i < dataId.length; i++) {
-                //   console.log('#td-'+dataId[i]);
-                //   $('#td-'+dataId[i]).empty().append('<span class="glyphicon glyphicon-refresh spin"></span> <span>В обработке</span>');
-                // }
-
                 console.log(data['success']);
                 $btn.button('reset');
               }
