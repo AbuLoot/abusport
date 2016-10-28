@@ -13,7 +13,6 @@ class CreatedNewMatch extends Event implements ShouldBroadcast
     use SerializesModels;
 
     public $match;
-    public $count;
 
     /**
      * Create a new event instance.
@@ -38,11 +37,16 @@ class CreatedNewMatch extends Event implements ShouldBroadcast
     public function broadcastWith()
     {
         return [
+            'id' => $this->match->id,
             'field_id' => $this->match->field_id,
+            'user_id' => $this->match->user_id,
+            'full_name' => $this->match->user->surname.' '.$this->match->user->name,
             'start_time' => $this->match->start_time,
             'end_time' => $this->match->end_time,
             'date' => $this->match->date,
+            'price' => $this->match->price,
             'match_type' => $this->match->match_type,
+            'number_of_players' => $this->match->number_of_players,
             'status' => $this->match->status,
         ];
     }

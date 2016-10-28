@@ -104,7 +104,6 @@
                     <td class="hours"><span>{{ $hour }}</span></td>
 
                     @foreach($days as $day)
-
                       @if ($current_date >= $day['year'] AND $current_hour >= $hour)
                         <?php $game = false; ?>
                         @foreach($field->matches->where('date', $day['year'])->where('status', 1) as $match)
@@ -210,7 +209,7 @@
             sportId = $('#sport_id').val(),
             areaId = $('#area_id').val(),
             numberOfPlayers = $('#number_of_players').val(),
-            matchType = $('input[name="match_type"]').val(),
+            matchType = $('input[name="match_type"]:checked').val(),
             hours = new Array(),
             price = new Array(),
             dataId = new Array(),
@@ -269,9 +268,8 @@
           }
         }
 
-        var $btn = $(this).button('loading');
-
         if (hours != '') {
+          var $btn = $(this).button('loading');
           $.ajax({
             type: "POST",
             url: '/store-match-ajax',

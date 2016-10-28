@@ -208,17 +208,22 @@ class SportController extends Controller
         }
 
         // Check match
-        $result = $field->matches()
-            ->where('date', $date[0])
-            ->where(function ($query) {
-                $query->whereBetween('start_time', [$hours[0], last($hours)])
-                    ->orWhereBetween('end_time', [$hours[0], last($hours)]);
-            })
-            ->first();
+        $matches = $field->matches()->where('date', $date[0])->get();
 
-        if ($result) {
-            $messages['errors'][$index++] = 'Поле занято '.$result->date;
-            return response()->json($messages);
+        foreach ($matches as $item_match)
+        {
+            if ($item_match->start_time == $hours[0] OR $item_match->end_time == $hours[0]) {
+                $messages['errors'][$index++] = 'Поле занято';
+                return response()->json($messages);
+            }
+            elseif ($item_match->start_time == last($hours) OR $item_match->end_time == last($hours)) {
+                $messages['errors'][$index++] = 'Поле занято';
+                return response()->json($messages);
+            }
+            elseif ($item_match->start_time >= $hours[0] AND $item_match->end_time <= last($hours)) {
+                $messages['errors'][$index++] = 'Поле занято';
+                return response()->json($messages);
+            }
         }
 
         // Create match
@@ -299,16 +304,30 @@ class SportController extends Controller
         $area = Area::find($request->area_id);
 
         if (is_null($area)) {
-            $messages['errors'][$index++] = 'Нет данных';
-            return response()->json($messages);
+            return redirect()->back()->withInput()->withWarning('Нет данных');
         }
 
         // Check field
-        $field = $area->fields()->where('id', (int) $fields[0])->get();
+        $field = $area->fields()->where('id', $fields[0])->first();
 
-        if ($field->isEmpty()) {
-            $messages['errors'][$index++] = 'Нет данных';
-            return response()->json($messages);
+        if (is_null($field)) {
+            return redirect()->back()->withInput()->withWarning('Нет данных');
+        }
+
+        // Check for the existence of the match
+        $matches = $field->matches()->where('date', $date[0])->get();
+
+        foreach ($matches as $item_match)
+        {
+            if ($item_match->start_time == $hours[0] OR $item_match->end_time == $hours[0]) {
+                return redirect()->back()->withInput()->withWarning('Поле занято');
+            }
+            elseif ($item_match->start_time == last($hours) OR $item_match->end_time == last($hours)) {
+                return redirect()->back()->withInput()->withWarning('Поле занято');
+            }
+            elseif ($item_match->start_time >= $hours[0] AND $item_match->end_time <= last($hours)) {
+                return redirect()->back()->withInput()->withWarning('Поле занято');
+            }
         }
 
         // Create match

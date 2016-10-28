@@ -38,7 +38,7 @@
                 <td>{{ $match->user->name }}</td>
                 <td>{{ $match->date }}</td>
                 <td>{{ $match->start_time.' - '.$match->end_time }}</td>
-                <td><b>{{ 1 + $match->users->count() }}</b>/{{ $match->number_of_players }}</td>
+                <td>{{ $match->number_of_players }}</td>
                 <td>{{ $match->price }}тг</td>
                 <td>
                   @if ($match->match_type == 'open')
@@ -66,10 +66,7 @@
                 <td colspan="9">Нет записи</td>
               </tr>
             @endforelse
-            <tr>
-              <td colspan="10">
-              </td>
-            </tr>
+            <tr id="tr-{{ $field->id }}"></tr>
           @empty
             <tr>
               <td colspan="9">Нет записи</td>
@@ -78,4 +75,154 @@
         </tbody>
       </table>
     </div>
+@endsection
+
+@section('scripts')
+    <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+    <script>
+      var socket = io(':6001'),
+          channel = 'area-{{ $area->id }}';
+
+      socket.on('connect', function() {
+        socket.emit('subscribe', channel)
+      });
+
+      socket.on('error', function() {
+        console.warn('Error', error);
+      });
+
+      socket.on('message', function(message) {
+        console.log(message);
+      });
+
+      socket.on(channel, function(data) {
+
+        // if (data.status == 0) {
+
+          var matchType = (data.match_type == 'open') ? '<span class="label label-success">Открытая</span>' : '<span class="label label-default">Закрытая</span>';
+          var newMatch = 
+              '<tr>' +
+                '<td>Матч ' + data.id + '</td>' +
+                '<td><a href="/user-profile/' + data.user_id + '">' + data.full_name + '</a></td>' +
+                '<td>' + data.date + '</td>' +
+                '<td>' + data.start_time + ' - ' + data.end_time + '</td>' +
+                '<td>' + data.number_of_players + '</td>' +
+                '<td>' + data.price + 'тг</td>' +
+                '<td>' + matchType + '</td>' +
+                '<td class="text-danger">Неактивен</td>' +
+                '<td class="text-right">' +
+                  '<a class="btn btn-primary btn-xs" href="panel/admin-matches/' + data.id + '/edit" title="Запустить"><span class="glyphicon glyphicon-play"></span></a>' +
+                '</td>' +
+              '</tr>';
+
+          $(newMatch).insertAfter($('#tr-' + data.field_id));
+
+        // } else {
+          
+        // }
+
+        console.log(data);
+      });
+
+      // Create match
+      $('#store').click(function(e){
+        e.preventDefault();
+
+        var token = $('input[name="_token"]').val(),
+            sportId = $('#sport_id').val(),
+            areaId = $('#area_id').val(),
+            numberOfPlayers = $('#number_of_players').val(),
+            matchType = $('input[name="match_type"]').val(),
+            hours = new Array(),
+            price = new Array(),
+            dataId = new Array(),
+            sum = 0;
+            priceForEach = 0,
+            balance = $('#balance').data('balance');
+
+        $('input[name="hours[]"]:checked').each(function() {
+          hours.push($(this).val());
+          price.push($(this).data('price'));
+          dataId.push($(this).data('id'));
+        });
+
+        // Check balance for payment
+        for (var i = price.length; i--;) {
+          sum += price[i];
+        }
+
+        priceForEach = sum / number_of_players;
+
+        if (priceForEach > balance) {
+          alert('У вас недостаточно денег для создания матча'.toUpperCase());
+          return null;
+        }
+
+        // Validation create match
+        for (var i = 0; i < hours.length; i++) {
+          var time = hours[i].split(' ');
+
+          if (i >= 1) {
+            var n = i - 1;
+            var pastTime = hours[n].split(' ');
+
+            if (time[0] != pastTime[0]) {
+              alert('Матч должен состоятся в одном поле'.toUpperCase());
+              $('input[name="hours[]"]:checked').prop('checked', false);
+              return null;
+            }
+
+            if (time[1] != pastTime[1]) {
+              alert('Матч должен состоятся в один день'.toUpperCase());
+              $('input[name="hours[]"]:checked').prop('checked', false);
+              return null;
+            }
+
+            var hour = time[2].split(':'),
+                pastHour = pastTime[2].split(':');
+
+            pastHour[0] = +pastHour[0] + 1;
+
+            if (+hour[0] != +pastHour[0]) {
+              alert('Выберите время последовательно'.toUpperCase());
+              $('input[name="hours[]"]:checked').prop('checked', false);
+              return null;
+            }
+          }
+        }
+
+        if (hours != '') {
+          var $btn = $(this).button('loading');
+          $.ajax({
+            type: "POST",
+            url: '/store-match-ajax',
+            dataType: "json",
+            data: {
+              '_token':token,
+              'sport_id':sportId,
+              'area_id':areaId,
+              'number_of_players':numberOfPlayers,
+              'match_type':matchType,
+              'hours':hours
+            },
+            success: function(data) {
+              if (data['errors'] != undefined) {
+                for (var e = 0; e < data['errors'].length; e++) {
+                  alert(data['errors'][e].toUpperCase());
+                  console.log(data['errors']);
+                  $btn.button('reset');
+                }
+              } else {
+                console.log(data['success']);
+                $btn.button('reset');
+              }
+            }
+          });
+        } else {
+          alert("Выберите время для игры!");
+          $btn.button('reset');
+        }
+      });
+
+    </script>
 @endsection
