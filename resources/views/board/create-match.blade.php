@@ -187,12 +187,12 @@
 
       socket.on(channel, function(data) {
         if (data.status == 0) {
-          var start_time = data.start_time.split(':'),
-              end_time = data.end_time.split(':'),
-              cycle = +end_time[0] - +start_time[0];
+          var startTime = data.startTime.split(':'),
+              endTime = data.endTime.split(':'),
+              cycle = +endTime[0] - +startTime[0];
 
           for (var i = 0; i <= cycle; i++) {
-            $('#td-' + data.field_id + '-' + data.date + '-' + start_time[0]++).empty().append('<span class="glyphicon glyphicon-refresh spin"></span> <span>В обработке</span>');
+            $('#td-' + data.fieldId + '-' + data.date + '-' + startTime[0]++).empty().append('<span class="glyphicon glyphicon-refresh spin"></span> <span>В обработке</span>');
           }
         } else {
 

@@ -38,15 +38,15 @@ class CreatedNewMatch extends Event implements ShouldBroadcast
     {
         return [
             'id' => $this->match->id,
-            'field_id' => $this->match->field_id,
-            'user_id' => $this->match->user_id,
-            'full_name' => $this->match->user->surname.' '.$this->match->user->name,
-            'start_time' => $this->match->start_time,
-            'end_time' => $this->match->end_time,
+            'fieldId' => $this->match->field_id,
+            'userId' => $this->match->user_id,
+            'fullName' => $this->match->user->surname.' '.$this->match->user->name,
+            'startTime' => $this->match->start_time,
+            'endTime' => $this->match->end_time,
             'date' => $this->match->date,
             'price' => $this->match->price,
-            'match_type' => $this->match->match_type,
-            'number_of_players' => $this->match->number_of_players,
+            'matchType' => $this->match->match_type,
+            'numberOfPlayers' => $this->match->number_of_players,
             'status' => $this->match->status,
         ];
     }

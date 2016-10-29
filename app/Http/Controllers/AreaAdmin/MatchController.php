@@ -5,6 +5,8 @@ namespace App\Http\Controllers\AreaAdmin;
 use Illuminate\Http\Request;
 
 use Auth;
+use Response;
+use Validator;
 
 use App\Area;
 use App\Match;
@@ -68,6 +70,31 @@ class MatchController extends Controller
         }
 
         return view('area-admin.matches.index', compact('area', 'matches'));
+    }
+
+    public function ajaxRun($id)
+    {
+        list($field_id, $match_id) = explode('-', $id);
+        $messages = [];
+        $index = 0;
+
+        $area = Area::where('org_id', $this->organization->id)->first();
+
+        // Check field
+        $field = $area->fields()->where('id', $field_id)->first();
+
+        if (is_null($field)) {
+            $messages['errors'][$index++] = 'Нет данных';
+            return response()->json($messages);
+        }
+
+        // Check match
+        $match = $field->matches()->where('id', $match_id)->first();
+        $match->status = 1;
+        $match->save();
+
+        $messages['success'] = 'Матч Запущен!';
+        return response()->json($messages);
     }
 
     public function edit($id)

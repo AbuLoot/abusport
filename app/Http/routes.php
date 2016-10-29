@@ -100,6 +100,7 @@ Route::group(['prefix' => 'panel', 'middleware' => ['auth', 'role:area-admin']],
     // Matches control
     Route::get('admin-matches/{time?}', 'AreaAdmin\MatchController@index');
     Route::get('admin-matches/{id}/edit', 'AreaAdmin\MatchController@edit');
+    Route::get('admin-matches-ajax/{id}', 'AreaAdmin\MatchController@ajaxRun');
     Route::delete('admin-matches/{id}', 'AreaAdmin\MatchController@destroy');
 });
 
