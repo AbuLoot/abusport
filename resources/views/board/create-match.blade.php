@@ -145,7 +145,7 @@
                             <?php $id = $field->id.'-'.$day['year'].'-'.$hour_key; ?>
                             @if ($schedule->start_time <= $hour AND $schedule->end_time >= $hour)
                               <td id="td-{{ $id }}">
-                                <label class="checkbox-inline text-info">
+                                <label class="checkbox-inline" data-toggle="tooltip" data-placement="right" title="{{ $schedule->price }}тг">
                                   <input type="checkbox" name="hours[]" data-price="{{ $schedule->price }}"  data-id="{{ $id }}" value="{{ $field->id.' '.$day['year'].' '.$hour }}"> Купить
                                 </label>
                               </td>
@@ -195,10 +195,20 @@
             $('#td-' + data.fieldId + '-' + data.date + '-' + startTime[0]++).empty().append('<span class="glyphicon glyphicon-refresh spin"></span> <span>В обработке</span>');
           }
         } else {
+          var startTime = data.startTime.split(':'),
+              endTime = data.endTime.split(':'),
+              cycle = +endTime[0] - +startTime[0];
 
+          for (var i = 0; i <= cycle; i++) {
+            $('#td-' + data.fieldId + '-' + data.date + '-' + startTime[0]++).empty().append('<span class="glyphicon glyphicon-time"></span> <a href="/sport/match/' + data.areaId + '/' + data.id + '">Игра  ' + data.id + '</a>');
+          }
         }
 
         console.log(data);
+      });
+
+      $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
       });
 
       // Create match
@@ -290,6 +300,7 @@
                   $btn.button('reset');
                 }
               } else {
+                alert(data['success']);
                 console.log(data['success']);
                 $btn.button('reset');
               }

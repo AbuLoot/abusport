@@ -12,6 +12,7 @@ use App\Area;
 use App\Match;
 use App\Schedule;
 use App\Http\Requests;
+use App\Events\NotifyNewMatch;
 use App\Events\CreatedNewMatch;
 
 class SportController extends Controller
@@ -41,7 +42,8 @@ class SportController extends Controller
             'features' => []
         ];
 
-        foreach ($areas as $id => $single) {
+        foreach ($areas as $id => $single)
+        {
             $single_array = [
                 'type' => 'Feature',
                 'id' => $single->id,
@@ -239,6 +241,10 @@ class SportController extends Controller
         $match->status = 0;
         $match->save();
 
+        // Notify Area Admin
+        event(new NotifyNewMatch($match));
+
+        // Notify All Users
         event(new CreatedNewMatch($match));
 
         $messages['success'][$index++] = 'Ваша заявка принята для обработки';
@@ -342,6 +348,9 @@ class SportController extends Controller
         $match->price = $price;
         $match->status = 0;
         $match->save();
+
+        // Notify Area Admin
+        event(new NotifyNewMatch($match));
 
         event(new CreatedNewMatch($match));
 

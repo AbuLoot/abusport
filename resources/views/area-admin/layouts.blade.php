@@ -67,13 +67,17 @@
     </nav>
 
     <main class="container">
-      <ul class="nav nav-pills nav-justified">
-        <li @if (Request::is('panel/admin-matches', 'panel/admin-matches/*')) class="active" @endif><a href="/panel/admin-matches">Матчи</a></li>
-        <li @if (Request::is('panel/admin-organization', 'panel/admin-organization/*')) class="active" @endif><a href="/panel/admin-organization">Организации</a></li>
-        <li @if (Request::is('panel/admin-areas', 'panel/admin-areas/*')) class="active" @endif><a href="/panel/admin-areas">Площадки</a></li>
-        <li @if (Request::is('panel/admin-fields', 'panel/admin-fields/*')) class="active" @endif><a href="/panel/admin-fields">Поля</a></li>
-        <li @if (Request::is('panel/admin-schedules', 'panel/admin-schedules/*')) class="active" @endif><a href="/panel/admin-schedules">Расписания</a></li>
-      </ul><hr>
+      <div class="panel panel-default panel-admin">
+        <div class="panel-body">
+          <ul class="nav nav-pills nav-justified">
+            <li @if (Request::is('panel/admin-matches', 'panel/admin-matches/*')) class="active" @endif><a href="/panel/admin-matches">Матчи</a></li>
+            <li @if (Request::is('panel/admin-organization', 'panel/admin-organization/*')) class="active" @endif><a href="/panel/admin-organization">Организации</a></li>
+            <li @if (Request::is('panel/admin-areas', 'panel/admin-areas/*')) class="active" @endif><a href="/panel/admin-areas">Площадки</a></li>
+            <li @if (Request::is('panel/admin-fields', 'panel/admin-fields/*')) class="active" @endif><a href="/panel/admin-fields">Поля</a></li>
+            <li @if (Request::is('panel/admin-schedules', 'panel/admin-schedules/*')) class="active" @endif><a href="/panel/admin-schedules">Расписания</a></li>
+          </ul>
+        </div>
+      </div>
 
       <div class="col-md-12">
         @yield('content')
@@ -81,7 +85,7 @@
     </main>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     @yield('scripts')

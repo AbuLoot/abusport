@@ -10,6 +10,7 @@ use Validator;
 
 use App\Area;
 use App\Match;
+use App\Events\StartedMatch;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
@@ -72,7 +73,7 @@ class MatchController extends Controller
         return view('area-admin.matches.index', compact('area', 'matches'));
     }
 
-    public function ajaxRun($id)
+    public function ajaxStart($id)
     {
         list($field_id, $match_id) = explode('-', $id);
         $messages = [];
@@ -93,20 +94,36 @@ class MatchController extends Controller
         $match->status = 1;
         $match->save();
 
-        $messages['success'] = 'Матч Запущен!';
+        event(new StartedMatch($match));
+
+        $messages['success'] = 'Матч начат!';
         return response()->json($messages);
     }
 
-    public function edit($id)
+    public function start($id)
     {
+        list($field_id, $match_id) = explode('-', $id);
+        $messages = [];
+        $index = 0;
+
         $area = Area::where('org_id', $this->organization->id)->first();
 
-        $match = Match::findOrFail($id);
+        // Check field
+        $field = $area->fields()->where('id', $field_id)->first();
+
+        if (is_null($field)) {
+            $messages['errors'][$index++] = 'Нет данных';
+            return response()->json($messages);
+        }
+
+        // Check match
+        $match = $field->matches()->where('id', $match_id)->first();
         $match->status = 1;
         $match->save();
 
-        return redirect()->back()->with('status', 'Матч Запущен!');
-        // return view('area-admin.matches.edit', compact('match', 'area'));
+        event(new StartedMatch($match));
+
+        return redirect()->back()->with('status', 'Матч начат!');
     }
 
     public function destroy($id)
@@ -114,6 +131,6 @@ class MatchController extends Controller
         $match = Match::find($id);
         $match->delete();
 
-        return redirect('panel/admin-matches')->with('status', 'Запись удалена!');
+        return redirect()->back()->with('status', 'Запись удалена!');
     }
 }

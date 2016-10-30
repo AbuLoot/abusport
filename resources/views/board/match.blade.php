@@ -55,7 +55,7 @@
             <tbody>
               <?php $i = 1; ?>
               <tr>
-                <th>{{ $i++.'. '.$match->user->surname.' '.$match->user->name }} [Вы организатор]</th>
+                <th>{{ $i++.'. '.$match->user->surname.' '.$match->user->name }} @if ($match->user_id == Auth::id()) [Вы организатор] @else [Организатор] @endif</th>
                 <td>{{ $match->price_for_each }}</td>
               </tr>
               @foreach($match->users as $user)

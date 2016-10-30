@@ -33,7 +33,7 @@
               <th colspan="9">{{ $field->title }}</th>
             </tr>
             @forelse ($matches[$field->id] as $match)
-              <tr>
+              <tr id="match-{{ $match->id }}">
                 <td>Матч {{ $match->id }}</td>
                 <td><a href="/user-profile/{{ $match->user->id }}">{{ $match->user->surname . ' ' . $match->user->name }}</a></td>
                 <td>{{ $match->date }}</td>
@@ -53,7 +53,7 @@
                   <td class="text-danger">Неактивен</td>
                 @endif
                 <td class="text-right">
-                  <a class="btn btn-primary btn-xs" id="run" href="{{ url('panel/admin-matches/'.$match->id.'/edit') }}" data-match-id="{{ $match->field_id . '-' . $match->id }}" title="Запустить"><span class="glyphicon glyphicon-play"></span></a>
+                  <a class="btn btn-primary btn-xs" id="run" href="{{ url('panel/admin-matches/'.$match->id.'/start') }}" data-match-id="{{ $match->field_id . '-' . $match->id }}" title="Запустить"><span class="glyphicon glyphicon-play"></span></a>
                   <form method="POST" action="{{ url('panel/admin-matches/'.$match->id) }}" accept-charset="UTF-8" class="btn-delete">
                     <input name="_method" type="hidden" value="DELETE">
                     <input name="_token" type="hidden" value="{{ csrf_token() }}">
@@ -81,7 +81,7 @@
     <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
     <script>
       var socket = io(':6001'),
-          channel = 'area-{{ $area->id }}';
+          channel = 'admin-area-{{ $area->id }}';
 
       socket.on('connect', function() {
         socket.emit('subscribe', channel)
@@ -99,7 +99,7 @@
 
           var matchType = (data.matchType == 'open') ? '<span class="label label-success">Открытая</span>' : '<span class="label label-default">Закрытая</span>';
           var newMatch = 
-              '<tr>' +
+              '<tr id="match-' + data.id + '">' +
                 '<td>Матч ' + data.id + '</td>' +
                 '<td><a href="/user-profile/' + data.userId + '">' + data.fullName + '</a></td>' +
                 '<td>' + data.date + '</td>' +
@@ -109,7 +109,7 @@
                 '<td>' + matchType + '</td>' +
                 '<td class="text-danger">Неактивен</td>' +
                 '<td class="text-right">' +
-                  '<a class="btn btn-primary btn-xs" href="panel/admin-matches/' + data.id + '/edit" data-match-id="' + data.fieldId + '-' + data.id + '" title="Запустить"><span class="glyphicon glyphicon-play"></span></a>' +
+                  '<a class="btn btn-primary btn-xs" id="run" href="/panel/admin-matches/' + data.id + '/start" data-match-id="' + data.fieldId + '-' + data.id + '" title="Запустить"><span class="glyphicon glyphicon-play"></span></a>' +
                 '</td>' +
               '</tr>';
 
@@ -119,13 +119,17 @@
       });
 
       // Create match
-      $('a#run').click(function(e){
+      $('table').on('click', 'a#run', function(e){
         e.preventDefault();
 
-        var matchId = $(this).data('match-id');
+        // alert($(this).data('match-id'));
+        // return null;
+
+        var matchId = $(this).data('match-id'),
+            arrMatchID = matchId.split('-');
 
         if (matchId != null) {
-          var $btn = $(this).button('loading');
+          var $btn = $(this).button('Запуск');
           $.ajax({
             type: "GET",
             url: '/panel/admin-matches-ajax/' + matchId,
@@ -138,7 +142,7 @@
                   $btn.button('reset');
                 }
               } else {
-                $(this).remove();
+                $('#match-'+arrMatchID[1]).remove();
                 console.log(data['success']);
                 alert(data['success']);
                 $btn.button('reset');
