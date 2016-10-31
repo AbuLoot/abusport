@@ -6,16 +6,17 @@
 
 @section('tabs')
 
-    <ul class="tabs-panel">
-      <li class="active"><a href="#">Площадки</a></li>
-      <li><a href="{{ action('SportController@getAreasWithMap', $sport->slug) }}">На карте</a></li>
-      <li><a href="#">Горячие матчи</a></li>
-    </ul>
+  <ul class="tabs-panel">
+    <li class="active"><a href="#">Площадки</a></li>
+    <li><a href="{{ action('SportController@getAreasWithMap', $sport->slug) }}">На карте</a></li>
+    <li><a href="#">Горячие матчи</a></li>
+  </ul>
 
 @endsection
 
 @section('content')
 
+  <div class="col-lg-8 col-md-9 col-sm-12">
     <div class="areas">
       @foreach ($areas as $area)
         <div class="media">
@@ -42,5 +43,6 @@
     </div>
 
     {{ $areas->render() }}
+  </div>
 
 @endsection

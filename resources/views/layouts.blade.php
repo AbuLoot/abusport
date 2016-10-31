@@ -108,9 +108,7 @@
           </ul>
         </aside>
 
-        <div class="col-lg-8 col-md-9 col-sm-12">
-          @yield('content')
-        </div>
+        @yield('content')
 
       </div>
     </main><br>

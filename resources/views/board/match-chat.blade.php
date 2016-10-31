@@ -6,16 +6,17 @@
 
 @section('tabs')
 
-    <ul class="tabs-panel">
-      <li><a href="{{ url('sport/match/'.$sport->id.'/'.$match->id) }}">Комната</a></li>
-      <li><a href="#">Карта</a></li>
-      <li class="active"><a href="#">Чат</a></li>
-    </ul>
+  <ul class="tabs-panel">
+    <li><a href="{{ url('sport/match/'.$sport->id.'/'.$match->id) }}">Комната</a></li>
+    <li><a href="#">Карта</a></li>
+    <li class="active"><a href="#">Чат</a></li>
+  </ul>
 
 @endsection
 
 @section('content')
 
+  <div class="col-lg-7 col-md-9 col-sm-12">
     @include('partials.alerts')
 
     <div class="panel panel-default">
@@ -55,90 +56,108 @@
         </form>
       </div>
     </div>
+  </div>
+
+  <div class="col-lg-3 col-md-3 col-sm-12">
+    <div class="list-group">
+      <a href="#" class="list-group-item active">
+        Cras justo odio
+      </a>
+      <a href="#" class="list-group-item">Dapibus ac facilisis in</a>
+      <a href="#" class="list-group-item">Morbi leo risus</a>
+      <a href="#" class="list-group-item">Porta ac consectetur ac</a>
+      <a href="#" class="list-group-item">Vestibulum at eros</a>
+    </div>
+  </div>
 
 @endsection
 
 @section('scripts')
-    <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
-    <script>
-      var block = document.getElementById("chat");
-      block.scrollTop = block.scrollHeight;
 
-      var socket = io(':6001'),
-          user_id = '{{ Auth::id() }}',
-          channel = 'chat-{{ $match->id }}';
+  <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+  <script>
+    var block = document.getElementById("chat");
+    block.scrollTop = block.scrollHeight;
 
-      socket.on('connect', function() {
-        socket.emit('subscribe', channel)
-      });
+    var socket = io(':6001'),
+        user_id = '{{ Auth::id() }}',
+        channel = 'chat-{{ $match->id }}';
 
-      socket.on('error', function() {
-        console.warn('Error', error);
-      });
+    socket.on('connect', function() {
+      socket.emit('subscribe', channel)
+    });
 
-      socket.on('message', function(message) {
-        console.log(message);
-      });
+    socket.on('error', function() {
+      console.warn('Error', error);
+    });
 
-      function appendMessage(data, mediaClass) {
-        $('.scroll-chat').append(
-          $('<div class="media">').append(
-            $('<div class="media-body">').append(
-              $('<h5 class="media-heading">').html("<a href='/user-profile/"+data.user_id+"'><b>"+data.fullname+"</b></a>"),
-              $('<p>').text(data.message)
-            )
-          ).addClass(mediaClass)
-        );
+    socket.on('message', function(message) {
+      console.log(message);
+    });
+
+    function appendMessage(data, mediaClass) {
+      $('.scroll-chat').append(
+        $('<div class="media">').append(
+          $('<div class="media-body">').append(
+            $('<h5 class="media-heading">').html("<a href='/user-profile/"+data.user_id+"'><b>"+data.fullname+"</b></a>"),
+            $('<p>').text(data.message)
+          )
+        ).addClass(mediaClass)
+      );
+    }
+
+    socket.on(channel, function(data) {
+
+      if (data.user_id == user_id) {
+        appendMessage(data, 'text-right');
       }
 
-      socket.on(channel, function(data) {
-        if (data.user_id == user_id) {
-          appendMessage(data, 'text-right');
-        } else {
-          appendMessage(data);
-        }
-        block.scrollTop = block.scrollHeight;
-      });
+      appendMessage(data);
 
-      $('#send').click(function(e){
-        e.preventDefault();
+      block.scrollTop = block.scrollHeight;
+    });
 
-        var token = $('input[name="_token"]').val();
-        var msg = $('#message').val();
+    $('#send').click(function(e){
+      e.preventDefault();
 
-        if (msg != '') {
-          $.ajax({
-            type: "POST",
-            url: '{!! URL::to("chat/message/".$match->id) !!}',
-            dataType: "json",
-            data: {'_token':token, 'message':msg},
-            success: function(data) {
-              console.log(data);
-              $('#message').val('');
-            } 
-          });
-        } else {
-          alert("Please Add Message.");
-        }
-      });
+      var token = $('input[name="_token"]').val();
+      var msg = $('#message').val();
 
-      // $('form').on('submit', function() {
-      //   var text = $('#message').val(),
-      //       msg = {message: text};
+      $('#message').val('');
 
-      //   socket.join(channel, function(error) {
-      //     socket.send(msg);
-      //     appendMessage(msg);
-      //   });
+      if (msg != '') {
+        $.ajax({
+          type: "POST",
+          url: '{!! URL::to("chat/message/".$match->id) !!}',
+          dataType: "json",
+          data: {'_token':token, 'message':msg},
+          success: function(data) {
 
-      //   $('#message').val('');
-      //   return false;
-      // });
+          } 
+        });
+      } else {
+        alert("Please Add Message.");
+      }
+    });
 
-      // socket.on('message', function(data) {
-      //   console.log('Message: ', data);
-      // }).on('server-info', function(data) {
-      //   console.log(data);
-      // });
-    </script>
+    // $('form').on('submit', function() {
+    //   var text = $('#message').val(),
+    //       msg = {message: text};
+
+    //   socket.join(channel, function(error) {
+    //     socket.send(msg);
+    //     appendMessage(msg);
+    //   });
+
+    //   $('#message').val('');
+    //   return false;
+    // });
+
+    // socket.on('message', function(data) {
+    //   console.log('Message: ', data);
+    // }).on('server-info', function(data) {
+    //   console.log(data);
+    // });
+  </script>
+
 @endsection

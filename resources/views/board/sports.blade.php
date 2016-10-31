@@ -6,14 +6,15 @@
 
 @section('tabs')
 
-    <ul class="tabs-panel">
-      <li class="active"><a href="#">Спорт</a></li>
-    </ul>
+  <ul class="tabs-panel">
+    <li class="active"><a href="#">Спорт</a></li>
+  </ul>
 
 @endsection
 
 @section('content')
 
+  <div class="col-lg-8 col-md-9 col-sm-12">
     <div class="sports">
       @foreach($sports->sortBy('sort_id')->chunk(4) as $chunk)
         <div class="row">
@@ -28,5 +29,6 @@
         </div>
       @endforeach
     </div>
+  </div>
 
 @endsection

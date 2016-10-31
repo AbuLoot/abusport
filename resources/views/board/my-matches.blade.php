@@ -6,14 +6,15 @@
 
 @section('tabs')
 
-    <ul class="tabs-panel">
-      <li class="active"><a href="#">Мои Матчи</a></li>
-    </ul>
+  <ul class="tabs-panel">
+    <li class="active"><a href="#">Мои Матчи</a></li>
+  </ul>
 
 @endsection
 
 @section('content')
 
+  <div class="col-lg-8 col-md-9 col-sm-12">
     @include('partials.alerts')
 
     <div>
@@ -72,4 +73,6 @@
         </table>
       </div>
     </div>
+  </div>
+
 @endsection

@@ -6,16 +6,17 @@
 
 @section('tabs')
 
-    <ul class="tabs-panel">
-      <li><a href="{{ action('SportController@getMatches', [$sport->slug, $area->id]) }}">Матчи</a></li>
-      <li class="active"><a href="#">Календарь</a></li>
-      <li><a href="#">Информация</a></li>
-    </ul>
+  <ul class="tabs-panel">
+    <li><a href="{{ action('SportController@getMatches', [$sport->slug, $area->id]) }}">Матчи</a></li>
+    <li class="active"><a href="#">Календарь</a></li>
+    <li><a href="#">Информация</a></li>
+  </ul>
 
 @endsection
 
 @section('content')
 
+  <div class="col-lg-8 col-md-9 col-sm-12">
     <?php $current_hour = date('H').':00'; ?>
     <?php $current_week = (int) date('w'); ?>
     <?php $current_date = date('Y-m-d'); ?>
@@ -99,5 +100,6 @@
         </table>
       </div>
     @endforeach
+  </div>
 
 @endsection

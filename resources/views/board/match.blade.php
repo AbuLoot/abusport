@@ -6,16 +6,17 @@
 
 @section('tabs')
 
-    <ul class="tabs-panel">
-      <li class="active"><a href="#">Комната</a></li>
-      <li><a href="#">Карта</a></li>
-      <li><a href="{{ url('sport/match-chat/'.$sport->id.'/'.$match->id) }}">Чат</a></li>
-    </ul>
+  <ul class="tabs-panel">
+    <li class="active"><a href="#">Комната</a></li>
+    <li><a href="#">Карта</a></li>
+    <li><a href="{{ url('sport/match-chat/'.$sport->id.'/'.$match->id) }}">Чат</a></li>
+  </ul>
 
 @endsection
 
 @section('content')
 
+  <div class="col-lg-8 col-md-9 col-sm-12">
     @include('partials.alerts')
 
     <h2 class="text-center">Матч {{ $match->id }} <small>{{ $match->matchDate }}</small></h2>
@@ -71,5 +72,6 @@
         </div>
       </div>
     </div>
+  </div>
 
 @endsection

@@ -6,16 +6,17 @@
 
 @section('tabs')
 
-    <ul class="tabs-panel">
-      <li class="active"><a href="#">Матчи</a></li>
-      <li><a href="{{ action('SportController@getMatchesWithCalendar', [$sport->slug, $area->id]) }}">Календарь</a></li>
-      <li><a href="#">Информация</a></li>
-    </ul>
+  <ul class="tabs-panel">
+    <li class="active"><a href="#">Матчи</a></li>
+    <li><a href="{{ action('SportController@getMatchesWithCalendar', [$sport->slug, $area->id]) }}">Календарь</a></li>
+    <li><a href="#">Информация</a></li>
+  </ul>
 
 @endsection
 
 @section('content')
 
+  <div class="col-lg-8 col-md-9 col-sm-12">
     @include('partials.alerts')
 
     <div>
@@ -142,4 +143,6 @@
 
       @endforeach
     </div>
+  </div>
+
 @endsection

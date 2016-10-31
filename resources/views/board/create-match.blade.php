@@ -6,14 +6,15 @@
 
 @section('tabs')
 
-    <ul class="tabs-panel">
-      <li class="active"><a href="#">Создание матча</a></li>
-    </ul>
+  <ul class="tabs-panel">
+    <li class="active"><a href="#">Создание матча</a></li>
+  </ul>
 
 @endsection
 
 @section('content')
 
+  <div class="col-lg-8 col-md-9 col-sm-12">
     @include('partials.alerts')
 
     <form action="/store-match" method="post">
@@ -165,6 +166,8 @@
         <button type="submit" id="store" data-loading-text="Идет Бронирование..." class="btn btn-primary"><span class="glyphicon glyphicon-time"></span> Забронировать время</button>
       </div>
     </form>
+  </div>
+
 @endsection
 
 @section('scripts')
