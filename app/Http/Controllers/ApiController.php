@@ -17,10 +17,53 @@ use App\MatchUser;
 use App\Match; 
 use App\Feedback;
 use App\Payment;
+use App\Chat;
 use App\Http\Controllers\Controller;
 use AbuLoot\Sms\MobizonApi as Mobizon;
+use App\Events\AddedNewMessage;
 class ApiController extends Controller
 {
+	public function requestmessages(Request $request)
+    {
+	    $ps=array();
+		try {  
+		    $chats = DB::table('chats')->where('match_id', '=', $request->matchid)->get();	    
+            foreach($chats as $chat){
+			    $ar['id']=$chat->id;
+				$ar['message']=$chat->message;
+				$ar['created_at']=$chat->created_at;
+				$user = User::find($chat->user_id);
+				$ar['username']=$user->name;
+				$ar['user_id']=$user->id;
+                array_push($ps,$ar); 				
+			}	
+			$response['messages']=$ps;
+			$response['error']=false;			
+		}catch (Exception $e){
+            $response['error']=true;
+        }finally{
+            return Response::json($response);
+        }	
+    }
+    public function requestaddmessage(Request $request)
+    {
+		try{   
+			$chat = new Chat;
+			$chat->match_id =$request->match_id;
+			$chat->user_id = $request->user_id;
+			$chat->message = $request->message;
+			$chat->save();
+			/*event(
+					new AddedNewMessage($chat)
+			);*/
+				$response['error']=false;
+					
+		}catch (Exception $e){
+            $response['error']=true;
+        }finally{
+            return Response::json($response);
+        }	
+    }
 	public function requestprofile(Request $request)
 	{
 	$response=array();						
@@ -301,9 +344,7 @@ class ApiController extends Controller
 	{	
 	$user = User::find(intval($userid));
 	$match = Match::find(intval($matchid));	
-	$match->users->push($user);
-  
-				if($match->users()->sync($match->users->lists('id')->toArray())){ 
+				if($match->users()->attach($userid)){ 
 							$response['error']=false;
 							$response['message']="Player joined success";  
 						}

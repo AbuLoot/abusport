@@ -53,7 +53,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::post('chat/message/{match_id}', 'ChatController@postMessage');
 
     // Real-time chat
-    Route::get('ws/check-auth', function () {
+    Route::get('ws/check-auth', function(){
         return response()->json(['auth' => true]);
     });
 
@@ -90,6 +90,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'role:root', 'role:a
 });
 Route::get('payment/{amount}', 'Payment\EpayController@index'); 
 // Api
+Route::post('api/requestmessages/','ApiController@requestmessages');
+Route::post('api/requestaddmessage/','ApiController@requestaddmessage');
 Route::post('api/requestprofile/','ApiController@requestprofile');
 Route::get('api/requestcallbacklist/{userid}','ApiController@requestcallbacklist');
 Route::post('api/requestnewcallback/','ApiController@requestnewcallback');
