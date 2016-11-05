@@ -28,6 +28,13 @@ Route::get('sport/{sport}', 'SportController@getAreas');
 Route::get('sport/map/{sport}', 'SportController@getAreasWithMap');
 Route::get('sport/calendar/{sport}/{area_id}/{setDays?}', 'SportController@getMatchesWithCalendar');
 
+Route::get('test', function(){
+
+    $user = \App\User::first();
+
+    echo gettype($user);
+
+});
 
 Route::group(['middleware' => 'auth'], function() {
 

@@ -24,7 +24,8 @@
         ],
         "psr-4": {
             "App\\": "app/",
-            "AbuLoot\\Sms\\": "packages/AbuLoot/Sms/src"
+            "AbuLoot\\Sms\\": "packages/AbuLoot/Sms/src",
+            "AbuLoot\\Epay\\": "packages/AbuLoot/Epay/src"
         }
     },
     "autoload-dev": {

@@ -11,39 +11,41 @@
 
 @section('content')
 
-  <div class="panel panel-default">
-    <div class="panel-heading">Мои друзья</div>
-    <div class="panel-body">
+  <div class="col-lg-8 col-md-9 col-sm-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">Мои друзья</div>
+      <div class="panel-body">
 
-      @include('partials.alerts')
+        @include('partials.alerts')
 
-      @if($user->friends()->count())
-        @foreach($user->friends() as $user)
+        @if($user->friends()->count())
+          @foreach($user->friends() as $user)
+            <div class="row">
+              <div class="col-lg-3 col-md-3">
+                @if(!empty($user->profile->avatar))
+                  <img src="/img/users/{{ $user->profile->id . '/' . $user->profile->avatar }}" style="width: 150px; height: 150px;">
+                @else
+                  <img src="/img/user-default.jpg" style="width: 150px; height: 150px;">
+                @endif
+              </div>
+              <div class="col-lg-6 col-md-6">
+                <p><a href="/user-profile/{{ $user->id }}">{{ $user->surname }} {{  $user->name }}</a></p>
+                <p>{{ $user->profile->city->title }}</p>
+                <p>{{ $user->profile->birthday }}</p>
+              </div>
+            </div>
+            <hr>
+          @endforeach
+        @else
           <div class="row">
-            <div class="col-lg-3 col-md-3">
-              @if(!empty($user->profile->avatar))
-                <img src="/img/users/{{ $user->profile->id . '/' . $user->profile->avatar }}" style="width: 150px; height: 150px;">
-              @else
-                <img src="/img/user-default.jpg" style="width: 150px; height: 150px;">
-              @endif
-            </div>
-            <div class="col-lg-6 col-md-6">
-              <p><a href="/user-profile/{{ $user->id }}">{{ $user->surname }} {{  $user->name }}</a></p>
-              <p>{{ $user->profile->city->title }}</p>
-              <p>{{ $user->profile->birthday }}</p>
+            <div class="form-group">
+              <div class="col-lg-12 col-md-12">
+                <p>У вас пока нет друзей</p>
+              </div>
             </div>
           </div>
-          <hr>
-        @endforeach
-      @else
-        <div class="row">
-          <div class="form-group">
-            <div class="col-lg-12 col-md-12">
-              <p>У вас пока нет друзей</p>
-            </div>
-          </div>
-        </div>
-      @endif
+        @endif
+      </div>
     </div>
   </div>
 

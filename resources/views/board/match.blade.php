@@ -34,12 +34,12 @@
         @if (in_array(Auth::id(), $match->users->lists('id')->toArray()) AND Auth::id() != $match->user_id)
           <form action="/leave-match/{{ $match->id }}" method="post">
             {!! csrf_field() !!}
-            <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-remove"></span> Выйти из игры</button>
+            <button type="submit" id="leave-match" class="btn btn-default"><span class="glyphicon glyphicon-remove"></span> Выйти из игры</button>
           </form>
         @elseif(Auth::id() != $match->user_id)
           <form action="/join-match/{{ $match->id }}" method="post">
             {!! csrf_field() !!}
-            <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Вступить в игру</button>
+            <button type="submit" id="join-match" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Вступить в игру</button>
           </form>
         @endif
       </div>
@@ -57,13 +57,13 @@
               <?php $i = 1; ?>
               <tr>
                 <th>
-                  {{ $i++.'. '.$match->user->surname.' '.$match->user->name }}
+                  {{  $i++.'. ' }}<a href="/user-profile/{{ $match->user->id }}">{{ $match->user->surname.' '.$match->user->name }}</a>
                   {{ ($match->user_id == Auth::id()) ? '[Вы организатор]' : '[Организатор]' }}</th>
                 <td>{{ $match->price_for_each }}</td>
               </tr>
               @foreach($match->users as $user)
                 <tr>
-                  <td>{{ $i++.'. '.$user->surname.' '.$user->name }}</td>
+                  <td><a href="/user-profile/{{ $user->id }}">{{ $i++.'. '.$user->surname.' '.$user->name }}</a></td>
                   <td>{{ $match->price_for_each }}</td>
                 </tr>
               @endforeach
@@ -74,4 +74,67 @@
     </div>
   </div>
 
+@endsection
+
+@section('scripts')
+    <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+    <script>
+      var socket = io(':6001'),
+          channel = 'match-{{ $match->id }}';
+
+      socket.on('connect', function() {
+        socket.emit('subscribe', channel)
+      });
+
+      socket.on('error', function() {
+        console.warn('Error', error);
+      });
+
+      socket.on('message', function(message) {
+        console.log(message);
+      });
+
+      socket.on(channel, function(data) {
+
+        console.log(data);
+      });
+
+      // Join match
+      $('#join-match').click(function(e){
+        e.preventDefault();
+
+        var token = $('input[name="_token"]').val(),
+            matchId = '{{ $match->id }}';
+
+        if (matchId != '') {
+          var $btn = $(this).button('loading');
+          $.ajax({
+            type: "POST",
+            url: '/join-match/'+matchId,
+            dataType: "json",
+            data: {
+              '_token':token,
+              'match_id':matchId
+            },
+            success: function(data) {
+              if (data['errors'] != undefined) {
+                for (var e = 0; e < data['errors'].length; e++) {
+                  alert(data['errors'][e].toUpperCase());
+                  console.log(data['errors']);
+                  $btn.button('reset');
+                }
+              } else {
+                alert(data['success']);
+                console.log(data['success']);
+                $btn.button('reset');
+              }
+            }
+          });
+        } else {
+          alert("Ошибка");
+          $btn.button('reset');
+        }
+      });
+
+    </script>
 @endsection

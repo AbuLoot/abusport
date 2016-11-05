@@ -14,6 +14,7 @@ use App\Schedule;
 use App\Http\Requests;
 use App\Events\NotifyNewMatch;
 use App\Events\CreatedNewMatch;
+use App\Events\JoinedToMatch;
 
 class SportController extends Controller
 {
@@ -325,10 +326,8 @@ class SportController extends Controller
 
         foreach ($matches as $item_match)
         {
-            if ($item_match->start_time == $hours[0] OR $item_match->end_time == $hours[0]) {
-                return redirect()->back()->withInput()->withWarning('Поле занято');
-            }
-            elseif ($item_match->start_time == last($hours) OR $item_match->end_time == last($hours)) {
+            if ($item_match->start_time == $hours[0] OR $item_match->end_time == $hours[0] OR
+                $item_match->start_time == last($hours) OR $item_match->end_time == last($hours)) {
                 return redirect()->back()->withInput()->withWarning('Поле занято');
             }
             elseif ($item_match->start_time >= $hours[0] AND $item_match->end_time <= last($hours)) {
@@ -367,8 +366,8 @@ class SportController extends Controller
             ->where('id', $request->match_id)
             ->firstOrFail();
 
-        // $request->user()->balance = $request->user()->balance - $price_for_each;
-        // $request->user()->save();
+        $request->user()->balance = $request->user()->balance - $price_for_each;
+        $request->user()->save();
 
         $match->users()->attach($request->user()->id);
 
@@ -388,6 +387,54 @@ class SportController extends Controller
         $match->users()->detach($request->user()->id);
 
         return redirect()->back()->with('info', 'Вы вышли из игры!');
+    }
+
+    public function joinMatchAjax(Request $request, $match_id)
+    {
+        $date = date('Y-m-d');
+        $date_time = date('Y-m-d H:i:s');
+
+        $match = Match::where('created_at', '<', $date_time)
+            ->where('date', '>=', $date)
+            ->where('id', $request->match_id)
+            ->firstOrFail();
+
+        $request->user()->balance = $request->user()->balance - $price_for_each;
+        $request->user()->save();
+
+        $match->users()->attach($request->user()->id);
+
+        $data_user = [
+            'match_id' => $match->id,
+            'user_id' => $request->user()->id,
+            'surname' => $request->user()->surname,
+            'name' => $request->user()->name
+        ];
+
+        // User joined to match
+        event(new JoinedToMatch($data_user));
+
+        $messages['success'][0] = 'Вы в игре!';
+        return response()->json($messages);
+    }
+
+    public function leaveMatchAjax(Request $request, $match_id)
+    {
+        $date = date('Y-m-d');
+        $date_time = date('Y-m-d H:i:s');
+
+        $match = Match::where('created_at', '<', $date_time)
+            ->where('date', '>=', $date)
+            ->where('id', $request->match_id)
+            ->firstOrFail();
+
+        $match->users()->detach($request->user()->id);
+
+        // User leaved from match
+        event(new LeaveMatch($request->user()));
+
+        $messages['success'][0] = 'Вы вышли из игры!';
+        return response()->json($messages);
     }
 
     public function getDays($setDays, $date = '')
