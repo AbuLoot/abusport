@@ -2,7 +2,7 @@
 
 namespace App\Events;
 
-new App\User;
+use App\User;
 use App\Events\Event;
 
 use Illuminate\Queue\SerializesModels;
@@ -31,6 +31,21 @@ class JoinedToMatch extends Event implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return ['match-'];
+        return ['match-'.$this->user->pivot->match_id];
+    }
+
+    public function broadcastWith()
+    {
+        return [
+            'id' => $this->user->id,
+            'fullName' => $this->user->surname.' '.$this->user->name,
+            'balance' => $this->user->balance,
+            'status' => 1
+        ];
+    }
+
+    public function broadcastAs()
+    {
+        return 'JoinedToMatch';
     }
 }

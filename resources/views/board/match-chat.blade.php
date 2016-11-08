@@ -132,7 +132,7 @@
           dataType: "json",
           data: {'_token':token, 'message':msg},
           success: function(data) {
-
+            // Success
           } 
         });
       } else {

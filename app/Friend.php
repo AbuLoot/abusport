@@ -10,7 +10,5 @@ class Friend extends Model
     
     protected $fillable = [
         'id', 'user_id', 'friend_id', 'accepted'
-    ];
-
-    
+    ];    
 }

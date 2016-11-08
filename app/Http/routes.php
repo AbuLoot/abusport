@@ -30,10 +30,17 @@ Route::get('sport/calendar/{sport}/{area_id}/{setDays?}', 'SportController@getMa
 
 Route::get('test', function(){
 
-    $user = \App\User::first();
+    $user = \App\User::find(1);
 
-    echo gettype($user);
+    $el = $user->roles()->wherePivot('role_id', 1)->first();
+    // echo $el;
+    dd($el);
 
+    foreach ($user->roles as $role) {
+        echo $role->pivot->role_id . '<br>';
+    }
+
+    dd($user);
 });
 
 Route::group(['middleware' => 'auth'], function() {
@@ -58,7 +65,9 @@ Route::group(['middleware' => 'auth'], function() {
     Route::post('store-match', 'SportController@storeMatch');
     Route::post('store-match-ajax', 'SportController@storeMatchAjax');
     Route::post('join-match/{match_id}', 'SportController@joinMatch');
+    Route::post('join-match-ajax/{match_id}', 'SportController@joinMatchAjax');
     Route::post('leave-match/{match_id}', 'SportController@leaveMatch');
+    Route::post('leave-match-ajax/{match_id}', 'SportController@leaveMatchAjax');
 
     Route::get('sport/match/{sport_id}/{match_id}/', 'SportController@getMatch');
     Route::get('sport/match-chat/{sport_id}/{match_id}/', 'SportController@getChat');

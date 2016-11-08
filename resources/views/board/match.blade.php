@@ -27,7 +27,7 @@
           <b>Время игры:</b> {{ $match->start_time.' - '.$match->end_time }}<br>
           <b>Адрес:</b> {{ $match->field->area->address }}<br>
           <b>Игроков:</b> {{ 1 + $match->users->count().'/'.$match->number_of_players }}<br>
-          <b>Цена:</b> {{ $match->price.'тг' }}
+          <b>Цена:</b> <span id="price">{{ $match->price.'тг' }}</span>
         </p>
       </div>
       <div class="col-md-6 text-right">
@@ -53,17 +53,18 @@
                 <th>Цена</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody id="players">
               <?php $i = 1; ?>
               <tr>
                 <th>
-                  {{  $i++.'. ' }}<a href="/user-profile/{{ $match->user->id }}">{{ $match->user->surname.' '.$match->user->name }}</a>
-                  {{ ($match->user_id == Auth::id()) ? '[Вы организатор]' : '[Организатор]' }}</th>
+                  <span id="sort">{{  $i++ }}</span> <a href="/user-profile/{{ $match->user->id }}">{{ $match->user->surname.' '.$match->user->name }}</a>
+                  {{ ($match->user_id == Auth::id()) ? '[Вы организатор]' : '[Организатор]' }}
+                </th>
                 <td>{{ $match->price_for_each }}</td>
               </tr>
               @foreach($match->users as $user)
                 <tr>
-                  <td><a href="/user-profile/{{ $user->id }}">{{ $i++.'. '.$user->surname.' '.$user->name }}</a></td>
+                  <td><span id="sort">{{ $i++ }}</span> <a href="/user-profile/{{ $user->id }}">{{ $user->surname.' '.$user->name }}</a></td>
                   <td>{{ $match->price_for_each }}</td>
                 </tr>
               @endforeach
@@ -77,7 +78,7 @@
 @endsection
 
 @section('scripts')
-    <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+    <script src="/js/socket.io-1.4.5.js"></script>
     <script>
       var socket = io(':6001'),
           channel = 'match-{{ $match->id }}';
@@ -96,6 +97,21 @@
 
       socket.on(channel, function(data) {
 
+        if (data.status == 1) {
+
+          var sort = $('#sort').last(),
+              price = $('#price').val(),
+              newPlayer = 
+                '<tr>' +
+                  '<td><span id="sort">' + sort + '</span> <a href="/user-profile/' + data.id + '">' + data.fullName + '</a></td>' +
+                  '<td>' + data.balance + '</td>' +
+                '</tr>';
+
+                console.log(sort);
+
+          $('#players').append(newPlayer);
+        }
+
         console.log(data);
       });
 
@@ -110,7 +126,7 @@
           var $btn = $(this).button('loading');
           $.ajax({
             type: "POST",
-            url: '/join-match/'+matchId,
+            url: '/join-match-ajax/'+matchId,
             dataType: "json",
             data: {
               '_token':token,

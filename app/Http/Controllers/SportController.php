@@ -215,11 +215,8 @@ class SportController extends Controller
 
         foreach ($matches as $item_match)
         {
-            if ($item_match->start_time == $hours[0] OR $item_match->end_time == $hours[0]) {
-                $messages['errors'][$index++] = 'Поле занято';
-                return response()->json($messages);
-            }
-            elseif ($item_match->start_time == last($hours) OR $item_match->end_time == last($hours)) {
+            if ($item_match->start_time == $hours[0] OR $item_match->end_time == $hours[0] OR
+                $item_match->start_time == last($hours) OR $item_match->end_time == last($hours)) {
                 $messages['errors'][$index++] = 'Поле занято';
                 return response()->json($messages);
             }
@@ -366,8 +363,8 @@ class SportController extends Controller
             ->where('id', $request->match_id)
             ->firstOrFail();
 
-        $request->user()->balance = $request->user()->balance - $price_for_each;
-        $request->user()->save();
+        // $request->user()->balance = $request->user()->balance - $price_for_each;
+        // $request->user()->save();
 
         $match->users()->attach($request->user()->id);
 
@@ -399,20 +396,22 @@ class SportController extends Controller
             ->where('id', $request->match_id)
             ->firstOrFail();
 
-        $request->user()->balance = $request->user()->balance - $price_for_each;
-        $request->user()->save();
+        if ($match->users()->wherePivot('user_id', $request->user()->id)->first()) {
+            $messages['errors'][0] = 'Вы уже в игре!';
+            return response()->json($messages);
+        }
 
         $match->users()->attach($request->user()->id);
 
-        $data_user = [
-            'match_id' => $match->id,
-            'user_id' => $request->user()->id,
-            'surname' => $request->user()->surname,
-            'name' => $request->user()->name
-        ];
+        // Taking from balance
+        $price_for_each = $match->price / $match->number_of_players;
+        $request->user()->balance = $request->user()->balance - $price_for_each;
+        $request->user()->save();
+
+        $user = $match->users()->wherePivot('user_id', $request->user()->id)->first();
 
         // User joined to match
-        event(new JoinedToMatch($data_user));
+        event(new JoinedToMatch($user));
 
         $messages['success'][0] = 'Вы в игре!';
         return response()->json($messages);
