@@ -14,38 +14,39 @@
 
 @section('content')
 
-  <div class="areas">
+  <div class="col-lg-8 col-md-9 col-sm-12">
+    <div class="areas">
 
       @include('partials.alerts')
       <div class="wrapper-height" id="search_on_ya_Map"></div>
 
+    </div>
   </div>
 
 @endsection
 
 @section('styles')
-<style>
-  #search_on_ya_Map{
-    width: 100%;
-    height: 500px;
-  }
+  <style>
+    #search_on_ya_Map{
+      width: 100%;
+      height: 500px;
+    }
 
-  .ymaps-2-1-34-b-cluster-tabs__menu, .ymaps-2-1-34-b-cluster-tabs__content-item {
-    display: block;
-    width: 200px;
-    min-height: 290px;
-  }
+    .ymaps-2-1-34-b-cluster-tabs__menu, .ymaps-2-1-34-b-cluster-tabs__content-item {
+      display: block;
+      width: 200px;
+      min-height: 290px;
+    }
 
-  .ymaps-2-1-34-balloon__content {
-    max-width: 330px;
-    min-height: 295px;
-  }
+    .ymaps-2-1-34-balloon__content {
+      max-width: 330px;
+      min-height: 295px;
+    }
 
-  .ymaps-2-1-34-b-cluster-tabs{
-    min-height: 300px;
-  }
-
-</style>
+    .ymaps-2-1-34-b-cluster-tabs{
+      min-height: 300px;
+    }
+  </style>
 @endsection
 
 @section('scripts')
@@ -73,7 +74,7 @@
     }
 
     $(document).ready(function(){
-//            $("#search_on_ya_Map").height($(window).height() - ($(".navbar.header").height() + 40));
+      //$("#search_on_ya_Map").height($(window).height() - ($(".navbar.header").height() + 40));
       //$("#search_on_ya_Map").width($(window).width() - 400);
     });
 

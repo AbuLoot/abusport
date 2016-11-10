@@ -2,7 +2,9 @@
 
 namespace App\Events;
 
-use App\User;
+use Auth;
+
+use App\Match;
 use App\Events\Event;
 
 use Illuminate\Queue\SerializesModels;
@@ -13,15 +15,17 @@ class JoinedToMatch extends Event implements ShouldBroadcast
     use SerializesModels;
 
     public $user;
+    public $match;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(User $user)
+    public function __construct(Match $match)
     {
-        $this->user = $user;
+        $this->match = $match;
+        $this->user = $match->users()->wherePivot('user_id', Auth::id())->first();
     }
 
     /**
@@ -31,7 +35,7 @@ class JoinedToMatch extends Event implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return ['match-'.$this->user->pivot->match_id];
+        return ['match-'.$this->match->id];
     }
 
     public function broadcastWith()
@@ -40,6 +44,7 @@ class JoinedToMatch extends Event implements ShouldBroadcast
             'id' => $this->user->id,
             'fullName' => $this->user->surname.' '.$this->user->name,
             'balance' => $this->user->balance,
+            'numberOfPlayers' => 1 + $this->match->users->count(),
             'status' => 1
         ];
     }

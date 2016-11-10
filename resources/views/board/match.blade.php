@@ -26,8 +26,8 @@
         <p>
           <b>Время игры:</b> {{ $match->start_time.' - '.$match->end_time }}<br>
           <b>Адрес:</b> {{ $match->field->area->address }}<br>
-          <b>Игроков:</b> {{ 1 + $match->users->count().'/'.$match->number_of_players }}<br>
-          <b>Цена:</b> <span id="price">{{ $match->price.'тг' }}</span>
+          <b>Игроков:</b> <span id="number-of-players">{{ $match_users_count }}</span> / {{ $match->number_of_players }}<br>
+          <b>Цена:</b> {{ $match->price.'тг' }}
         </p>
       </div>
       <div class="col-md-6 text-right">
@@ -37,7 +37,7 @@
             <button type="submit" id="leave-match" class="btn btn-default"><span class="glyphicon glyphicon-remove"></span> Выйти из игры</button>
           </form>
         @elseif(Auth::id() != $match->user_id)
-          <form action="/join-match/{{ $match->id }}" method="post">
+          <form action="/join-match/{{ $match->id }}" id="form-join-match" method="post">
             {!! csrf_field() !!}
             <button type="submit" id="join-match" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Вступить в игру</button>
           </form>
@@ -60,7 +60,7 @@
                   <span id="sort">{{  $i++ }}</span> <a href="/user-profile/{{ $match->user->id }}">{{ $match->user->surname.' '.$match->user->name }}</a>
                   {{ ($match->user_id == Auth::id()) ? '[Вы организатор]' : '[Организатор]' }}
                 </th>
-                <td>{{ $match->price_for_each }}</td>
+                <td id="price-for-each">{{ $match->price_for_each }}</td>
               </tr>
               @foreach($match->users as $user)
                 <tr>
@@ -99,17 +99,25 @@
 
         if (data.status == 1) {
 
-          var sort = $('#sort').last(),
-              price = $('#price').val(),
-              newPlayer = 
+          var sort = $('#sort:last').text(),
+              price = $('#price').text(),
+              priceForEach = $('#price-for-each').text(),
+              numberOfPlayers = $('#number-of-players').text(),
+              newPlayer = '';
+
+          sort = +sort + 1;
+
+          newPlayer = 
                 '<tr>' +
                   '<td><span id="sort">' + sort + '</span> <a href="/user-profile/' + data.id + '">' + data.fullName + '</a></td>' +
-                  '<td>' + data.balance + '</td>' +
+                  '<td>' + priceForEach + '</td>' +
                 '</tr>';
 
-                console.log(sort);
+                console.log(data.numberOfPlayers);
 
           $('#players').append(newPlayer);
+          $('#number-of-players').text(data.numberOfPlayers);
+          $('#form-join-match').remove();
         }
 
         console.log(data);

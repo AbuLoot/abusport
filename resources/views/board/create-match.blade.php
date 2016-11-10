@@ -83,7 +83,7 @@
           </ul>
 
           <div class="table-responsive">
-            <table class="table table-hover table-striped table-bordered">
+            <table class="table table-bordered">
               <thead>
                 <tr>
                   <th class="empty-th text-center h3">
@@ -228,7 +228,7 @@
             dataId = new Array(),
             sum = 0;
             priceForEach = 0,
-            balance = $('#balance').data('balance');
+            balance = $('#balance').text();
 
         $('input[name="hours[]"]:checked').each(function() {
           hours.push($(this).val());

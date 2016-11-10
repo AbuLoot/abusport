@@ -401,17 +401,26 @@ class SportController extends Controller
             return response()->json($messages);
         }
 
+        $price_for_each = $match->price / $match->number_of_players;
+
+        if ($request->user()->balance < $price_for_each) {
+            $messages['errors'][0] = 'У вас недостаточно денег для участья в игре';
+            return response()->json($messages);
+        }
+
+        if ($match->users->count() > $match->number_of_players) {
+            $messages['errors'][0] = 'Нет свободного места!';
+            return response()->json($messages);
+        }
+
         $match->users()->attach($request->user()->id);
 
         // Taking from balance
-        $price_for_each = $match->price / $match->number_of_players;
         $request->user()->balance = $request->user()->balance - $price_for_each;
         $request->user()->save();
 
-        $user = $match->users()->wherePivot('user_id', $request->user()->id)->first();
-
         // User joined to match
-        event(new JoinedToMatch($user));
+        event(new JoinedToMatch($match));
 
         $messages['success'][0] = 'Вы в игре!';
         return response()->json($messages);

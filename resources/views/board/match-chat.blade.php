@@ -59,15 +59,12 @@
   </div>
 
   <div class="col-lg-3 col-md-3 col-sm-12">
-    <div class="list-group">
-      <a href="#" class="list-group-item active">
-        Cras justo odio
-      </a>
-      <a href="#" class="list-group-item">Dapibus ac facilisis in</a>
-      <a href="#" class="list-group-item">Morbi leo risus</a>
-      <a href="#" class="list-group-item">Porta ac consectetur ac</a>
-      <a href="#" class="list-group-item">Vestibulum at eros</a>
-    </div>
+    <ul class="list-group">
+      <li class="list-group-item">{{ $match->user->surname . ' ' . $match->user->name }} [Организатор]</li>
+      @foreach($match->users as $user)
+        <li class="list-group-item">{{ $user->surname . ' ' . $user->name }}</li>
+      @endforeach
+    </ul>
   </div>
 
 @endsection
@@ -110,9 +107,9 @@
 
       if (data.user_id == user_id) {
         appendMessage(data, 'text-right');
+      } else {
+        appendMessage(data);
       }
-
-      appendMessage(data);
 
       block.scrollTop = block.scrollHeight;
     });
@@ -136,7 +133,7 @@
           } 
         });
       } else {
-        alert("Please Add Message.");
+        alert("Введите сообщение");
       }
     });
 

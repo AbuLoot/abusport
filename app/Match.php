@@ -35,6 +35,11 @@ class Match extends Model
         return ($this->price / $this->number_of_players) . 'тг';
     }
 
+    public function getMatchUsersCountAttribute()
+    {
+        return $this->users->count() + 1;
+    }
+
     public function getMatchDateAttribute()
     {
         list($date['year'], $date['month'], $date['day']) = explode('-', $this->date);

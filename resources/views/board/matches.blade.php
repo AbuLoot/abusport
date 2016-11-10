@@ -37,7 +37,7 @@
           @endforeach
         </ul>
         <div class="table-responsive">
-          <table class="table table-hover table-bordered">
+          <table class="table table-bordered">
             <thead>
               <tr>
                 <th>Время старта</th>
@@ -107,14 +107,8 @@
                             @endif
                           </a>
                         </td>
-                        <td>{{ '0/'.$match->number_of_players }}</td>
-                        <td>
-                          @foreach($field->schedules->where('week', $index_weekday) as $schedule)
-                            @if ($schedule->start_time <= $hour AND $schedule->end_time >= $hour)
-                              {{ $schedule->price }} тг
-                            @endif
-                          @endforeach
-                        </td>
+                        <td>{{ $match->match_users_count.'/'.$match->number_of_players }}</td>
+                        <td>{{ $match->price }} тг</td>
                       </tr>
                     @endif
                   @endforeach

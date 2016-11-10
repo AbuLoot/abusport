@@ -35,7 +35,7 @@ class AuthCustomController extends Controller
             return redirect('/');
         }
         else {
-            return redirect()->back()->withStatus('Не правильный логин или пароль или не подтвержден номер телефона.');
+            return redirect()->back()->withInput()->withWarning('Не правильный логин или пароль или не подтвержден номер телефона.');
         }
     }
 

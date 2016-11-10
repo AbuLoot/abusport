@@ -10,7 +10,6 @@
     <meta name="description" content="@yield('meta_description', 'AbuSport')">
 
     <link href="/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- <link rel="stylesheet" type="text/css" href="http://bootswatch.com/cerulean/bootstrap.min.css"> -->
     <link rel="stylesheet" href="/bower_components/bootstrap-offcanvas/dist/css/bootstrap.offcanvas.css">
     <link rel="stylesheet" type="text/css" href="/css/style.css">
     @yield('styles')
@@ -49,7 +48,9 @@
           @if (Auth::guest())
             <li><a href="{{ url('login') }}"><span class="glyphicon glyphicon-log-in"></span> Войти</a></li>
           @else
-            <li><a href="{{ url('create-match') }}"><span class="glyphicon glyphicon-plus"></span> Создать матч</a></li>
+            <li>
+              <a href="{{ url('create-match') }}" class="text-success"><span class="glyphicon glyphicon-plus"></span> Создать матч</a>
+            </li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ Auth::user()->name }} <span class="caret"></span></a>
               <ul class="dropdown-menu">
@@ -95,7 +96,7 @@
 
           <ul class="nav nav-pills nav-stacked">
             @if (Auth::check())
-              <li><a href="/my-balance">Баланс <small data-balance="{{ Auth::user()->balance }}" id="balance" class="text-left text-success">{{ Auth::user()->balance }}тг</small></a></li>
+              <li><a href="/my-balance">Баланс <small id="balance" class="text-success">{{ Auth::user()->balance }}</small><small class="text-success">тг</small></a></li>
               <li><a href="/my-profile">Мой профиль</a></li>
               <li><a href="/my-matches">Мои матчи <span class="badge">{{ Auth::user()->matches()->count() }}</span></a></li>
               <li><a href="/friends">Мои друзья <span class="badge">{{ Auth::user()->friends()->count() }}</span></a></li>
