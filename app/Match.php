@@ -32,10 +32,10 @@ class Match extends Model
 
     public function getPriceForEachAttribute()
     {
-        return ($this->price / $this->number_of_players) . 'тг';
+        return ($this->price / $this->number_of_players) . ' тг';
     }
 
-    public function getMatchUsersCountAttribute()
+    public function getUsersCountAttribute()
     {
         return $this->users->count() + 1;
     }

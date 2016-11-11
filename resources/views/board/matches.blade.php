@@ -47,8 +47,7 @@
               </tr>
             </thead>
             <tbody>
-              @foreach(trans('data.hours') as $hour)
-
+              @foreach(trans('data.hours') as $hour_key => $hour)
                 @continue($hour < $area->start_time)
 
                 @if ($current_date >= $date AND $current_hour >= $hour)
@@ -92,22 +91,30 @@
                   @endif
                 @else
                   <?php $game = false; ?>
-                  @foreach ($field->matches->where('date', $date)->where('status', 1) as $match)
+                  @foreach ($field->matches->where('date', $date) as $match)
                     @if ($match->start_time <= $hour AND $match->end_time >= $hour)
                       <?php $game = true; ?>
                       <tr>
                         <td>{{ $hour }}</td>
-                        <td>
-                          <a class="match-link" href="{{ url('sport/match/'.$area->id.'/'.$match->id) }}">
-                            Матч {{ $match->id }}
-                            @if ($match->match_type == 'open')
-                              <span class="pull-right label label-success">Открытая игра</span>
-                            @else
-                              <span class="pull-right label label-default">Закрытая игра</span>
-                            @endif
-                          </a>
-                        </td>
-                        <td>{{ $match->match_users_count.'/'.$match->number_of_players }}</td>
+                        <?php $id = $field->id.'-'.$day['year'].'-'.$hour_key; ?>
+                        @if ($match->status == 1)
+                          <td id="#td-{{ $id }}">
+                            <a class="match-link" href="{{ url('sport/match/'.$area->id.'/'.$match->id) }}">
+                              Матч {{ $match->id }}
+                              @if ($match->match_type == 'open')
+                                <span class="pull-right label label-success">Открытая игра</span>
+                              @else
+                                <span class="pull-right label label-default">Закрытая игра</span>
+                              @endif
+                            </a>
+                          </td>
+                        @else
+                          <td id="#td-{{ $id }}">
+                            <span class="glyphicon glyphicon-refresh spin"></span>
+                            <span>В обработке</span>
+                          </td>
+                        @endif
+                        <td>{{ $match->users_count.'/'.$match->number_of_players }}</td>
                         <td>{{ $match->price }} тг</td>
                       </tr>
                     @endif
@@ -134,9 +141,57 @@
             </tbody>
           </table>
         </div>
-
       @endforeach
     </div>
   </div>
 
+@endsection
+
+@section('scripts')
+    <script src="/js/socket.io-1.4.5.js"></script>
+    <script>
+      var socket = io(':6001'),
+          channel = 'area-{{ $area->id }}_date-{{ $date }}';
+
+      socket.on('connect', function() {
+        socket.emit('subscribe', channel)
+      });
+
+      socket.on('error', function() {
+        console.warn('Error', error);
+      });
+
+      socket.on('message', function(message) {
+        console.log(message);
+      });
+
+      socket.on(channel, function(data) {
+
+        if (data.status == 0) {
+          var startTime = data.startTime.split(':'),
+              endTime = data.endTime.split(':'),
+              cycle = +endTime[0] - +startTime[0];
+
+          for (var i = 0; i <= cycle; i++) {
+            $('#td-' + data.fieldId + '-' + data.date + '-' + startTime[0]++).empty().append('<span class="glyphicon glyphicon-refresh spin"></span> <span>В обработке</span>');
+          }
+        } else {
+          var startTime = data.startTime.split(':'),
+              endTime = data.endTime.split(':'),
+              cycle = +endTime[0] - +startTime[0],
+              matchType = '';
+
+          matchType = (data.matchType == 'open') ? '<span class="pull-right label label-success">Открытая игра</span>' : '<span class="pull-right label label-default">Закрытая игра</span>';
+
+          for (var i = 0; i <= cycle; i++) {
+            $('#td-' + data.fieldId + '-' + data.date + '-' + startTime[0]++).empty().append('<span class="glyphicon glyphicon-time"></span> <a href="/sport/match/' + data.areaId + '/' + data.id + '">Игра  ' + data.id + matchType + '</a>');
+          }
+        }
+        console.log(data);
+      });
+
+      $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+      });
+    </script>
 @endsection

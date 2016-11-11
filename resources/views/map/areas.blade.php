@@ -2,13 +2,11 @@
 
 @section('tabs')
 
-  <div class="col-lg-8 col-md-9 col-sm-12">
-    <ul class="tabs-panel">
-      <li><a href="{{ action('SportController@getAreas', $sport->slug) }}">Площадки</a></li>
-      <li class="active"><a href="#">На карте</a></li>
-      <li><a href="#">Горячие матчи</a></li>
-    </ul>
-  </div>
+  <ul class="tabs-panel">
+    <li><a href="{{ action('SportController@getAreas', $sport->slug) }}">Площадки</a></li>
+    <li class="active"><a href="#">На карте</a></li>
+    <li><a href="#">Горячие матчи</a></li>
+  </ul>
 
 @endsection
 

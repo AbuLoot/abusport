@@ -60,9 +60,10 @@
 
   <div class="col-lg-3 col-md-3 col-sm-12">
     <ul class="list-group">
-      <li class="list-group-item">{{ $match->user->surname . ' ' . $match->user->name }} [Организатор]</li>
+      <?php $i = 1; ?>
+      <li class="list-group-item">{{ $i++ . ' ' . $match->user->surname . ' ' . $match->user->name }} [Организатор]</li>
       @foreach($match->users as $user)
-        <li class="list-group-item">{{ $user->surname . ' ' . $user->name }}</li>
+        <li class="list-group-item">{{ $i++ . ' ' . $user->surname . ' ' . $user->name }}</li>
       @endforeach
     </ul>
   </div>
@@ -70,8 +71,7 @@
 @endsection
 
 @section('scripts')
-
-  <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+  <script src="/js/socket.io-1.4.5.js"></script>
   <script>
     var block = document.getElementById("chat");
     block.scrollTop = block.scrollHeight;
@@ -125,7 +125,7 @@
       if (msg != '') {
         $.ajax({
           type: "POST",
-          url: '{!! URL::to("chat/message/".$match->id) !!}',
+          url: '{!! URL::to("chat/message-ajax/".$match->id) !!}',
           dataType: "json",
           data: {'_token':token, 'message':msg},
           success: function(data) {
@@ -136,25 +136,6 @@
         alert("Введите сообщение");
       }
     });
-
-    // $('form').on('submit', function() {
-    //   var text = $('#message').val(),
-    //       msg = {message: text};
-
-    //   socket.join(channel, function(error) {
-    //     socket.send(msg);
-    //     appendMessage(msg);
-    //   });
-
-    //   $('#message').val('');
-    //   return false;
-    // });
-
-    // socket.on('message', function(data) {
-    //   console.log('Message: ', data);
-    // }).on('server-info', function(data) {
-    //   console.log(data);
-    // });
   </script>
 
 @endsection

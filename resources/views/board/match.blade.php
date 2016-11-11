@@ -26,15 +26,15 @@
         <p>
           <b>Время игры:</b> {{ $match->start_time.' - '.$match->end_time }}<br>
           <b>Адрес:</b> {{ $match->field->area->address }}<br>
-          <b>Игроков:</b> <span id="number-of-players">{{ $match_users_count }}</span> / {{ $match->number_of_players }}<br>
-          <b>Цена:</b> {{ $match->price.'тг' }}
+          <b>Игроков:</b> <span id="number-of-players">{{ $match->users_count }}</span> / {{ $match->number_of_players }}<br>
+          <b>Цена:</b> {{ $match->price }} тг. <b>цена с игрока:</b> {{ $match->price_for_each }}
         </p>
       </div>
       <div class="col-md-6 text-right">
         @if (in_array(Auth::id(), $match->users->lists('id')->toArray()) AND Auth::id() != $match->user_id)
-          <form action="/leave-match/{{ $match->id }}" method="post">
+          <form action="/left-match/{{ $match->id }}" method="post">
             {!! csrf_field() !!}
-            <button type="submit" id="leave-match" class="btn btn-default"><span class="glyphicon glyphicon-remove"></span> Выйти из игры</button>
+            <button type="submit" id="left-match" class="btn btn-default"><span class="glyphicon glyphicon-remove"></span> Выйти из игры</button>
           </form>
         @elseif(Auth::id() != $match->user_id)
           <form action="/join-match/{{ $match->id }}" id="form-join-match" method="post">
@@ -50,7 +50,6 @@
             <thead>
               <tr>
                 <th>Игроки</th>
-                <th>Цена</th>
               </tr>
             </thead>
             <tbody id="players">
@@ -60,12 +59,10 @@
                   <span id="sort">{{  $i++ }}</span> <a href="/user-profile/{{ $match->user->id }}">{{ $match->user->surname.' '.$match->user->name }}</a>
                   {{ ($match->user_id == Auth::id()) ? '[Вы организатор]' : '[Организатор]' }}
                 </th>
-                <td id="price-for-each">{{ $match->price_for_each }}</td>
               </tr>
               @foreach($match->users as $user)
-                <tr>
+                <tr id="user-{{ $user->id }}">
                   <td><span id="sort">{{ $i++ }}</span> <a href="/user-profile/{{ $user->id }}">{{ $user->surname.' '.$user->name }}</a></td>
-                  <td>{{ $match->price_for_each }}</td>
                 </tr>
               @endforeach
             </tbody>
@@ -99,25 +96,21 @@
 
         if (data.status == 1) {
 
-          var sort = $('#sort:last').text(),
-              price = $('#price').text(),
-              priceForEach = $('#price-for-each').text(),
-              numberOfPlayers = $('#number-of-players').text(),
-              newPlayer = '';
+          var price = $('#price').text(),
+              numberOfPlayers = $('#number-of-players').text();
 
-          sort = +sort + 1;
+          $('#players').append(
+            '<tr id="user-' + data.id + '">' +
+              '<td><span id="sort">' + data.numberOfPlayers + '</span> <a href="/user-profile/' + data.id + '">' + data.fullName + '</a></td>' +
+            '</tr>'
+          );
 
-          newPlayer = 
-                '<tr>' +
-                  '<td><span id="sort">' + sort + '</span> <a href="/user-profile/' + data.id + '">' + data.fullName + '</a></td>' +
-                  '<td>' + priceForEach + '</td>' +
-                '</tr>';
-
-                console.log(data.numberOfPlayers);
-
-          $('#players').append(newPlayer);
           $('#number-of-players').text(data.numberOfPlayers);
           $('#form-join-match').remove();
+        } else if (data.status == 0) {
+
+          $('#number-of-players').text(data.numberOfPlayers);
+          $('#user-' + data.id).remove();
         }
 
         console.log(data);

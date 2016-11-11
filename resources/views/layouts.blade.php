@@ -96,7 +96,7 @@
 
           <ul class="nav nav-pills nav-stacked">
             @if (Auth::check())
-              <li><a href="/my-balance">Баланс <small id="balance" class="text-success">{{ Auth::user()->balance }}</small><small class="text-success">тг</small></a></li>
+              <li><a href="/my-balance">Баланс <small id="balance" class="text-success">{{ Auth::user()->balance }}</small> <small class="text-success">тг</small></a></li>
               <li><a href="/my-profile">Мой профиль</a></li>
               <li><a href="/my-matches">Мои матчи <span class="badge">{{ Auth::user()->matches()->count() }}</span></a></li>
               <li><a href="/friends">Мои друзья <span class="badge">{{ Auth::user()->friends()->count() }}</span></a></li>

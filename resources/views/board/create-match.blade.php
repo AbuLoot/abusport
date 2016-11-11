@@ -171,7 +171,7 @@
 @endsection
 
 @section('scripts')
-    <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+    <script src="/js/socket.io-1.4.5.js"></script>
     <script>
       var socket = io(':6001'),
           channel = 'area-{{ $active_area->id }}';
@@ -314,6 +314,5 @@
           $btn.button('reset');
         }
       });
-
     </script>
 @endsection

@@ -12,9 +12,11 @@ use App\Area;
 use App\Match;
 use App\Schedule;
 use App\Http\Requests;
+use App\Events\LeftMatch;
+use App\Events\JoinedToMatch;
 use App\Events\NotifyNewMatch;
 use App\Events\CreatedNewMatch;
-use App\Events\JoinedToMatch;
+use App\Events\CreatedNewMatchByDate;
 
 class SportController extends Controller
 {
@@ -244,6 +246,7 @@ class SportController extends Controller
 
         // Notify All Users
         event(new CreatedNewMatch($match));
+        event(new CreatedNewMatchByDate($match));
 
         $messages['success'][$index++] = 'Ваша заявка принята для обработки';
         return response()->json($messages);
@@ -348,7 +351,9 @@ class SportController extends Controller
         // Notify Area Admin
         event(new NotifyNewMatch($match));
 
+        // Notify All Users
         event(new CreatedNewMatch($match));
+        event(new CreatedNewMatchByDate($match));
 
         return redirect()->back()->with('status', 'Запись добавлена!');
     }
@@ -363,27 +368,30 @@ class SportController extends Controller
             ->where('id', $request->match_id)
             ->firstOrFail();
 
-        // $request->user()->balance = $request->user()->balance - $price_for_each;
-        // $request->user()->save();
+        if ($match->users()->wherePivot('user_id', $request->user()->id)->first()) {
+            return redirect()->back()->with('status', 'Вы уже в игре!');
+        }
+
+        if ($match->users->count() > $match->number_of_players) {
+            return redirect()->back()->with('status', 'Нет свободного места!');
+        }
+
+        $price_for_each = $match->price / $match->number_of_players;
+
+        if ($request->user()->balance < $price_for_each) {
+            return redirect()->back()->with('status', 'У вас недостаточно денег для участья в игре');
+        }
 
         $match->users()->attach($request->user()->id);
 
+        // Taking from balance
+        $request->user()->balance = $request->user()->balance - $price_for_each;
+        $request->user()->save();
+
+        // User joined to match
+        event(new JoinedToMatch($match));
+
         return redirect()->back()->with('status', 'Вы в игре!');
-    }
-
-    public function leaveMatch(Request $request, $match_id)
-    {
-        $date = date('Y-m-d');
-        $date_time = date('Y-m-d H:i:s');
-
-        $match = Match::where('created_at', '<', $date_time)
-            ->where('date', '>=', $date)
-            ->where('id', $request->match_id)
-            ->firstOrFail();
-
-        $match->users()->detach($request->user()->id);
-
-        return redirect()->back()->with('info', 'Вы вышли из игры!');
     }
 
     public function joinMatchAjax(Request $request, $match_id)
@@ -401,15 +409,15 @@ class SportController extends Controller
             return response()->json($messages);
         }
 
+        if ($match->users->count() > $match->number_of_players) {
+            $messages['errors'][0] = 'Нет свободного места!';
+            return response()->json($messages);
+        }
+
         $price_for_each = $match->price / $match->number_of_players;
 
         if ($request->user()->balance < $price_for_each) {
             $messages['errors'][0] = 'У вас недостаточно денег для участья в игре';
-            return response()->json($messages);
-        }
-
-        if ($match->users->count() > $match->number_of_players) {
-            $messages['errors'][0] = 'Нет свободного места!';
             return response()->json($messages);
         }
 
@@ -426,7 +434,7 @@ class SportController extends Controller
         return response()->json($messages);
     }
 
-    public function leaveMatchAjax(Request $request, $match_id)
+    public function leftMatch(Request $request, $match_id)
     {
         $date = date('Y-m-d');
         $date_time = date('Y-m-d H:i:s');
@@ -438,8 +446,38 @@ class SportController extends Controller
 
         $match->users()->detach($request->user()->id);
 
-        // User leaved from match
-        event(new LeaveMatch($request->user()));
+        $price_for_each = $match->price / $match->number_of_players;
+
+        // Return balance
+        $request->user()->balance = $request->user()->balance + $price_for_each;
+        $request->user()->save();
+
+        // User left from match
+        event(new LeftMatch($match));
+
+        return redirect()->back()->with('info', 'Вы вышли из игры!');
+    }
+
+    public function leftMatchAjax(Request $request, $match_id)
+    {
+        $date = date('Y-m-d');
+        $date_time = date('Y-m-d H:i:s');
+
+        $match = Match::where('created_at', '<', $date_time)
+            ->where('date', '>=', $date)
+            ->where('id', $request->match_id)
+            ->firstOrFail();
+
+        $match->users()->detach($request->user()->id);
+
+        $price_for_each = $match->price / $match->number_of_players;
+
+        // Return balance
+        $request->user()->balance = $request->user()->balance + $price_for_each;
+        $request->user()->save();
+
+        // User left from match
+        event(new LeftMatch($match));
 
         $messages['success'][0] = 'Вы вышли из игры!';
         return response()->json($messages);
