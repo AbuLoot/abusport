@@ -30,7 +30,7 @@
           <b>Цена:</b> {{ $match->price }} тг. <b>цена с игрока:</b> {{ $match->price_for_each }}
         </p>
       </div>
-      <div class="col-md-6 text-right">
+      <div class="col-md-6 text-right" id="door">
         @if (in_array(Auth::id(), $match->users->lists('id')->toArray()) AND Auth::id() != $match->user_id)
           <form action="/left-match/{{ $match->id }}" method="post">
             {!! csrf_field() !!}
@@ -117,6 +117,7 @@
       });
 
       // Join match
+      // $('form').on('click', '#join-match', function(e){
       $('#join-match').click(function(e){
         e.preventDefault();
 
@@ -141,7 +142,16 @@
                   $btn.button('reset');
                 }
               } else {
+
                 alert(data['success']);
+
+                $('#door').append(
+                  '<form action="/left-match/' + matchId + '" method="post">' +
+                    '<input type="hidden" name="_token" value="' + data['csrf'] + '">' +
+                    '<button type="submit" id="left-match" class="btn btn-default"><span class="glyphicon glyphicon-remove"></span> Выйти из игры</button>' +
+                  '</form>'
+                );
+
                 console.log(data['success']);
                 $btn.button('reset');
               }

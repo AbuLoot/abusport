@@ -53,7 +53,7 @@ main.container {
   position: relative;
   text-decoration: none;
   text-align: center;
-  font-size: 16px;
+  font-size: 15px;
 }
 
 .sports .sport-item img {
@@ -173,25 +173,21 @@ td.status-matches > div > label {
   vertical-align: bottom;
   border-bottom: 2px solid #ddd;
 }
-.table-bordered>thead>tr>th.empty-th {
+.table-bordered > thead > tr > th.empty-th {
   border: 0;
 }
-.table>tbody>tr>td.hours {
+.table > tbody > tr > td.hours {
   position: relative;
   border: 0;
   padding: 0;
 }
-.table>tbody>tr>td.hours>span {
+.table > tbody > tr > td.hours > span {
   position: absolute;
   right: 8px;
   margin-top: -9px;
 }
-.table>tbody>tr>td.vertical-align {
+.table > tbody > tr > td.vertical-align {
   vertical-align: middle;
-}
-.spin {
-  -webkit-animation: spin 2s infinite linear;
-  animation: spin 2s infinite linear;
 }
 
 /* Chat */

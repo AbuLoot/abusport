@@ -129,7 +129,7 @@
                             <?php $game = true; ?>
                             @if ($match->status == 0)
                               <td id="td-{{ $id }}">
-                                <span class="glyphicon glyphicon-refresh spin"></span>
+                                <span class="glyphicon glyphicon-refresh"></span>
                                 <span>В обработке</span>
                               </td>
                             @else
@@ -146,7 +146,7 @@
                             <?php $id = $field->id.'-'.$day['year'].'-'.$hour_key; ?>
                             @if ($schedule->start_time <= $hour AND $schedule->end_time >= $hour)
                               <td id="td-{{ $id }}">
-                                <label class="checkbox-inline" data-toggle="tooltip" data-placement="right" title="{{ $schedule->price }}тг">
+                                <label class="checkbox-inline" data-toggle="tooltip" data-placement="right" title="{{ $schedule->price }} тг">
                                   <input type="checkbox" name="hours[]" data-price="{{ $schedule->price }}"  data-id="{{ $id }}" value="{{ $field->id.' '.$day['year'].' '.$hour }}"> Купить
                                 </label>
                               </td>
@@ -195,7 +195,7 @@
               cycle = +endTime[0] - +startTime[0];
 
           for (var i = 0; i <= cycle; i++) {
-            $('#td-' + data.fieldId + '-' + data.date + '-' + startTime[0]++).empty().append('<span class="glyphicon glyphicon-refresh spin"></span> <span>В обработке</span>');
+            $('#td-' + data.fieldId + '-' + data.date + '-' + startTime[0]++).empty().append('<span class="glyphicon glyphicon-refresh"></span> <span>В обработке</span>');
           }
         } else {
           var startTime = data.startTime.split(':'),

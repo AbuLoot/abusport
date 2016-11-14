@@ -430,7 +430,8 @@ class SportController extends Controller
         // User joined to match
         event(new JoinedToMatch($match));
 
-        $messages['success'][0] = 'Вы в игре!';
+        $messages['success'] = 'Вы в игре!';
+        $messages['csrf'] = csrf_token();
         return response()->json($messages);
     }
 

@@ -94,9 +94,9 @@
                   @foreach ($field->matches->where('date', $date) as $match)
                     @if ($match->start_time <= $hour AND $match->end_time >= $hour)
                       <?php $game = true; ?>
+                      <?php $id = $field->id.'-'.$day['year'].'_'.$hour_key; ?>
                       <tr>
                         <td>{{ $hour }}</td>
-                        <?php $id = $field->id.'-'.$day['year'].'-'.$hour_key; ?>
                         @if ($match->status == 1)
                           <td id="#td-{{ $id }}">
                             <a class="match-link" href="{{ url('sport/match/'.$area->id.'/'.$match->id) }}">
@@ -121,20 +121,20 @@
                   @endforeach
 
                   @if ($game == false)
-                    <tr class="bg-info">
-                      <td>{{ $hour }}</td>
-                      <td>
-                        <span>Поле свободно</span>
-                      </td>
-                      <td>{{ '0' }}</td>
-                      <td>
-                        @foreach($field->schedules->where('week', $index_weekday) as $schedule)
-                          @if ($schedule->start_time <= $hour AND $schedule->end_time >= $hour)
-                            {{ $schedule->price }} тг
-                          @endif
-                        @endforeach
-                      </td>
-                    </tr>
+                    <?php $game = true; ?>
+                    <?php $id = $field->id.'-'.$day['year'].'_'.$hour_key; ?>
+                    @foreach($field->schedules->where('week', $index_weekday) as $schedule)
+                      @if ($schedule->start_time <= $hour AND $schedule->end_time >= $hour)
+                        <tr id="{{ $id }}" class="bg-info">
+                          <td>{{ $hour }}</td>
+                          <td>
+                            <span>Поле свободно</span>
+                          </td>
+                          <td>{{ '0' }}</td>
+                          <td>{{ $schedule->price }} тг</td>
+                        </tr>
+                      @endif
+                    @endforeach
                   @endif
                 @endif
               @endforeach
@@ -170,10 +170,25 @@
         if (data.status == 0) {
           var startTime = data.startTime.split(':'),
               endTime = data.endTime.split(':'),
-              cycle = +endTime[0] - +startTime[0];
+              cycle = +endTime[0] - +startTime[0],
+              newRowId = null,
+              rowId = null;
 
           for (var i = 0; i <= cycle; i++) {
-            $('#td-' + data.fieldId + '-' + data.date + '-' + startTime[0]++).empty().append('<span class="glyphicon glyphicon-refresh spin"></span> <span>В обработке</span>');
+            rowId = data.fieldId + '-' + data.date + '_' + startTime[0]++;
+
+            $('#' + rowId).remove();
+            newRowId =
+              '<tr id="' + rowId + '" class="bg-info">' +
+                '<td>' + startTime[0]++ + ':00</td>' +
+                '<td><span class="glyphicon glyphicon-refresh"></span> <span>В обработке</span></td>' +
+                '<td>' + data.usersCount + '/' + data.numberOfPlayers + '</td>' +
+                '<td>' + data.price + ' тг</td>' +
+              '</tr>';
+
+              console.log(newRowId);
+
+            // $('#' + rowId).replaceWith(newRowId);
           }
         } else {
           var startTime = data.startTime.split(':'),
@@ -184,10 +199,9 @@
           matchType = (data.matchType == 'open') ? '<span class="pull-right label label-success">Открытая игра</span>' : '<span class="pull-right label label-default">Закрытая игра</span>';
 
           for (var i = 0; i <= cycle; i++) {
-            $('#td-' + data.fieldId + '-' + data.date + '-' + startTime[0]++).empty().append('<span class="glyphicon glyphicon-time"></span> <a href="/sport/match/' + data.areaId + '/' + data.id + '">Игра  ' + data.id + matchType + '</a>');
+            $('#' + data.fieldId + '-' + data.date + '_' + startTime[0]++).empty().append('<span class="glyphicon glyphicon-time"></span> <a href="/sport/match/' + data.areaId + '/' + data.id + '">Игра  ' + data.id + matchType + '</a>');
           }
         }
-        console.log(data);
       });
 
       $(function () {

@@ -45,6 +45,7 @@ class CreatedNewMatchByDate extends Event implements ShouldBroadcast
             'date' => $this->match->date,
             'price' => $this->match->price,
             'matchType' => $this->match->match_type,
+            'usersCount' => $this->match->users->count(),
             'numberOfPlayers' => $this->match->number_of_players,
             'status' => $this->match->status,
         ];

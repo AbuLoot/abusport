@@ -28,8 +28,8 @@ Route::get('sport/{sport}', 'SportController@getAreas');
 Route::get('sport/map/{sport}', 'SportController@getAreasWithMap');
 Route::get('sport/calendar/{sport}/{area_id}/{setDays?}', 'SportController@getMatchesWithCalendar');
 
-Route::get('test', function(){
-
+Route::get('test', function() {
+    echo csrf_token();
 });
 
 Route::group(['middleware' => 'auth'], function() {
@@ -62,7 +62,6 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('sport/match-chat/{sport_id}/{match_id}/', 'SportController@getChat');
 
     Route::post('chat/message/{match_id}', 'ChatController@postMessage');
-    // Real-time request
     Route::post('chat/message-ajax/{match_id}', 'ChatController@postMessageAjax');
 });
 

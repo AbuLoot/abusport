@@ -19,7 +19,8 @@ class ChatController extends Controller
 
         if ($request->user()->id == $match->user_id OR in_array($request->user()->id, $match->users->lists('id')->toArray())) {
             $chat->match_id = $match->id;
-        } else {
+        }
+        else {
             return redirect()->back();
         }
 
@@ -40,7 +41,8 @@ class ChatController extends Controller
 
         if ($request->user()->id == $match->user_id OR in_array($request->user()->id, $match->users->lists('id')->toArray())) {
             $chat->match_id = $match->id;
-        } else {
+        }
+        else {
             return redirect()->back();
         }
 
@@ -51,10 +53,5 @@ class ChatController extends Controller
         event(new AddedNewMessage($chat));
 
         return response()->json([]);
-    }
-
-    public function checkChannel()
-    {
-
     }
 }
