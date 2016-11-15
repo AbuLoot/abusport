@@ -136,8 +136,6 @@ class SportController extends Controller
     public function storeMatchAjax(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'sport_id' => 'required|numeric',
-            'area_id' => 'required|numeric',
             'number_of_players' => 'required|numeric',
             'hours' => 'required',
         ]);
@@ -208,7 +206,11 @@ class SportController extends Controller
             return response()->json($messages);
         }
 
-        $area = Area::find($request->area_id);
+        // Segment 4 = is sport slug
+        // Segment 5 = is area id
+        $segments = explode('/', $request->headers->get('referer'));
+
+        $area = Area::find($segments[5]);
 
         if (is_null($area)) {
             $messages['errors'][$index++] = 'Нет данных';
@@ -264,8 +266,6 @@ class SportController extends Controller
     public function storeMatch(Request $request)
     {
         $this->validate($request, [
-            'sport_id' => 'required|numeric',
-            'area_id' => 'required|numeric',
             'number_of_players' => 'required|numeric',
             'hours' => 'required',
         ]);
@@ -316,8 +316,12 @@ class SportController extends Controller
             return redirect()->back()->withInput()->withWarning('У вас недостаточно денег для создания матча');
         }
 
+        // Segment 4 = is sport slug
+        // Segment 5 = is area id
+        $segments = explode('/', $request->headers->get('referer'));
+
         // Check area
-        $area = Area::find($request->area_id);
+        $area = Area::find($segments[5]);
 
         if (is_null($area)) {
             return redirect()->back()->withInput()->withWarning('Нет данных');

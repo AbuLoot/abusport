@@ -56,17 +56,11 @@
                     @if ($match->start_time <= $hour AND $match->end_time >= $hour)
                       <td>{{ $hour }}</td>
                       <td>
-                        Матч {{ $match->id }}
+                        <span class="glyphicon glyphicon-time"></span> Матч {{ $match->id }}
                         <span class="pull-right label label-default">Конец игры</span>
                       </td>
-                      <td>{{ '0/'.$match->number_of_players }}</td>
-                      <td>
-                        @foreach($field->schedules->where('week', $index_weekday) as $schedule)
-                          @if ($schedule->start_time <= $hour AND $schedule->end_time >= $hour)
-                            {{ $schedule->price }} тг
-                          @endif
-                        @endforeach
-                      </td>
+                      <td>{{ $match->usersCount.'/'.$match->number_of_players }}</td>
+                      <td>{{ $match->price }} тг</td>
                       <?php $game = true; ?>
                     @endif
                   </tr>
@@ -75,17 +69,9 @@
                 @if ($game == false)
                   <tr>
                     <td>{{ $hour }}</td>
-                    <td>
-                      <span>Время прошло</span>
-                    </td>
-                    <td>{{ '0' }}</td>
-                    <td>
-                      @foreach($field->schedules->where('week', $index_weekday) as $schedule)
-                        @if ($schedule->start_time <= $hour AND $schedule->end_time >= $hour)
-                          {{ $schedule->price }} тг
-                        @endif
-                      @endforeach
-                    </td>
+                    <td><span>Время прошло</span></td>
+                    <td></td>
+                    <td></td>
                   </tr>
                 @endif
               @else
@@ -98,9 +84,9 @@
                       <td>{{ $hour }}</td>
                       @if ($match->status == 1)
                         <td id="#td-{{ $id }}">
-
-                          <a class="match-link" href="{{ url('sport/match/'.$area->id.'/'.$match->id) }}">
-                            <span class="glyphicon glyphicon-time"></span>  Матч {{ $match->id }}
+                          <span class="glyphicon glyphicon-time"></span>
+                          <a href="{{ url('sport/match/'.$area->id.'/'.$match->id) }}">
+                            Матч {{ $match->id }}
                             @if ($match->match_type == 'open')
                               <span class="pull-right label label-success">Открытая игра</span>
                             @else
@@ -127,10 +113,8 @@
                     @if ($schedule->start_time <= $hour AND $schedule->end_time >= $hour)
                       <tr id="{{ $id }}" class="bg-info">
                         <td>{{ $hour }}</td>
-                        <td>
-                          <span>Поле свободно</span>
-                        </td>
-                        <td>{{ '0' }}</td>
+                        <td><span>Поле свободно</span></td>
+                        <td>0</td>
                         <td>{{ $schedule->price }} тг</td>
                       </tr>
                     @endif

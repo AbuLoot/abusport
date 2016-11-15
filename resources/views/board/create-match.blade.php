@@ -86,9 +86,7 @@
             <table class="table table-bordered">
               <thead>
                 <tr>
-                  <th class="empty-th text-center h3">
-                    <span class="glyphicon glyphicon-time"></span>
-                  </th>
+                  <th class="empty-th text-center h3"><span class="glyphicon glyphicon-time"></span></th>
                   @foreach($days as $day)
                     @if ($current_date == $day['year'])
                       <th class="text-center bg-info">{{ $day['day'] }}<br>{{$day['weekday'] }}</th>

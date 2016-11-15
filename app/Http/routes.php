@@ -50,7 +50,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('accept/{id}', 'FriendController@accept');
 
     // Match
-    Route::get('create-match/{setDays?}', 'SportController@createMatch');
+    // Route::get('create-match/{setDays?}', 'SportController@createMatch');
     Route::get('sport/{sport}/{area_id}/create-match/{setDays?}', 'SportController@createMatchInArea');
     Route::post('store-match', 'SportController@storeMatch');
     Route::post('store-match-ajax', 'SportController@storeMatchAjax');
