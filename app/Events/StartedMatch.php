@@ -31,7 +31,10 @@ class StartedMatch extends Event implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return ['area-'.$this->match->field->area_id];
+        return [
+            'area-'.$this->match->field->area_id,
+            'area-'.$this->match->field->area_id.'_date-'.$this->match->date
+        ];
     }
 
     public function broadcastWith()
@@ -46,6 +49,7 @@ class StartedMatch extends Event implements ShouldBroadcast
             'date' => $this->match->date,
             'price' => $this->match->price,
             'matchType' => $this->match->match_type,
+            'usersCount' => 1 + $this->match->users->count(),
             'numberOfPlayers' => $this->match->number_of_players,
             'status' => $this->match->status,
         ];

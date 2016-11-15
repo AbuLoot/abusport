@@ -11,6 +11,8 @@ use Validator;
 use App\Area;
 use App\Match;
 use App\Events\StartedMatch;
+use App\Events\CreatedNewMatch;
+use App\Events\CreatedNewMatchByDate;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
@@ -89,11 +91,12 @@ class MatchController extends Controller
             return response()->json($messages);
         }
 
-        // Check match
+        // Start match
         $match = $field->matches()->where('id', $match_id)->first();
         $match->status = 1;
         $match->save();
 
+        // Notify All Users
         event(new StartedMatch($match));
 
         $messages['success'] = 'Матч начат!';
@@ -116,11 +119,12 @@ class MatchController extends Controller
             return response()->json($messages);
         }
 
-        // Check match
+        // Start match
         $match = $field->matches()->where('id', $match_id)->first();
         $match->status = 1;
         $match->save();
 
+        // Notify All Users
         event(new StartedMatch($match));
 
         return redirect()->back()->with('status', 'Матч начат!');

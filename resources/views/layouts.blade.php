@@ -48,9 +48,9 @@
           @if (Auth::guest())
             <li><a href="{{ url('login') }}"><span class="glyphicon glyphicon-log-in"></span> Войти</a></li>
           @else
-            <li>
+            <!-- <li>
               <a href="{{ url('create-match') }}" class="text-success"><span class="glyphicon glyphicon-plus"></span> Создать матч</a>
-            </li>
+            </li> -->
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ Auth::user()->name }} <span class="caret"></span></a>
               <ul class="dropdown-menu">

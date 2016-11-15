@@ -44,7 +44,7 @@ class JoinedToMatch extends Event implements ShouldBroadcast
             'id' => $this->user->id,
             'fullName' => $this->user->surname.' '.$this->user->name,
             'balance' => $this->user->balance,
-            'numberOfPlayers' => 1 + $this->match->users->count(),
+            'usersCount' => 1 + $this->match->users->count(),
             'status' => 1
         ];
     }

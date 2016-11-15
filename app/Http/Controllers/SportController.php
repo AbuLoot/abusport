@@ -16,7 +16,6 @@ use App\Events\LeftMatch;
 use App\Events\JoinedToMatch;
 use App\Events\NotifyNewMatch;
 use App\Events\CreatedNewMatch;
-use App\Events\CreatedNewMatchByDate;
 
 class SportController extends Controller
 {
@@ -115,12 +114,23 @@ class SportController extends Controller
     {
         $sports = Sport::all();
         $areas = Area::all();
-        $active_area = Area::findOrFail(1);
+        $active_area = Area::first();
 
         // Get days
         $days = $this->getDays($setDays);
 
         return view('board.create-match', compact('sports', 'areas', 'days', 'active_area'));
+    }
+
+    public function createMatchInArea($sport, $area_id, $setDays = 3)
+    {
+        $sport = Sport::where('slug', $sport)->first();
+        $area = $sport->areas()->where('id', $area_id)->first();
+
+        // Get days
+        $days = $this->getDays($setDays);
+
+        return view('board.create-match-in-area', compact('sport', 'days', 'area'));
     }
 
     public function storeMatchAjax(Request $request)
@@ -246,7 +256,6 @@ class SportController extends Controller
 
         // Notify All Users
         event(new CreatedNewMatch($match));
-        event(new CreatedNewMatchByDate($match));
 
         $messages['success'][$index++] = 'Ваша заявка принята для обработки';
         return response()->json($messages);
@@ -353,7 +362,6 @@ class SportController extends Controller
 
         // Notify All Users
         event(new CreatedNewMatch($match));
-        event(new CreatedNewMatchByDate($match));
 
         return redirect()->back()->with('status', 'Запись добавлена!');
     }

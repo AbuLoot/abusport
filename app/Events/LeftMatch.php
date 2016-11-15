@@ -40,7 +40,7 @@ class LeftMatch extends Event implements ShouldBroadcast
     {
         return [
             'id' => Auth::id(),
-            'numberOfPlayers' => 1 + $this->match->users->count(),
+            'usersCount' => 1 + $this->match->users->count(),
             'csrf' => csrf_token(),
             'status' => 0
         ];

@@ -92,17 +92,6 @@
       console.log(message);
     });
 
-    function appendMessage(data, mediaClass) {
-      $('.scroll-chat').append(
-        $('<div class="media">').append(
-          $('<div class="media-body">').append(
-            $('<h5 class="media-heading">').html("<a href='/user-profile/"+data.user_id+"'><b>"+data.fullname+"</b></a>"),
-            $('<p>').text(data.message)
-          )
-        ).addClass(mediaClass)
-      );
-    }
-
     socket.on(channel, function(data) {
 
       if (data.user_id == user_id) {
@@ -113,6 +102,17 @@
 
       block.scrollTop = block.scrollHeight;
     });
+
+    function appendMessage(data, mediaClass) {
+      $('.scroll-chat').append(
+        $('<div class="media">').append(
+          $('<div class="media-body">').append(
+            $('<h5 class="media-heading">').html("<a href='/user-profile/"+data.user_id+"'><b>"+data.fullname+"</b></a>"),
+            $('<p>').text(data.message)
+          )
+        ).addClass(mediaClass)
+      );
+    }
 
     $('#send').click(function(e){
       e.preventDefault();

@@ -26,7 +26,7 @@
         <p>
           <b>Время игры:</b> {{ $match->start_time.' - '.$match->end_time }}<br>
           <b>Адрес:</b> {{ $match->field->area->address }}<br>
-          <b>Игроков:</b> <span id="number-of-players">{{ $match->users_count }}</span> / {{ $match->number_of_players }}<br>
+          <b>Игроков:</b> <span id="number-of-players">{{ $match->users_count }}</span>/{{ $match->number_of_players }}<br>
           <b>Цена:</b> {{ $match->price }} тг. <b>цена с игрока:</b> {{ $match->price_for_each }}
         </p>
       </div>
@@ -96,20 +96,19 @@
 
         if (data.status == 1) {
 
-          var price = $('#price').text(),
-              numberOfPlayers = $('#number-of-players').text();
+          var price = $('#price').text();
 
           $('#players').append(
             '<tr id="user-' + data.id + '">' +
-              '<td><span id="sort">' + data.numberOfPlayers + '</span> <a href="/user-profile/' + data.id + '">' + data.fullName + '</a></td>' +
+              '<td><span id="sort">' + data.usersCount + '</span> <a href="/user-profile/' + data.id + '">' + data.fullName + '</a></td>' +
             '</tr>'
           );
 
-          $('#number-of-players').text(data.numberOfPlayers);
+          $('#number-of-players').text(data.usersCount);
           $('#form-join-match').remove();
         } else if (data.status == 0) {
 
-          $('#number-of-players').text(data.numberOfPlayers);
+          $('#number-of-players').text(data.usersCount);
           $('#user-' + data.id).remove();
         }
 
@@ -117,7 +116,6 @@
       });
 
       // Join match
-      // $('form').on('click', '#join-match', function(e){
       $('#join-match').click(function(e){
         e.preventDefault();
 
