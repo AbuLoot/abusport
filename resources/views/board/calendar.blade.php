@@ -36,7 +36,7 @@
         <table class="table table-hover table-bordered">
           <thead>
             <tr>
-              <th></th>
+              <th class="empty-th text-center h3"><span class="glyphicon glyphicon-time"></span></th>
               @foreach($days as $day)
                 @if ($current_date == $day['year'])
                   <th class="bg-info" @if (Request::is($current_uri.'/1')) colspan="2" @endif>{{ $day['day'] }}<br>{{$day['weekday'] }}</th>
@@ -47,10 +47,10 @@
             </tr>
           </thead>
           <tbody>
-            @foreach(trans('data.hours') as $hour)
+            @foreach(trans('data.hours') as $hour_key => $hour)
               @continue($hour < $area->start_time)
               <tr>
-                <td style="">{{ $hour }}</td>
+                <td class="hours"><span>{{ $hour }}</span></td>
 
                 @foreach($days as $day)
 
@@ -65,33 +65,47 @@
                   @endif
 
                   @if ($current_date >= $day['year'] AND $current_hour >= $hour)
-                    <td class="bg-warning">
-                      <?php $game = false; ?>
-                      @foreach($field->matches->where('date', $day['year']) as $match)
-                        @if ($match->start_time <= $hour AND $match->end_time >= $hour)
-                          <span>Конец игры</span>
-                          <?php $game = true; ?>
-                        @endif
-                      @endforeach
+                    <?php $game = false; ?>
+                    @foreach($field->matches->where('date', $day['year'])->where('status', 1) as $match)
+                      @if ($match->start_time <= $hour AND $match->end_time >= $hour)
+                        <td class="bg-warning">
+                          <span>Игра состоялось</span>
+                        </td>
+                        <?php $game = true; ?>
+                      @endif
+                    @endforeach
 
-                      @if ($game == false)
+                    @if ($game == false)
+                      <td class="bg-warning">
                         <span class="text-muted">Время прошло</span>
-                      @endif
-                    </td>
+                      </td>
+                    @endif
                   @else
-                    <td>
-                      <?php $game = false; ?>
-                      @foreach($field->matches->where('date', $day['year']) as $match)
-                        @if ($match->start_time <= $hour AND $match->end_time >= $hour)
-                          <a href="#">Игра {{ $match->id }}</a>
-                          <?php $game = true; ?>
+                    <?php $game = false; ?>
+                    @foreach($field->matches->where('date', $day['year']) as $match)
+                      <?php $id = $field->id.'-'.$day['year'].'-'.$hour_key; ?>
+                      @if ($match->start_time <= $hour AND $match->end_time >= $hour)
+                        <?php $game = true; ?>
+                        @if ($match->status == 0)
+                          <td id="td-{{ $id }}">
+                            <span class="glyphicon glyphicon-refresh"></span>
+                            <span>В обработке</span>
+                          </td>
+                        @else
+                          <td id="td-{{ $id }}">
+                            <span class="glyphicon glyphicon-time"></span>
+                            <a href="{{ url('sport/match/'.$area->id.'/'.$match->id) }}">Игра {{ $match->id }}</a>
+                          </td>
                         @endif
-                      @endforeach
-
-                      @if ($game == false)
-                        <span>Свободно</span>
                       @endif
-                    </td>
+                    @endforeach
+
+                    @if ($game == false)
+                      <?php $id = $field->id.'-'.$day['year'].'-'.$hour_key; ?>
+                      <td id="td-{{ $id }}">
+                        <span>Свободно</span>
+                      </td>
+                    @endif
                   @endif
                 @endforeach
               </tr>
@@ -102,4 +116,44 @@
     @endforeach
   </div>
 
+@endsection
+
+@section('scripts')
+    <script src="/js/socket.io-1.4.5.js"></script>
+    <script>
+      var socket = io(':6001'),
+          channel = 'area-{{ $area->id }}';
+
+      socket.on('connect', function() {
+        socket.emit('subscribe', channel)
+      });
+
+      socket.on('error', function() {
+        console.warn('Error', error);
+      });
+
+      socket.on('message', function(message) {
+        console.log(message);
+      });
+
+      socket.on(channel, function(data) {
+        if (data.status == 0) {
+          var startTime = data.startTime.split(':'),
+              endTime = data.endTime.split(':'),
+              cycle = +endTime[0] - +startTime[0];
+
+          for (var i = 0; i <= cycle; i++) {
+            $('#td-' + data.fieldId + '-' + data.date + '-' + startTime[0]++).empty().append('<span class="glyphicon glyphicon-refresh"></span> <span>В обработке</span>');
+          }
+        } else {
+          var startTime = data.startTime.split(':'),
+              endTime = data.endTime.split(':'),
+              cycle = +endTime[0] - +startTime[0];
+
+          for (var i = 0; i <= cycle; i++) {
+            $('#td-' + data.fieldId + '-' + data.date + '-' + startTime[0]++).empty().append('<span class="glyphicon glyphicon-time"></span> <a href="/sport/match/' + data.areaId + '/' + data.id + '">Игра  ' + data.id + '</a>');
+          }
+        }
+      });
+    </script>
 @endsection

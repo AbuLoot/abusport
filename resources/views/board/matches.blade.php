@@ -80,10 +80,10 @@
                   @if ($match->start_time <= $hour AND $match->end_time >= $hour)
                     <?php $game = true; ?>
                     <?php $id = $field->id.'-'.$date.'_'.$hour_key; ?>
-                    <tr>
+                    <tr id="{{ $id }}">
                       <td>{{ $hour }}</td>
                       @if ($match->status == 1)
-                        <td id="#td-{{ $id }}">
+                        <td>
                           <span class="glyphicon glyphicon-time"></span>
                           <a href="{{ url('sport/match/'.$area->id.'/'.$match->id) }}">
                             Матч {{ $match->id }}
@@ -95,7 +95,7 @@
                           </a>
                         </td>
                       @else
-                        <td id="#td-{{ $id }}">
+                        <td>
                           <span class="glyphicon glyphicon-refresh spin"></span>
                           <span>В обработке</span>
                         </td>
@@ -163,10 +163,10 @@
         if (data.status == 0) {
 
           for (var i = 0; i <= cycle; i++) {
-            rowId = data.fieldId + '-' + data.date + '_' + startTime[0]++;
+            rowId = data.fieldId + '-' + data.date + '_' + +startTime[0];
             newRowId =
               '<tr id="' + rowId + '">' +
-                '<td>' + startTime[0] + ':00</td>' +
+                '<td>' + startTime[0]++ + ':00</td>' +
                 '<td><span class="glyphicon glyphicon-refresh"></span> <span>В обработке</span></td>' +
                 '<td>' + data.usersCount + '/' + data.numberOfPlayers + '</td>' +
                 '<td>' + data.price + ' тг</td>' +
@@ -182,10 +182,10 @@
                 : '<span class="pull-right label label-default">Закрытая игра</span>';
 
           for (var i = 0; i <= cycle; i++) {
-            rowId = data.fieldId + '-' + data.date + '_' + startTime[0]++;
+            rowId = data.fieldId + '-' + data.date + '_' + +startTime[0];
             newRowId =
               '<tr id="' + rowId + '">' +
-                '<td>' + startTime[0] + ':00</td>' +
+                '<td>' + startTime[0]++ + ':00</td>' +
                 '<td><span class="glyphicon glyphicon-time"></span> <a href="/sport/match/' + data.areaId + '/' + data.id + '">Игра  ' + data.id + matchType + '</a></td>' +
                 '<td>' + data.usersCount + '/' + data.numberOfPlayers + '</td>' +
                 '<td>' + data.price + ' тг</td>' +
