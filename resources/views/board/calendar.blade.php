@@ -115,6 +115,9 @@
       </div>
     @endforeach
   </div>
+  <div class="col-lg-2 col-md-3 col-sm-12">
+    <a href="{{ url('sport/'.$sport->slug.'/'.$area->id.'/create-match/') }}" class="btn btn-primary text-uppercase pull-right"><span class="glyphicon glyphicon-plus"></span> Создать матч</a>
+  </div>
 
 @endsection
 
