@@ -17,17 +17,21 @@
 @section('content')
 
   <div class="col-lg-8 col-md-9 col-sm-12">
+    <ol class="breadcrumb">
+      <li><a href="{{ url('/') }}"><span class="glyphicon glyphicon-menu-left"></span> Главная</a></li>
+      <li class="active">{{ $sport->title }}</li>
+    </ol>
     <div class="areas">
       @foreach ($areas as $area)
         <div class="media">
           <div class="media-left hidden-xs">
-            <a href="{{ url('sport/'.$sport->slug.'/'.$area->id) }}">
+            <a href="{{ url('sport/'.$sport->slug.'/'.$area->id.'/matches') }}">
               <img class="media-object" src="/img/organizations/{{ $area->org_id.'/'.$area->image }}" alt="...">
             </a>
           </div>
           <div class="media-body">
             <div class="pull-left">
-              <h4 class="media-heading"><a href="{{ url('sport/'.$sport->slug.'/'.$area->id) }}">{{ $area->title }}</a></h4>
+              <h4 class="media-heading"><a href="{{ url('sport/'.$sport->slug.'/'.$area->id.'/matches') }}">{{ $area->title }}</a></h4>
               <p><b>Адрес:</b> {{ $area->address }}</p>
             </div>
             <div class="pull-right">

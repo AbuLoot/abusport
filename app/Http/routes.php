@@ -24,13 +24,11 @@ Route::post('confirm-register', 'Auth\AuthCustomController@postConfirmRegister')
 
 // Board
 Route::get('/', 'SportController@getSports');
-Route::get('sport/{sport}', 'SportController@getAreas');
-Route::get('sport/map/{sport}', 'SportController@getAreasWithMap');
-Route::get('sport/calendar/{sport}/{area_id}/{setDays?}', 'SportController@getMatchesWithCalendar');
+Route::get('sport/{slug}', 'SportController@getAreas');
+Route::get('sport/{slug}/map', 'SportController@getAreasWithMap');
 
-Route::get('test', function() {
-    echo csrf_token();
-});
+Route::get('sport/{slug}/{area_id}/calendar/{setDays?}', 'SportController@getMatchesWithCalendar');
+Route::get('sport/{slug}/{area_id}/matches/{date?}', 'SportController@getMatches');
 
 Route::group(['middleware' => 'auth'], function() {
 
@@ -51,7 +49,10 @@ Route::group(['middleware' => 'auth'], function() {
 
     // Match
     // Route::get('create-match/{setDays?}', 'SportController@createMatch');
-    Route::get('sport/{sport}/{area_id}/create-match/{setDays?}', 'SportController@createMatchInArea');
+    Route::get('sport/{slug}/{area_id}/create-match/{setDays?}', 'SportController@createMatchInArea');
+    Route::get('sport/{slug}/{area_id}/match/{match_id}/', 'SportController@getMatch');
+    Route::get('sport/{slug}/{area_id}/match-chat/{match_id}/', 'SportController@getChat');
+
     Route::post('store-match', 'SportController@storeMatch');
     Route::post('store-match-ajax', 'SportController@storeMatchAjax');
     Route::post('join-match/{match_id}', 'SportController@joinMatch');
@@ -59,15 +60,9 @@ Route::group(['middleware' => 'auth'], function() {
     Route::post('left-match/{match_id}', 'SportController@leftMatch');
     Route::post('left-match-ajax/{match_id}', 'SportController@leftMatchAjax');
 
-    Route::get('sport/match/{sport_id}/{match_id}/', 'SportController@getMatch');
-    Route::get('sport/match-chat/{sport_id}/{match_id}/', 'SportController@getChat');
-
     Route::post('chat/message/{match_id}', 'ChatController@postMessage');
     Route::post('chat/message-ajax/{match_id}', 'ChatController@postMessageAjax');
 });
-
-
-Route::get('sport/{sport}/{area_id}/{date?}', 'SportController@getMatches');
 
 
 // Administration

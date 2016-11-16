@@ -7,6 +7,7 @@
 @section('tabs')
 
   <ul class="tabs-panel">
+    <li><a href="{{ action('SportController@createMatchInArea', [$sport->slug, $area->id]) }}"><span class="glyphicon glyphicon-plus"></span> Создать матч</a></li>
     <li class="active"><a href="#">Матчи</a></li>
     <li><a href="{{ action('SportController@getMatchesWithCalendar', [$sport->slug, $area->id]) }}">Календарь</a></li>
     <li><a href="#">Информация</a></li>
@@ -17,6 +18,12 @@
 @section('content')
 
   <div class="col-lg-8 col-md-9 col-sm-12">
+    <ol class="breadcrumb">
+      <li><a href="{{ url('/') }}"><span class="glyphicon glyphicon-menu-left"></span> Главная</a></li>
+      <li><a href="{{ url('sport/'.$sport->slug) }}"><span class="glyphicon glyphicon-menu-left"></span> {{ $sport->title }}</a></li>
+      <li class="active">{{ $area->title }}</li>
+    </ol>
+
     @include('partials.alerts')
 
     <?php $current_hour = date('H').':00'; ?>
@@ -28,10 +35,10 @@
       <ul class="nav nav-tabs nav-justified">
         @foreach ($days as $day)
           @if ($day['year'] == $date)
-            <li class="active"><a href="{{ url('sport/'.$area->sport->slug.'/'.$area->id.'/'.$day['year']) }}">{{ $day['day'].' '.$day['short_weekday'] }}</a></li>
+            <li class="active"><a href="{{ url('sport/'.$sport->slug.'/'.$area->id.'/matches/'.$day['year']) }}">{{ $day['day'].' '.$day['short_weekday'] }}</a></li>
             <?php $index_weekday = (int) $day['index_weekday']; ?>
           @else
-            <li><a href="{{ url('sport/'.$area->sport->slug.'/'.$area->id.'/'.$day['year']) }}">{{ $day['day'].' '.$day['short_weekday'] }}</a></li>
+            <li><a href="{{ url('sport/'.$sport->slug.'/'.$area->id.'/matches/'.$day['year']) }}">{{ $day['day'].' '.$day['short_weekday'] }}</a></li>
           @endif
         @endforeach
       </ul>
@@ -85,7 +92,7 @@
                       @if ($match->status == 1)
                         <td>
                           <span class="glyphicon glyphicon-time"></span>
-                          <a href="{{ url('sport/match/'.$area->id.'/'.$match->id) }}">
+                          <a href="{{ url('sport/'.$sport->slug.'/'.$area->id.'/match/'.$match->id) }}">
                             Матч {{ $match->id }}
                             @if ($match->match_type == 'open')
                               <span class="pull-right label label-success">Открытая игра</span>
@@ -128,7 +135,7 @@
     @endforeach
   </div>
   <div class="col-lg-2 col-md-3 col-sm-12">
-    <a href="{{ url('sport/'.$sport->slug.'/'.$area->id.'/create-match/') }}" class="btn btn-primary text-uppercase pull-right"><span class="glyphicon glyphicon-plus"></span> Создать матч</a>
+    <a href="{{ url('sport/'.$sport->slug.'/'.$area->id.'/create-match') }}" class="btn btn-primary text-uppercase pull-right"><span class="glyphicon glyphicon-plus"></span> Создать матч</a>
   </div>
 
 @endsection
@@ -186,7 +193,7 @@
             newRowId =
               '<tr id="' + rowId + '">' +
                 '<td>' + startTime[0]++ + ':00</td>' +
-                '<td><span class="glyphicon glyphicon-time"></span> <a href="/sport/match/' + data.areaId + '/' + data.id + '">Игра  ' + data.id + matchType + '</a></td>' +
+                '<td><span class="glyphicon glyphicon-time"></span> <a href="/sport/' + data.sportSlug + '/' + data.areaId + '/match/' + data.id + '">Игра  ' + data.id + matchType + '</a></td>' +
                 '<td>' + data.usersCount + '/' + data.numberOfPlayers + '</td>' +
                 '<td>' + data.price + ' тг</td>' +
               '</tr>';

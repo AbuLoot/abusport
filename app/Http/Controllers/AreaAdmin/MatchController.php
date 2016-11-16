@@ -97,7 +97,7 @@ class MatchController extends Controller
         $match->save();
 
         // Notify All Users
-        event(new StartedMatch($match));
+        event(new StartedMatch($match, $area->sport->slug));
 
         $messages['success'] = 'Матч начат!';
         return response()->json($messages);
@@ -125,7 +125,7 @@ class MatchController extends Controller
         $match->save();
 
         // Notify All Users
-        event(new StartedMatch($match));
+        event(new StartedMatch($match, $area->sport->slug));
 
         return redirect()->back()->with('status', 'Матч начат!');
     }

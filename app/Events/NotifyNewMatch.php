@@ -13,15 +13,17 @@ class NotifyNewMatch extends Event implements ShouldBroadcast
     use SerializesModels;
 
     public $match;
+    public $sport_slug;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(Match $match)
+    public function __construct(Match $match, $sport_slug)
     {
         $this->match = $match;
+        $this->sport_slug = $sport_slug;
     }
 
     /**
@@ -38,6 +40,7 @@ class NotifyNewMatch extends Event implements ShouldBroadcast
     {
         return [
             'id' => $this->match->id,
+            'sportSlug' => $this->sport_slug,
             'areaId' => $this->match->field->area_id,
             'fieldId' => $this->match->field_id,
             'userId' => $this->match->user_id,

@@ -9,7 +9,7 @@
   <ul class="tabs-panel">
     <li class="active"><a href="#">Комната</a></li>
     <li><a href="#">Карта</a></li>
-    <li><a href="{{ url('sport/match-chat/'.$sport->id.'/'.$match->id) }}">Чат</a></li>
+    <li><a href="{{ url('sport/'.$sport->slug.'/'.$match->field->area_id.'/match-chat/'.$match->id) }}">Чат</a></li>
   </ul>
 
 @endsection
@@ -17,6 +17,13 @@
 @section('content')
 
   <div class="col-lg-8 col-md-9 col-sm-12">
+    <ol class="breadcrumb">
+      <li><a href="{{ url('/') }}"><span class="glyphicon glyphicon-menu-left"></span> Главная</a></li>
+      <li><a href="{{ url('sport/'.$sport->slug) }}"><span class="glyphicon glyphicon-menu-left"></span> {{ $sport->title }}</a></li>
+      <li><a href="{{ url('sport/'.$sport->slug.'/'.$match->field->area->id.'/matches') }}"><span class="glyphicon glyphicon-menu-left"></span> {{ $match->field->area->title }}</a></li>
+      <li class="active">Матч {{ $match->id }}</li>
+    </ol>
+
     @include('partials.alerts')
 
     <h2 class="text-center">Матч {{ $match->id }} <small>{{ $match->matchDate }}</small></h2>

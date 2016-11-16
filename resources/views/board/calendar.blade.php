@@ -7,6 +7,7 @@
 @section('tabs')
 
   <ul class="tabs-panel">
+    <li><a href="{{ action('SportController@createMatchInArea', [$sport->slug, $area->id]) }}"><span class="glyphicon glyphicon-plus"></span> Создать матч</a></li>
     <li><a href="{{ action('SportController@getMatches', [$sport->slug, $area->id]) }}">Матчи</a></li>
     <li class="active"><a href="#">Календарь</a></li>
     <li><a href="#">Информация</a></li>
@@ -17,10 +18,16 @@
 @section('content')
 
   <div class="col-lg-8 col-md-9 col-sm-12">
+    <ol class="breadcrumb">
+      <li><a href="{{ url('/') }}"><span class="glyphicon glyphicon-menu-left"></span> Главная</a></li>
+      <li><a href="{{ url('sport/'.$sport->slug) }}"><span class="glyphicon glyphicon-menu-left"></span> {{ $sport->title }}</a></li>
+      <li class="active">{{ $area->title }}</li>
+    </ol>
+
     <?php $current_hour = date('H').':00'; ?>
     <?php $current_week = (int) date('w'); ?>
     <?php $current_date = date('Y-m-d'); ?>
-    <?php $current_uri = 'sport/calendar/'.$sport->slug.'/'.$area->id; ?>
+    <?php $current_uri = 'sport/'.$sport->slug.'/'.$area->id.'/calendar'; ?>
 
     @foreach($area->fields as $field)
       <h3>{{ $field->title }}</h3>
@@ -94,7 +101,7 @@
                         @else
                           <td id="td-{{ $id }}">
                             <span class="glyphicon glyphicon-time"></span>
-                            <a href="{{ url('sport/match/'.$area->id.'/'.$match->id) }}">Игра {{ $match->id }}</a>
+                            <a href="{{ url('sport/'.$sport->slug.'/'.$area->id.'/match/'.$match->id) }}">Игра {{ $match->id }}</a>
                           </td>
                         @endif
                       @endif
@@ -116,7 +123,7 @@
     @endforeach
   </div>
   <div class="col-lg-2 col-md-3 col-sm-12">
-    <a href="{{ url('sport/'.$sport->slug.'/'.$area->id.'/create-match/') }}" class="btn btn-primary text-uppercase pull-right"><span class="glyphicon glyphicon-plus"></span> Создать матч</a>
+    <a href="{{ url('sport/'.$sport->slug.'/'.$area->id.'/create-match') }}" class="btn btn-primary text-uppercase pull-right"><span class="glyphicon glyphicon-plus"></span> Создать матч</a>
   </div>
 
 @endsection
@@ -154,7 +161,7 @@
               cycle = +endTime[0] - +startTime[0];
 
           for (var i = 0; i <= cycle; i++) {
-            $('#td-' + data.fieldId + '-' + data.date + '-' + startTime[0]++).empty().append('<span class="glyphicon glyphicon-time"></span> <a href="/sport/match/' + data.areaId + '/' + data.id + '">Игра  ' + data.id + '</a>');
+            $('#td-' + data.fieldId + '-' + data.date + '-' + startTime[0]++).empty().append('<span class="glyphicon glyphicon-time"></span> <a href="/sport/' + data.sportSlug + '/' + data.areaId + '/match/' + data.id + '">Игра  ' + data.id + '</a>');
           }
         }
       });

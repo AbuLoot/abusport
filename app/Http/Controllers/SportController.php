@@ -26,17 +26,17 @@ class SportController extends Controller
     	return view('board.sports', compact('sports'));
     }
 
-    public function getAreas($sport)
+    public function getAreas($sport_slug)
     {
-    	$sport = Sport::where('slug', $sport)->first();
+    	$sport = Sport::where('slug', $sport_slug)->first();
     	$areas = $sport->areas()->paginate(10);
 
     	return view('board.areas', compact('sport', 'areas'));
     }
 
-    public function getAreasWithMap($sport)
+    public function getAreasWithMap($sport_slug)
     {
-        $sport = Sport::where('slug', $sport)->first();
+        $sport = Sport::where('slug', $sport_slug)->first();
         $areas = $sport->areas()->get();
 
         $data = [
@@ -71,9 +71,9 @@ class SportController extends Controller
         return view('map.areas', compact('sport', 'data'));
     }
 
-    public function getMatches($sport, $area_id, $date = '')
+    public function getMatches($sport_slug, $area_id, $date = '')
     {
-        $sport = Sport::where('slug', $sport)->first();
+        $sport = Sport::where('slug', $sport_slug)->first();
         $area = Area::find($area_id);
         $date = ($date) ? $date : date('Y-m-d');
 
@@ -83,25 +83,25 @@ class SportController extends Controller
         return view('board.matches', compact('sport', 'area', 'days', 'date'));
     }
 
-    public function getMatch($sport_id, $match_id)
+    public function getMatch($sport_slug, $area_id, $match_id)
     {
-        $sport = Sport::findOrFail($sport_id);
+        $sport = Sport::where('slug', $sport_slug)->first();
         $match = Match::findOrFail($match_id);
 
         return view('board.match', compact('sport', 'match'));
     }
 
-    public function getChat($sport_id, $match_id)
+    public function getChat($sport_slug, $area_id, $match_id)
     {
-        $sport = Sport::findOrFail($sport_id);
+        $sport = Sport::where('slug', $sport_slug)->first();
         $match = Match::findOrFail($match_id);
 
         return view('board.match-chat', compact('sport', 'match'));
     }
 
-    public function getMatchesWithCalendar($sport, $area_id, $setDays = 3)
+    public function getMatchesWithCalendar($sport_slug, $area_id, $setDays = 3)
     {
-        $sport = Sport::where('slug', $sport)->first();
+        $sport = Sport::where('slug', $sport_slug)->first();
         $area = Area::find($area_id);
 
         // Get days
@@ -122,9 +122,9 @@ class SportController extends Controller
         return view('board.create-match', compact('sports', 'areas', 'days', 'active_area'));
     }
 
-    public function createMatchInArea($sport, $area_id, $setDays = 3)
+    public function createMatchInArea($sport_slug, $area_id, $setDays = 3)
     {
-        $sport = Sport::where('slug', $sport)->first();
+        $sport = Sport::where('slug', $sport_slug)->first();
         $area = $sport->areas()->where('id', $area_id)->first();
 
         // Get days
@@ -206,8 +206,8 @@ class SportController extends Controller
             return response()->json($messages);
         }
 
-        // Segment 4 = is sport slug
-        // Segment 5 = is area id
+        // Segment 4 = sport slug
+        // Segment 5 = area id
         $segments = explode('/', $request->headers->get('referer'));
 
         $area = Area::find($segments[5]);
@@ -254,10 +254,10 @@ class SportController extends Controller
         $match->save();
 
         // Notify Area Admin
-        event(new NotifyNewMatch($match));
+        event(new NotifyNewMatch($match, $segments[4]));
 
         // Notify All Users
-        event(new CreatedNewMatch($match));
+        event(new CreatedNewMatch($match, $segments[4]));
 
         $messages['success'][$index++] = 'Ваша заявка принята для обработки';
         return response()->json($messages);
@@ -316,8 +316,8 @@ class SportController extends Controller
             return redirect()->back()->withInput()->withWarning('У вас недостаточно денег для создания матча');
         }
 
-        // Segment 4 = is sport slug
-        // Segment 5 = is area id
+        // Segment 4 = sport slug
+        // Segment 5 = area id
         $segments = explode('/', $request->headers->get('referer'));
 
         // Check area
