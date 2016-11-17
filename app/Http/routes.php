@@ -108,6 +108,8 @@ Route::group(['prefix' => 'panel', 'middleware' => ['auth', 'role:area-admin']],
 
 
 // Api
+Route::post('api/requestmessages/','ApiController@requestmessages');
+Route::post('api/requestaddmessage/','ApiController@requestaddmessage');
 Route::post('api/requestprofile/','ApiController@requestprofile');
 Route::get('api/requestcallbacklist/{userid}','ApiController@requestcallbacklist');
 Route::post('api/requestnewcallback/','ApiController@requestnewcallback');
@@ -122,3 +124,4 @@ Route::get('api/requestjoinmatch/{matchid}/{userid}','ApiController@requestjoinm
 Route::get('api/requestexitmatch/{matchid}/{userid}','ApiController@requestexitmatch');
 Route::get('api/requestweekdays/{playgroundid}/{selecteddate}','ApiController@requestweekdays');
 Route::post('api/requestmatchcreate/','ApiController@requestmatchcreate');
+Route::post('api/requestsign64/','ApiController@requestsign64');

@@ -75,16 +75,12 @@ class SportController extends Controller
         return view('board.matches', compact('sport', 'area', 'days', 'date'));
     }
 
-    public function getInfo($sport_slug, $area_id, $date = '')
+    public function getInfo($sport_slug, $area_id)
     {
         $sport = Sport::where('slug', $sport_slug)->first();
         $area = Area::find($area_id);
-        $date = ($date) ? $date : date('Y-m-d');
 
-        // Get days
-        $days = $this->getDays(7);
-
-        return view('board.matches', compact('sport', 'area', 'days', 'date'));
+        return view('board.info', compact('sport', 'area'));
     }
 
     public function getMatchesWithCalendar($sport_slug, $area_id, $setDays = 3)

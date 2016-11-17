@@ -10,7 +10,7 @@
     <li><a href="{{ action('MatchController@createMatchInArea', [$sport->slug, $area->id]) }}"><span class="glyphicon glyphicon-plus"></span> Создать матч</a></li>
     <li><a href="{{ action('SportController@getMatches', [$sport->slug, $area->id]) }}">Матчи</a></li>
     <li class="active"><a href="#">Календарь</a></li>
-    <li><a href="#">Информация</a></li>
+    <li><a href="{{ action('SportController@getInfo', [$sport->slug, $area->id]) }}">Информация</a></li>
   </ul>
 
 @endsection
