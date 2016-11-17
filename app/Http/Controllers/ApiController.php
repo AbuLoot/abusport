@@ -16,10 +16,55 @@ use App\Area;
 use App\MatchUser; 
 use App\Match; 
 use App\Feedback;
+use App\Payment;
+use App\Chat;
 use App\Http\Controllers\Controller;
 use AbuLoot\Sms\MobizonApi as Mobizon;
+use App\Events\AddedNewMessage;
+
 class ApiController extends Controller
 {
+	public function requestmessages(Request $request)
+    {
+	    $ps=array();
+		try {  
+		    $chats = DB::table('chats')->where('match_id', '=', $request->matchid)->get();	    
+            foreach($chats as $chat){
+			    $ar['id']=$chat->id;
+				$ar['message']=$chat->message;
+				$ar['created_at']=$chat->created_at;
+				$user = User::find($chat->user_id);
+				$ar['username']=$user->name;
+				$ar['user_id']=$user->id;
+                array_push($ps,$ar); 				
+			}	
+			$response['messages']=$ps;
+			$response['error']=false;			
+		}catch (Exception $e){
+            $response['error']=true;
+        }finally{
+            return Response::json($response);
+        }	
+    }
+    public function requestaddmessage(Request $request)
+    {
+		try{   
+			$chat = new Chat;
+			$chat->match_id =$request->match_id;
+			$chat->user_id = $request->user_id;
+			$chat->message = $request->message;
+			$chat->save();
+			/*event(
+					new AddedNewMessage($chat)
+			);*/
+				$response['error']=false;
+					
+		}catch (Exception $e){
+            $response['error']=true;
+        }finally{
+            return Response::json($response);
+        }	
+    }
 	public function requestprofile(Request $request)
 	{
 	$response=array();						
@@ -245,10 +290,10 @@ class ApiController extends Controller
             ->join('matches', 'fields.id', '=', 'matches.field_id')
             ->select('matches.*')
 			->where('matches.date','>=',$date)
-			->where('matches.start_time','>=',$hour)
-			->whereIn('matches.field_id',DB::table('fields')->select('fields.id')->from('fields')->where('fields.area_id', '=', $areaid))					  
+			->whereIn('matches.field_id',DB::table('fields')->select('fields.id')->from('fields')->where('fields.area_id', '=', $areaid))
+			->orderBy('date', 'asc')	
             ->get();         			
-			foreach($matches as $match){
+			foreach($matches as $match){						
 			  $mt['id']=$match->id;
 			  $mt['field_id']=$match->field_id;
 			  $mt['price']=$match->price;
@@ -257,7 +302,8 @@ class ApiController extends Controller
 			  $mt['game_type']=$match->game_type;
 			  $mt['game_format']=$match->game_format;
 			  $mt['start_time']=$match->start_time;
-			  $mt['end_time']=$match->end_time;
+			  $endTime = strtotime("+60 minutes", strtotime($match->end_time));						
+			  $mt['end_time']=date("H:i",$endTime);
 			  $mt['number_of_players']=$match->number_of_players;
 			  $mplayers = DB::table('match_user')->select('match_user.user_id')->where('match_user.match_id', '=', $match->id)->get();
 			  $mt['joined_players']=count($mplayers)+1;
@@ -298,10 +344,8 @@ class ApiController extends Controller
 	public function requestjoinmatch($matchid,$userid)
 	{	
 	$user = User::find(intval($userid));
-	$match = Match::find(intval($matchid));
-	$match->users->push($user);
-
-				if($match->users()->sync($match->users->lists('id')->toArray())){ 
+	$match = Match::find(intval($matchid));	
+				if($match->users()->attach($userid)){ 
 							$response['error']=false;
 							$response['message']="Player joined success";  
 						}
@@ -309,13 +353,12 @@ class ApiController extends Controller
 						     $response['error']=true;
 						     $response['message']="Player failed";
 				}
-
+						 
 				return Response::json($response);
 			
 	}
-
 	public function requestexitmatch($matchid,$userid)
-	{
+	{	
 		$deletedRows=DB::table('match_user')->where('user_id', '=', $userid)->where('match_id', '=', $matchid)->delete();
 				if($deletedRows>0){ 
 					$response['error']=false;
@@ -364,36 +407,36 @@ class ApiController extends Controller
 						"5" => "Птн", 
 						"6" => "Сбт", 
 						"0" => "Вск"); 
-							  $result["year"] = $dt->format("Y-m-d");					
-							  $result["month"] = $month_r[$dt->format("m")];												  						  						  
+							  $result["year"] = $dt->format("Y-m-d");
+							  $result["month"] = $month_r[$dt->format("m")];
 							  $result["day"]= $dt->format("d");     
 							  $result["weekday"]=$day_r[$dt->format("w")];
 							  array_push($days,$result);}	
 				$hours=array(
-							'0' => '05:00',
-							'1' => '06:00',
-							'2' => '07:00',
-							'3' => '08:00',
-							'4' => '09:00',
-							'5' => '10:00',
-							'6' => '11:00',
-							'7' => '12:00',
-							'8' => '13:00',
-							'9' => '14:00',
-							'10' => '15:00',
-							'11' => '16:00',
-							'12' => '17:00',
-							'13' => '18:00',
-							'14' => '19:00',
-							'15' => '20:00',
-							'16' => '21:00',
-							'17' => '22:00',
-							'18' => '23:00',
-							'19' => '00:00',
-							'20' => '01:00',
-							'21' => '02:00',
-							'22' => '03:00',
-							'23' => '04:00');
+							'0' => '00:00',
+							'1' => '01:00',
+							'2' => '02:00',
+							'3' => '03:00',
+							'4' => '04:00',
+							'5' => '05:00',
+							'6' => '06:00',
+							'7' => '07:00',
+							'8' => '08:00',
+							'9' => '09:00',
+							'10' => '10:00',
+							'11' => '11:00',
+							'12' => '12:00',
+							'13' => '13:00',
+							'14' => '14:00',
+							'15' => '15:00',
+							'16' => '16:00',
+							'17' => '17:00',
+							'18' => '18:00',
+							'19' => '19:00',
+							'20' => '20:00',
+							'21' => '21:00',
+							'22' => '22:00',
+							'23' => '23:00');
             $response['days'] =$days;
 			$week = new \DateTime($selecteddate);			
 			$fields = DB::table('fields')->select('fields.id','fields.title')->where('fields.area_id','=',$playgroundid)->where('fields.status','=',1)->get();			
@@ -404,7 +447,7 @@ class ApiController extends Controller
 				 
 				foreach($hours as $hour){
 				    $selectedtime=$selecteddate." ".$hour;
-				    if($selectedtime>=date("Y-m-d H:i")) {
+				    if($selectedtime>=date("Y-m-d H:i")){
 						$schresult['start_time']=$hour;
 						$endTime = strtotime("+60 minutes", strtotime($hour));
 						$schresult['end_time'] =date("H:i",$endTime);
@@ -419,7 +462,7 @@ class ApiController extends Controller
 							}						
 						}
 						foreach($times as $match){
-							if($match->start_time <= $hour AND $match->end_time > $hour){
+							if($match->start_time <= $hour AND $match->end_time >= $hour){
 								$schresult['status']=1;
 							}
 						}
@@ -520,4 +563,40 @@ class ApiController extends Controller
 
         return $response;
     }
+    public function requestsign64(Request $request){
+	 try {   
+	  	if(intval($request->amount)>0){    
+			$path=__DIR__.'/Payment/paysys/kkb.utils.php';
+			\File::requireOnce($path);
+			  $path1 = [
+				'MERCHANT_CERTIFICATE_ID' => '00C182B189',
+				'MERCHANT_NAME' => 'Test shop',
+				'PRIVATE_KEY_FN' => __DIR__.'/Payment/paysys/test_prv.pem',
+				'PRIVATE_KEY_PASS' => 'nissan',
+				'PUBLIC_KEY_FN' => __DIR__.'/Payment/paysys/kkbca.pem',
+				'MERCHANT_ID' => '92061101',
+				'XML_TEMPLATE_FN' => __DIR__.'/Payment/paysys/template.xml',
+				'XML_COMMAND_TEMPLATE_FN' => __DIR__.'/Payment/paysys/command_template.xml'
+			];   
+			$user= User::find($request->userid);
+			$currency_id = "398"; // Шифр валюты  - 840-USD, 398-Tenge
+			$payment = new Payment;
+			$payment->user_id = $user->id;
+			$payment->amount = $request->amount;
+			$payment->status="0";
+			$payment->operation_id = 1;
+			$payment->save();
+			$content = process_request($payment->id,$currency_id, $payment->amount, $path1);
+			$response['content']=$content;
+			$response['error']=false;
+			//$response['content']="PGRvY3VtZW50PjxtZXJjaGFudCBjZXJ0X2lkPSIwMGMxODNkNzBiIiBuYW1lPSJOZXcgRGVtbyBTaG9wIj48b3JkZXIgb3JkZXJfaWQ9IjEwMTAwMDE3MDciIGFtb3VudD0iMTAiIGN1cnJlbmN5PSIzOTgiPjxkZXBhcnRtZW50IG1lcmNoYW50X2lkPSI5MjA2MTEwMyIgYW1vdW50PSIxMCIvPjwvb3JkZXI+PC9tZXJjaGFudD48bWVyY2hhbnRfc2lnbiB0eXBlPSJSU0EiPm5rWGQ4NkRBcGMrSVc5Qy9qQUZoaVVyS2VrUVZoaDQxQXBEbXVQWnBGQmF2WnZMaUhFdDh6SXNmK0xmR01WSE91NzlxdVEwcUlaUVllRWVjUGJhdWxiWEsxUmVJQ3VMdVNlU1NXdEUyQlBDWTZvUjEybVIzNlJJZUVOMnNUQm1mRkdGeG4wbkpaMzJMV2hYNWFrWVc3WEJOdWN1UlQzNlRVWHBzMXhqUmwyQT08L21lcmNoYW50X3NpZ24+PC9kb2N1bWVudD4=";;
+			$response['user']=$user; 
+	  }
+	}catch (Exception $e){
+            $response['error']=true;
+    }finally{
+            return Response::json($response);
+    }	
+	}
+	
 }
