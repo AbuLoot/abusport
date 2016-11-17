@@ -35,6 +35,11 @@ class ProfileController extends Controller
         return redirect('/my-balance')->with('status', 'Баланс пополнен!');
     }
 
+    public function myMatches()
+    {
+        return view('profile.my-matches');
+    }
+
     public function profile()
     {
         $user = Auth::user();

@@ -29,6 +29,7 @@ Route::get('sport/{slug}/map', 'SportController@getAreasWithMap');
 
 Route::get('sport/{slug}/{area_id}/calendar/{setDays?}', 'SportController@getMatchesWithCalendar');
 Route::get('sport/{slug}/{area_id}/matches/{date?}', 'SportController@getMatches');
+Route::get('sport/{slug}/{area_id}/info', 'SportController@getInfo');
 
 Route::group(['middleware' => 'auth'], function() {
 
@@ -38,7 +39,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('my-profile', 'ProfileController@profile');
     Route::post('my-profile', 'ProfileController@updateProfile');
     Route::get('my-profile/edit', 'ProfileController@editProfile');
-    Route::get('my-matches', 'MatchController@myMatches');
+    Route::get('my-matches', 'ProfileController@myMatches');
 
     // Users
     Route::get('friends', 'FriendController@myFriends');
@@ -48,17 +49,17 @@ Route::group(['middleware' => 'auth'], function() {
     Route::get('accept/{id}', 'FriendController@accept');
 
     // Match
-    // Route::get('create-match/{setDays?}', 'SportController@createMatch');
-    Route::get('sport/{slug}/{area_id}/create-match/{setDays?}', 'SportController@createMatchInArea');
-    Route::get('sport/{slug}/{area_id}/match/{match_id}/', 'SportController@getMatch');
-    Route::get('sport/{slug}/{area_id}/match-chat/{match_id}/', 'SportController@getChat');
+    // Route::get('create-match/{setDays?}', 'MatchController@createMatch');
+    Route::get('sport/{slug}/{area_id}/create-match/{setDays?}', 'MatchController@createMatchInArea');
+    Route::get('sport/{slug}/{area_id}/match/{match_id}/', 'MatchController@getMatch');
+    Route::get('sport/{slug}/{area_id}/match-chat/{match_id}/', 'MatchController@getChat');
 
-    Route::post('store-match', 'SportController@storeMatch');
-    Route::post('store-match-ajax', 'SportController@storeMatchAjax');
-    Route::post('join-match/{match_id}', 'SportController@joinMatch');
-    Route::post('join-match-ajax/{match_id}', 'SportController@joinMatchAjax');
-    Route::post('left-match/{match_id}', 'SportController@leftMatch');
-    Route::post('left-match-ajax/{match_id}', 'SportController@leftMatchAjax');
+    Route::post('store-match', 'MatchController@storeMatch');
+    Route::post('store-match-ajax', 'MatchController@storeMatchAjax');
+    Route::post('join-match/{match_id}', 'MatchController@joinMatch');
+    Route::post('join-match-ajax/{match_id}', 'MatchController@joinMatchAjax');
+    Route::post('left-match/{match_id}', 'MatchController@leftMatch');
+    Route::post('left-match-ajax/{match_id}', 'MatchController@leftMatchAjax');
 
     Route::post('chat/message/{match_id}', 'ChatController@postMessage');
     Route::post('chat/message-ajax/{match_id}', 'ChatController@postMessageAjax');

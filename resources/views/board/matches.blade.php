@@ -7,7 +7,7 @@
 @section('tabs')
 
   <ul class="tabs-panel">
-    <li><a href="{{ action('SportController@createMatchInArea', [$sport->slug, $area->id]) }}"><span class="glyphicon glyphicon-plus"></span> Создать матч</a></li>
+    <li><a href="{{ action('MatchController@createMatchInArea', [$sport->slug, $area->id]) }}"><span class="glyphicon glyphicon-plus"></span> Создать матч</a></li>
     <li class="active"><a href="#">Матчи</a></li>
     <li><a href="{{ action('SportController@getMatchesWithCalendar', [$sport->slug, $area->id]) }}">Календарь</a></li>
     <li><a href="#">Информация</a></li>
