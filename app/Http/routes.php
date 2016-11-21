@@ -56,8 +56,10 @@ Route::group(['middleware' => 'auth'], function() {
 
     Route::post('store-match', 'MatchController@storeMatch');
     Route::post('store-match-ajax', 'MatchController@storeMatchAjax');
+
     Route::post('join-match/{match_id}', 'MatchController@joinMatch');
     Route::post('join-match-ajax/{match_id}', 'MatchController@joinMatchAjax');
+
     Route::post('left-match/{match_id}', 'MatchController@leftMatch');
     Route::post('left-match-ajax/{match_id}', 'MatchController@leftMatchAjax');
 

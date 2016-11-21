@@ -30,6 +30,15 @@ class Match extends Model
         return $this->hasMany('App\Chat');
     }
 
+    public function getTimeFromToAttribute()
+    {
+        list($num_hour, $zeros) = explode(':', $this->end_time);
+
+        $num_hour = ($num_hour == '23') ? '00' : ++$num_hour;
+
+        return 'с ' . $this->start_time . ' до ' . $num_hour . ':' . $zeros;
+    }
+
     public function getPriceForEachAttribute()
     {
         return ($this->price / $this->number_of_players) . ' тг';

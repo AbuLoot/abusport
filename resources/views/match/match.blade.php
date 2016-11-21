@@ -29,12 +29,24 @@
 
     <div class="row">
       <div class="col-md-6">
-        <p>
-          <b>Время игры:</b> {{ $match->start_time.' - '.$match->end_time }}<br>
-          <b>Адрес:</b> {{ $match->field->area->address }}<br>
-          <b>Игроков:</b> <span id="number-of-players">{{ $match->users_count }}</span>/{{ $match->number_of_players }}<br>
-          <b>Цена:</b> {{ $match->price }} тг. <b>цена с игрока:</b> {{ $match->price_for_each }}
-        </p>
+        <table class="table table-condensed">
+          <tr>
+            <th>Время игры:</th>
+            <td>{{ $match->timeFromTo }}</td>
+          </tr>
+          <tr>
+            <th>Адрес:</th>
+            <td>{{ $match->field->area->address }}</td>
+          </tr>
+          <tr>
+            <th>Игроков:</th>
+            <td><span id="number-of-players">{{ $match->users_count }}</span>/{{ $match->number_of_players }}</td>
+          </tr>
+          <tr>
+            <th>Цена:</th>
+            <td>{{ $match->price }} тг. <b>цена с игрока:</b> {{ $match->price_for_each }}</td>
+          </tr>
+        </table>
       </div>
       <div class="col-md-6 text-right" id="door">
         @if (in_array(Auth::id(), $match->users->lists('id')->toArray()) AND Auth::id() != $match->user_id)
@@ -62,7 +74,7 @@
               <?php $i = 1; ?>
               <tr>
                 <th>
-                  <span id="sort">{{  $i++ }}</span> <a href="/user-profile/{{ $match->user->id }}">{{ $match->user->surname.' '.$match->user->name }}</a>
+                  <span id="sort">{{ $i++ }}</span> <a href="/user-profile/{{ $match->user->id }}">{{ $match->user->surname.' '.$match->user->name }}</a>
                   {{ ($match->user_id == Auth::id()) ? '[Вы организатор]' : '[Организатор]' }}
                 </th>
               </tr>
@@ -113,12 +125,9 @@
           $('#number-of-players').text(data.usersCount);
           $('#form-join-match').remove();
         } else if (data.status == 0) {
-
           $('#number-of-players').text(data.usersCount);
           $('#user-' + data.id).remove();
         }
-
-        console.log(data);
       });
 
       // Join match
