@@ -14,7 +14,7 @@
 
 @section('content')
 
-  <div class="col-lg-8 col-md-9 col-sm-12">
+  <div class="col-lg-8 col-md-8 col-sm-12">
     <div class="sports">
       @foreach($sports->sortBy('sort_id')->chunk(4) as $chunk)
         <div class="row">

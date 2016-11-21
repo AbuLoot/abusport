@@ -84,7 +84,7 @@
     <main class="container">
       <div class="row">
 
-        <aside class="col-lg-2 col-md-3 navbar-offcanvas navbar-offcanvas-touch" id="js-bootstrap-offcanvas">
+        <aside class="col-lg-2 col-md-2 navbar-offcanvas navbar-offcanvas-touch" id="js-bootstrap-offcanvas">
           <form action="/" class="navbar-offcanvas-form hidden-lg hidden-md">
             <div class="input-group">
               <input type="text" class="form-control" placeholder="Поиск...">

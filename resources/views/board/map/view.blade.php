@@ -1,5 +1,5 @@
 
-  <div class="col-lg-8 col-md-9 col-sm-12">
+  <div class="col-lg-8 col-md-8 col-sm-12">
     <div class="media">
       <div class="media-left hidden-xs">
         <a href="{{ url('sport/'.$sport->slug.'/'.$area->id) }}">

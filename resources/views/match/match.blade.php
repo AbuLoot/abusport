@@ -8,7 +8,6 @@
 
   <ul class="tabs-panel">
     <li class="active"><a href="#">Комната</a></li>
-    <li><a href="#">Карта</a></li>
     <li><a href="{{ url('sport/'.$sport->slug.'/'.$match->field->area_id.'/match-chat/'.$match->id) }}">Чат</a></li>
   </ul>
 
@@ -16,7 +15,7 @@
 
 @section('content')
 
-  <div class="col-lg-8 col-md-9 col-sm-12">
+  <div class="col-lg-8 col-md-8 col-sm-12">
     <ol class="breadcrumb">
       <li><a href="{{ url('/') }}"><span class="glyphicon glyphicon-menu-left"></span> Главная</a></li>
       <li><a href="{{ url('sport/'.$sport->slug) }}"><span class="glyphicon glyphicon-menu-left"></span> {{ $sport->title }}</a></li>

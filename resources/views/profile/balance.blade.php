@@ -11,7 +11,7 @@
 
 @section('content')
 
-  <div class="col-lg-8 col-md-9 col-sm-12">
+  <div class="col-lg-8 col-md-8 col-sm-12">
     <div class="panel panel-default">
       <div class="panel-heading">Мой баланс</div>
       <div class="panel-body">

@@ -8,7 +8,6 @@
 
   <ul class="tabs-panel">
     <li><a href="{{ url('sport/'.$sport->slug.'/'.$match->field->area_id.'/match/'.$match->id) }}">Комната</a></li>
-    <li><a href="#">Карта</a></li>
     <li class="active"><a href="#">Чат</a></li>
   </ul>
 
@@ -16,7 +15,7 @@
 
 @section('content')
 
-  <div class="col-lg-7 col-md-9 col-sm-12">
+  <div class="col-lg-7 col-md-7 col-sm-12">
 
     @include('partials.alerts')
 

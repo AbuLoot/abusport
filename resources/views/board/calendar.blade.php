@@ -17,7 +17,7 @@
 
 @section('content')
 
-  <div class="col-lg-8 col-md-9 col-sm-12">
+  <div class="col-lg-8 col-md-8 col-sm-12">
     <ol class="breadcrumb">
       <li><a href="{{ url('/') }}"><span class="glyphicon glyphicon-menu-left"></span> Главная</a></li>
       <li><a href="{{ url('sport/'.$sport->slug) }}"><span class="glyphicon glyphicon-menu-left"></span> {{ $sport->title }}</a></li>
@@ -122,7 +122,7 @@
       </div>
     @endforeach
   </div>
-  <div class="col-lg-2 col-md-3 col-sm-12">
+  <div class="col-lg-2 col-md-2 col-sm-12">
     <a href="{{ url('sport/'.$sport->slug.'/'.$area->id.'/create-match') }}" class="btn btn-primary text-uppercase pull-right"><span class="glyphicon glyphicon-plus"></span> Создать матч</a>
   </div>
 
