@@ -33,21 +33,6 @@ Route::get('sport/{slug}/{area_id}/info', 'SportController@getInfo');
 
 Route::group(['middleware' => 'auth'], function() {
 
-    // Profile
-    Route::get('my-balance', 'ProfileController@balance');
-    Route::post('top-up-balance', 'ProfileController@topUpBalance');
-    Route::get('my-profile', 'ProfileController@profile');
-    Route::post('my-profile', 'ProfileController@updateProfile');
-    Route::get('my-profile/edit', 'ProfileController@editProfile');
-    Route::get('my-matches', 'ProfileController@myMatches');
-
-    // Users
-    Route::get('friends', 'FriendController@myFriends');
-    Route::get('all-users', 'FriendController@allUsers');
-    Route::get('user-profile/{id}', 'FriendController@userProfile');
-    Route::get('add-to-friends/{id}', 'FriendController@addToFriends');
-    Route::get('accept/{id}', 'FriendController@accept');
-
     // Match
     // Route::get('create-match/{setDays?}', 'MatchController@createMatch');
     Route::get('sport/{slug}/{area_id}/create-match/{setDays?}', 'MatchController@createMatchInArea');
@@ -65,6 +50,21 @@ Route::group(['middleware' => 'auth'], function() {
 
     Route::post('chat/message/{match_id}', 'ChatController@postMessage');
     Route::post('chat/message-ajax/{match_id}', 'ChatController@postMessageAjax');
+
+    // Profile
+    Route::get('my-balance', 'ProfileController@balance');
+    Route::post('top-up-balance', 'ProfileController@topUpBalance');
+    Route::get('my-profile', 'ProfileController@profile');
+    Route::post('my-profile', 'ProfileController@updateProfile');
+    Route::get('my-profile/edit', 'ProfileController@editProfile');
+    Route::get('my-matches', 'ProfileController@myMatches');
+
+    // Users
+    Route::get('friends', 'UserController@myFriends');
+    Route::get('all-users', 'UserController@allUsers');
+    Route::get('user-profile/{id}', 'UserController@userProfile');
+    Route::get('add-to-friends/{id}', 'UserController@addToFriends');
+    Route::get('accept/{id}', 'UserController@accept');
 });
 
 

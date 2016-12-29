@@ -25,49 +25,53 @@
     </ol>
 
     <div class="col-md-4">
-      <img src="/img/organizations/{{ $area->id.'/'.$area->image }}" class="img-responsive">
+      <img src="/img/organizations/{{ $area->id.'/'.$area->image }}" class="center-block img-responsive">
     </div>
     <div class="col-md-8">
-      <dl>
-        <dt>Название</dt>
-        <dd>{{ $area->title }}</dd>
-      </dl>
-      <dl>
-        <dt>Номер</dt>
-        <dd>{{ $area->sort_id }}</dd>
-      </dl>
-      <dl>
-        <dt>Компания</dt>
-        <dd>{{ $area->organization->title }}</dd>
-      </dl>
-      <dl>
-        <dt>Спорт</dt>
-        <dd>{{ $area->sport->title }}</dd>
-      </dl>
-      <dl>
-        <dt>Город</dt>
-        <dd>{{ $area->city->title }}</dd>
-      </dl>
-      <dl>
-        <dt>Номера телефонов</dt>
-        <dd>{{ $area->phones }}</dd>
-      </dl>
-      <dl>
-        <dt>Emails</dt>
-        <dd>{{ $area->emails }}</dd>
-      </dl>
-      <dl>
-        <dt>Адрес</dt>
-        <dd>{{ $area->address }}</dd>
-      </dl>
-      <dl>
-        <dt>Описание</dt>
-        <dd>{{ $area->description }}</dd>
-      </dl>
-      <dl>
-        <dt>Время работы</dt>
-        <dd>{{ $area->start_time.' - '.$area->end_time }}</dd>
-      </dl>
+      <table class="table">
+        <tbody>
+          <tr>
+            <td>Название</td>
+            <td>{{ $area->title }}</td>
+          </tr>
+          <tr>
+            <td>Номер</td>
+            <td>{{ $area->sort_id }}</td>
+          </tr>
+          <tr>
+            <td>Компания</td>
+            <td>{{ $area->organization->title }}</td>
+          </tr>
+          <tr>
+            <td>Спорт</td>
+            <td>{{ $area->sport->title }}</td>
+          </tr>
+          <tr>
+            <td>Город</td>
+            <td>{{ $area->city->title }}</td>
+          </tr>
+          <tr>
+            <td>Номера телефонов</td>
+            <td>{{ $area->phones }}</td>
+          </tr>
+          <tr>
+            <td>Emails</td>
+            <td>{{ $area->emails }}</td>
+          </tr>
+          <tr>
+            <td>Адрес</td>
+            <td>{{ $area->address }}</td>
+          </tr>
+          <tr>
+            <td>Описание</td>
+            <td>{{ $area->description }}</td>
+          </tr>
+          <tr>
+            <td>Время работы</td>
+            <td>{{ $area->start_time.' - '.$area->end_time }}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
   <div class="col-lg-2 col-md-2 col-sm-12">

@@ -24,7 +24,7 @@
     <div class="areas">
       @foreach ($areas as $area)
         <div class="media">
-          <div class="media-left hidden-xs">
+          <div class="media-left">
             <a href="{{ url('sport/'.$sport->slug.'/'.$area->id.'/matches') }}">
               <img class="media-object" src="/img/organizations/{{ $area->org_id.'/'.$area->image }}" alt="...">
             </a>

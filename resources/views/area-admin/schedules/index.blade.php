@@ -7,7 +7,7 @@
       <a href="/panel/admin-schedules/create" class="btn btn-success btn-sm">Добавить</a>
     </p>
     <div class="table-responsive">
-      <table class="table-admin table table-striped table-condensed">
+      <table class="table table-striped table-condensed">
         <thead>
           <tr class="active">
             <td>День недели</td>

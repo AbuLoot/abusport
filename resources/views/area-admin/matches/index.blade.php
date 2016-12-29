@@ -13,7 +13,7 @@
     </ul>
 
     <div class="table-responsive">
-      <table class="table-admin table table-striped table-condensed">
+      <table class="table table-striped table-condensed">
         <thead>
           <tr class="active">
             <td>Матч</td>
@@ -61,20 +61,12 @@
                   </form>
                 </td>
               </tr>
-            @empty
-              <tr>
-                <td colspan="9">Нет записи</td>
-              </tr>
-            @endforelse
+            @endforeach
             <tr>
               <td colspan="10">
               </td>
             </tr>
-          @empty
-            <tr>
-              <td colspan="9">Нет записи</td>
-            </tr>
-          @endforelse
+          @endforeach
         </tbody>
       </table>
     </div>
